@@ -1,6 +1,13 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/ForceDropdownScript.cs">
+    <Files>
+      <File FileName="Assets/NewBehaviourScript.cs" Line="6" Column="46" />
+      <File FileName="Assets/FileExplorer.cs" Line="12" Column="1" />
+      <File FileName="Assets/Scenes/buttonScript.cs" Line="25" Column="37" />
+      <File FileName="Assets/ForceDropdownScript.cs" Line="12" Column="36" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -53,6 +53,7 @@
   <ItemGroup>
      <Compile Include="Assets\BallManager.cs" />
      <Compile Include="Assets\FileExplorer.cs" />
+     <Compile Include="Assets\ForceDropdownScript.cs" />
      <Compile Include="Assets\NewBehaviourScript.cs" />
      <Compile Include="Assets\Scenes\buttonScript.cs" />
  <Reference Include="UnityEngine.UI">
