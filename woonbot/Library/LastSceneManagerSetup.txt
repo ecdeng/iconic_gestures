@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Soccer Test Scene.unity
+- path: Assets/Scenes/TestButton.unity
   isLoaded: 1
   isActive: 1
