@@ -1,0 +1,8 @@
+prefix=/home/osboxes/Desktop/ws/install
+
+Name: woon
+Description: Description of woon
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/osboxes/Desktop/ws/install/lib 
+Requires: 
