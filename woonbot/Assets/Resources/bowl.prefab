@@ -125,6 +125,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4856905711260826}
+  - component: {fileID: 64760064362085644}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -480,6 +481,20 @@ MeshCollider:
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300008, guid: 5c2ecad731e8e486e9054de2da5ae384, type: 3}
+--- !u!64 &64760064362085644
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1871491416572416}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 0
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 0}
 --- !u!64 &64906015334608394
 MeshCollider:
   m_ObjectHideFlags: 1
