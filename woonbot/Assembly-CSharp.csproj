@@ -51,7 +51,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\BallManager.cs" />
      <Compile Include="Assets\Scripts\HandManager.cs" />
      <Compile Include="Assets\Scripts\ObjectManager.cs" />
  <Reference Include="UnityEngine.UI">

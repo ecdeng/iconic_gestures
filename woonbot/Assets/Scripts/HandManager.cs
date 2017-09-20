@@ -6,12 +6,9 @@ public class HandManager : MonoBehaviour {
 
 	private bool moving = false;
 	private float speed = 0.5f;
+	private Vector3 originalPos;
 
-	void OnCollisionEnter(Collision collision)
-	{
-		print ("collide");
-		moving = false; 
-	}
+
 
 	void OnTriggerEnter(Collider collider)
 	{
@@ -22,13 +19,14 @@ public class HandManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		originalPos = transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
 		if (Input.GetKey ("space")) {
+			transform.position = originalPos;
 			moving = true;
 		}
 
