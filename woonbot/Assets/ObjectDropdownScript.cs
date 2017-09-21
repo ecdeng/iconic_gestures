@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class ObjectDropdownScript : MonoBehaviour {
 
 	public Dropdown myDropdown; 
-	ObjectManager objManager = GameObject.Find("ObjectManager");
 
 	// Use this for initialization
 	void Start () {
@@ -42,8 +41,6 @@ public class ObjectDropdownScript : MonoBehaviour {
 		} else {
 			result = "ERROR";
 		}
-
-		objManager
 		return result;
 	}
 }
