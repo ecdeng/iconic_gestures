@@ -12,13 +12,14 @@ public class ObjectManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
 	}
 
-	void ChangeObject(string name) {
+	public void ChangeObject(string name) {
 		Destroy (gameObject);
 		gameObject = (GameObject)Instantiate(Resources.Load(name));
 		gameObject.transform.position = this.transform.position;
+		gameObject.transform.localScale *= 2;
+
 	}
 
 	void ApplyPhysics() {

@@ -1,4 +1,8 @@
 sceneSetups:
+<<<<<<< HEAD
 - path: Assets/networking.unity
+=======
+- path: Assets/Scenes/Master Scene.unity
+>>>>>>> d7efe5f0474346d34cf33367ccf80696149f31eb
   isLoaded: 1
   isActive: 1
