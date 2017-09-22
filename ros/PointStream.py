@@ -7,8 +7,7 @@ import thread
 import sys
 import signal
 
-
-class Vector3():
+class Point():
 	def __init__(self, x, y, z):
 		self.x = x
 		self.y = y
@@ -18,10 +17,12 @@ class Vector3():
 		return str(self.x) + " " + str(self.y) + " " + str(self.z)
 
 class PointStream(threading.Thread):
-	def __init__(self):
+	def __init__(self, ipAddress="localhost", port=8888):
 		threading.Thread.__init__(self)
 		self.__lock = threading.Lock()
 		self.__pointsListQueue = deque()
+		self.__ipAddress = ipAddress
+		self.__port = port
 
 	def __enqueue (self, points):
 		self.__lock.acquire()
@@ -29,7 +30,7 @@ class PointStream(threading.Thread):
 		try:
 			pointsList = []
 			for point in points:
-				pointsList.append(Vector3(point['x'], point['y'], point['z']))
+				pointsList.append(Point(point['x'], point['y'], point['z']))
 			self.__pointsListQueue.append(pointsList)
 		finally:
 			self.__lock.release()
@@ -63,12 +64,10 @@ class PointStream(threading.Thread):
 		while True:
 			try:
 				TCPSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-				TCPSock.connect(("localhost", 8888))
+				TCPSock.connect((self.__ipAddress, self.__port))
 				break
 			except:
 				TCPSock.close()
-
-		print("Connection made")
 
 		try:
 			while True:
@@ -79,5 +78,3 @@ class PointStream(threading.Thread):
 		except Exception:
 			traceback.print_exc()
 			TCPSock.close()
-
-
