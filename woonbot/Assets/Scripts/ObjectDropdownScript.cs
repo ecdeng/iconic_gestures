@@ -48,7 +48,9 @@ public class ObjectDropdownScript : MonoBehaviour {
 			result = "sword";
 		} else if (index == 3) {
 			result = "pencil";
-		} else {
+		} else if (index == 4) {
+			result = "bowl";
+		}  else {
 			result = "ERROR";
 		}
 		return result;

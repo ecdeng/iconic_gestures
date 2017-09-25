@@ -30,6 +30,7 @@ public class HandManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		originalPos = transform.position;
+		transform.localScale *= 1.5f;
 	}
 	
 	// Update is called once per frame
