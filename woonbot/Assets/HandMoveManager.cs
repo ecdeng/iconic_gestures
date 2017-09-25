@@ -43,7 +43,6 @@ public class HandMoveManager : MonoBehaviour {
 		if (vertices != null) {
 			transform.position = Vector3.Lerp(transform.position, vertices[currentPosition], Time.deltaTime * 10);
 			var normal = transform.position - vertices [currentPosition];
-
 			transform.right = Vector3.Lerp(transform.right, normal, Time.deltaTime * 10);
 
 		}
