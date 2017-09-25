@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\PointScript.cs" />
      <Compile Include="Assets\Scripts\HandManager.cs" />
      <Compile Include="Assets\Scripts\ObjectDropdownScript.cs" />
      <Compile Include="Assets\Scripts\ObjectManager.cs" />

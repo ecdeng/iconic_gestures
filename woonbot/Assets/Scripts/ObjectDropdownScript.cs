@@ -9,6 +9,7 @@ public class ObjectDropdownScript : MonoBehaviour {
 	private GameObject model;
 	private GameObject hand1;
 	private GameObject hand2;
+	private GameObject pointsDropdown;
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +19,7 @@ public class ObjectDropdownScript : MonoBehaviour {
 		model = GameObject.Find ("Model");
 		hand1 = GameObject.Find ("Hand1");
 		hand2 = GameObject.Find ("Hand2");
+		pointsDropdown = GameObject.Find ("POCDropdown");
 	}
 	
 	// Update is called once per frame
@@ -31,6 +33,7 @@ public class ObjectDropdownScript : MonoBehaviour {
 		model.SendMessage("ChangeObject",printStringFromIndex (target.value));
 		hand1.SendMessage ("ResetState");
 		hand2.SendMessage ("ResetState");
+		pointsDropdown.SendMessage ("UpdateOptions", printStringFromIndex(target.value));
 
 	}
 
@@ -43,9 +46,9 @@ public class ObjectDropdownScript : MonoBehaviour {
 		if (index == 0) {
 			result = "NoObject";
 		} else if (index == 1) {
-			result = "basketball";
+			result = "basketball"; //1-20
 		} else if (index == 2) {
-			result = "sword";
+			result = "sword"; 
 		} else if (index == 3) {
 			result = "pencil";
 		} else {
