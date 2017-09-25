@@ -8,13 +8,16 @@ import sys
 import signal
 
 class Point():
-	def __init__(self, x, y, z):
+	def __init__(self, x, y, z, roll, pitch, yaw):
 		self.x = x
 		self.y = y
-		self.z = z		
+		self.z = z	
+		self.roll = roll
+		self.pitch = pitch
+		self.yaw = yaw	
 
 	def toString(self):
-		return str(self.x) + " " + str(self.y) + " " + str(self.z)
+		return str(self.x) + " " + str(self.y) + " " + str(self.z) + " " + str(self.roll) + " " + str(self.pitch) + " " + str(self.yaw)
 
 class PointStream(threading.Thread):
 	def __init__(self, ipAddress="localhost", port=8888):
@@ -24,13 +27,15 @@ class PointStream(threading.Thread):
 		self.__ipAddress = ipAddress
 		self.__port = port
 
-	def __enqueue (self, points):
+	def __enqueue (self, points, normals):
 		self.__lock.acquire()
 
 		try:
 			pointsList = []
-			for point in points:
-				pointsList.append(Point(point['x'], point['y'], point['z']))
+			for i in range(0, len(points)):
+				point = points[i]
+				normal = normals[i]
+				pointsList.append(Point(point['x'], point['y'], point['z'], normal['x'], normal['y'], normal['z']))
 			self.__pointsListQueue.append(pointsList)
 		finally:
 			self.__lock.release()
@@ -73,7 +78,7 @@ class PointStream(threading.Thread):
 			while True:
 				data = TCPSock.recv(1024)
 				points = json.loads(data);
-				self.__enqueue(points['points'])
+				self.__enqueue(points['points'], points['normals'])
 
 		except Exception:
 			traceback.print_exc()

@@ -43,13 +43,18 @@ public class ROSBridge : MonoBehaviour {
         points.Add(new Vector3(1, 2, 3));
         points.Add(new Vector3(4, 5, 6));
 
-        sendPoints(points);
+        List<Vector3> normals = new List<Vector3>();
+        normals.Add(new Vector3(0, 1, 0));
+        normals.Add(new Vector3(1, 0, 0));
+
+        sendPoints(points, normals);
 	}
 
-    void sendPoints(List<Vector3> points)
+    void sendPoints(List<Vector3> points, List<Vector3> normals)
     {
-        string serializedPoints = UnityEngine.JsonUtility.ToJson(new Points(points));
+        string serializedPoints = UnityEngine.JsonUtility.ToJson(new Points(points, normals));
         Send(serializedPoints);
+        print(serializedPoints);
     }
 
     private void Send(string information)
@@ -75,9 +80,11 @@ public class ROSBridge : MonoBehaviour {
 public class Points
 {
     public List<Vector3> points;
+    public List<Vector3> normals;
 
-    public Points(List<Vector3> points)
+    public Points(List<Vector3> points, List<Vector3> normals)
     {
+        this.normals = normals;
         this.points = points;
     }
 }
