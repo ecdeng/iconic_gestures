@@ -51,12 +51,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
      <Compile Include="Assets\ForceDropdownScript.cs" />
      <Compile Include="Assets\HandMoveManager.cs" />
-=======
      <Compile Include="Assets\PointScript.cs" />
->>>>>>> f1cf926a5f7f76fc65c493bdab0806c142633650
      <Compile Include="Assets\Scripts\HandManager.cs" />
      <Compile Include="Assets\Scripts\ObjectDropdownScript.cs" />
      <Compile Include="Assets\Scripts\ObjectManager.cs" />
