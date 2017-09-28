@@ -54,7 +54,7 @@ public class ObjectManager : MonoBehaviour {
 			gameObject.transform.localScale = 0.1f * Vector3.one;
 		}
 		else {
-			gameObject = (GameObject)Instantiate(Resources.Load(name));
+			gameObject = (GameObject)Instantiate(Resources.Load("FBX/" + name));
 		}
 		gameObject.transform.position = this.transform.position;
 		//gameObject.transform.localScale *= 3;
