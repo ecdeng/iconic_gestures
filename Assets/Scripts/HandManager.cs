@@ -10,6 +10,7 @@ public class HandManager : MonoBehaviour {
 	private Quaternion originalRotation;
 	private List<Vector3> vertices;
 	private int numPoints = 50;
+	private GameObject NetworkManager;
 
 
 	void Push()
@@ -35,6 +36,7 @@ public class HandManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		NetworkManager = GameObject.Find ("NetworkManager");
 		originalPos = transform.position;
 		originalRotation = transform.rotation;
 
@@ -53,6 +55,10 @@ public class HandManager : MonoBehaviour {
 
 		if (moving) {
 			transform.Translate(direction.normalized * speed * Time.deltaTime,Space.World);
+			object[] message = new object[2];
+			message [0] = new List<Vector3>() {transform.position};
+			message [1] = new List<Vector3>() {transform.right};
+			NetworkManager.SendMessage ("sendPoints",message);
 		}
 		
 	}

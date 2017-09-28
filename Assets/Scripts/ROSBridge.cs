@@ -47,13 +47,19 @@ public class ROSBridge : MonoBehaviour {
 		normals.Add(new Vector3(0, 1, 0));
 		normals.Add(new Vector3(1, 0, 0));
 
-		sendPoints(points, normals);
+		//sendPoints(points, normals);
+	}
+
+	public void sendPoints(object[] point_normals) 
+	{
+		sendPoints ((List<Vector3>)point_normals [0], (List<Vector3>) point_normals [1]);
 	}
 
 	void sendPoints(List<Vector3> points, List<Vector3> normals)
 	{
 		string serializedPoints = UnityEngine.JsonUtility.ToJson(new Points(points, normals));
 		Send(serializedPoints);
+		print (serializedPoints);
 	}
 
 	private void Send(string information)
@@ -64,7 +70,6 @@ public class ROSBridge : MonoBehaviour {
 			byte[] sendBytes = Encoding.ASCII.GetBytes(information);
 			networkStream.Write(sendBytes, 0, sendBytes.Length);
 			networkStream.Flush();
-			print(information);
 
 		}
 		catch (Exception ex)

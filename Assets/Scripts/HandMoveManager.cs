@@ -13,7 +13,6 @@ public class HandMoveManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		var gameobj = GameObject.Find ("Ball/Ball");
 		float scaling = 1.5f;
 		List<Vector3> pts = PointsOnSphere(10);
 		List<GameObject> uspheres = new List<GameObject>();
