@@ -13,7 +13,14 @@ public class ObjectManager : MonoBehaviour {
 
 
 	void UpdateMesh(GameObject obj) {
-		var mesh = obj.GetComponentInChildren<MeshFilter> ().mesh;
+		Mesh mesh = null;
+		var filter = obj.GetComponent<MeshFilter>();
+		if (filter == null) {
+			mesh = obj.GetComponentInChildren<MeshFilter> ().mesh;
+		}
+		else {
+			mesh = obj.GetComponent<MeshFilter> ().mesh;
+		}
 		var vertices = mesh.vertices;
 		var qangle = obj.transform.rotation;
 
@@ -24,12 +31,14 @@ public class ObjectManager : MonoBehaviour {
 		}
 
 		//THIS IS FOR YOU ERIC
-		print (obj.transform.localScale.x);
 		for(int i = 0; i < vertices.Length; i++)
 		{
 			vertices[i] = obj.transform.localScale.x * vertices[i];
 			//vertices [i] = 0.1f * vertices[i];
 		}
+			
+
+
 
 		mesh.vertices = vertices;
 
@@ -54,7 +63,7 @@ public class ObjectManager : MonoBehaviour {
 			gameObject.transform.localScale = 0.1f * Vector3.one;
 		}
 		else {
-			gameObject = (GameObject)Instantiate(Resources.Load("FBX/" + name));
+			gameObject = (GameObject)Instantiate(Resources.Load(name + "/" + name));
 		}
 		gameObject.transform.position = this.transform.position;
 		//gameObject.transform.localScale *= 3;
