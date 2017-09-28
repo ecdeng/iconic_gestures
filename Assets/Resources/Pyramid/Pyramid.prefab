@@ -38,7 +38,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4542530169674084}
   m_Layer: 0
-  m_Name: Pyramid 1
+  m_Name: Pyramid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
