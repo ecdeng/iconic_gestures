@@ -72,7 +72,10 @@ public class HandMoveManager : MonoBehaviour {
 		for(int i = 0; i < vertices.Count; i ++)
 		{
 			Debug.Log (currentPosition);
-			currentPosition = i;
+			if (gameObject.name == "Hand1")
+				currentPosition = i;
+			else
+				currentPosition = (i + 1) % vertices.Count;
 			yield return new WaitForSeconds(1f);
 		}
 	}
