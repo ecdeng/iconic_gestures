@@ -27,10 +27,7 @@ public class ForceDropdownScript : MonoBehaviour {
 
 	private void myForceDropdownValueChangedHandler(Dropdown target) {
 		Debug.Log("selected force: "+ target.value);
-		if (target.value == 1) {
-			hand1.SendMessage ("Push");
-			hand2.SendMessage ("Push");
-		}
+
 	}
 
 	public void SetDropdownIndex(int index) {

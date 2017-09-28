@@ -13,28 +13,28 @@ public class HandMoveManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		var gameobj = GameObject.Find ("basketball");
+		var gameobj = GameObject.Find ("Ball/Ball");
 		float scaling = 1.5f;
-		List<Vector3> pts = PointsOnSphere(128);
+		List<Vector3> pts = PointsOnSphere(10);
 		List<GameObject> uspheres = new List<GameObject>();
 		int i = 0;
 		oldPosition = transform.position;
 		oldRight = transform.right;
 
-		/*foreach (Vector3 value in pts)
+		foreach (Vector3 value in pts)
 		{
 			uspheres.Add(GameObject.CreatePrimitive(PrimitiveType.Sphere));
-			uspheres[i].transform.parent = transform;
+			uspheres[i].transform.localScale *= 0.1f;
 			uspheres[i].transform.position = value * scaling;
 			i++;
-		}*/
+		}
 		
 	}
 
 	void Update() {
 		if (vertices == null) {
 			//vertices = PointManager.new_vertices;
-			vertices = PointsOnSphere(4);
+			vertices = PointsOnSphere(10);
 		}
 		else if (startMoving) {
 			StartCoroutine (Move ());
@@ -79,14 +79,11 @@ public class HandMoveManager : MonoBehaviour {
 
 	void FixedUpdate()
 	{
-
-
 		if (vertices != null) {
 			var normal = (vertices [currentPosition]).normalized;
-
-			transform.position = Vector3.Lerp(transform.position , vertices[currentPosition]* 1.5f, 10 *Time.deltaTime);
-			transform.right = Vector3.Lerp(transform.right, normal, 10 *Time.deltaTime);
-
+			transform.position = Vector3.Lerp (transform.position, vertices [currentPosition] * 1.5f, 10 * Time.deltaTime);
+			transform.right = Vector3.Lerp (transform.right, normal, 10 * Time.deltaTime);
 		}
 	}
+
 }

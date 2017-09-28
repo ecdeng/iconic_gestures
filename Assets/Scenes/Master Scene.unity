@@ -249,6 +249,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 23346276981218252, guid: 29563751ed9f94dfdbdecfb583300154,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 25426bc5de0014f0db2c1177bddc0dce, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 29563751ed9f94dfdbdecfb583300154, type: 2}
   m_IsPrefabParent: 0
@@ -2982,6 +2987,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e643914bbdde46e1889b8e9832efb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1625292200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1625292202}
+  - component: {fileID: 1625292201}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1625292201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1625292200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac60271a8e8644eec95396edf2df8750, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1625292202
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1625292200}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1635951295
 GameObject:
   m_ObjectHideFlags: 0
@@ -3137,6 +3182,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 23357830748566248, guid: c2a432027e6db446691a4b06adfd1537,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 25426bc5de0014f0db2c1177bddc0dce, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c2a432027e6db446691a4b06adfd1537, type: 2}
   m_IsPrefabParent: 0
@@ -3328,8 +3378,6 @@ MonoBehaviour:
     - m_Text: Pyramid
       m_Image: {fileID: 0}
     - m_Text: Stick
-      m_Image: {fileID: 0}
-    - m_Text: Sword
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

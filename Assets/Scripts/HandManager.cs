@@ -7,6 +7,10 @@ public class HandManager : MonoBehaviour {
 	private bool moving = false;
 	private float speed = 0.5f;
 	private Vector3 originalPos;
+	private Quaternion originalRotation;
+	private List<Vector3> vertices;
+	private int numPoints = 50;
+
 
 	void Push()
 	{
@@ -17,6 +21,7 @@ public class HandManager : MonoBehaviour {
 	void ResetState()
 	{
 		transform.position = originalPos;
+		transform.rotation = originalRotation;
 	}
 
 
@@ -25,12 +30,14 @@ public class HandManager : MonoBehaviour {
 		print ("trigger");
 		moving = false; 
 	}
+		
 
 
 	// Use this for initialization
 	void Start () {
 		originalPos = transform.position;
-		transform.localScale *= 1.5f;
+		originalRotation = transform.rotation;
+
 	}
 	
 	// Update is called once per frame
@@ -42,7 +49,6 @@ public class HandManager : MonoBehaviour {
 		}
 
 	
-
 		Vector3 direction = Vector3.zero - originalPos;
 
 		if (moving) {
@@ -50,4 +56,5 @@ public class HandManager : MonoBehaviour {
 		}
 		
 	}
+
 }

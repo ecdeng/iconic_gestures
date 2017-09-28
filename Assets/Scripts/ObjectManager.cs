@@ -2,45 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using System.Collections.Generic;
 
 public class ObjectManager : MonoBehaviour {
 
-	private GameObject gameObject;
-	Vector3[] vertices;
+	//current game object
+	private GameObject currObject;
+	//show mesh
 	private bool togglepoints;
+	//points for mesh
 	private List<GameObject> points;
 
 
-	void UpdateMesh(GameObject obj) {
-		Mesh mesh = null;
-		var filter = obj.GetComponent<MeshFilter>();
-		if (filter == null) {
-			mesh = obj.GetComponentInChildren<MeshFilter> ().mesh;
-		}
-		else {
-			mesh = obj.GetComponent<MeshFilter> ().mesh;
-		}
-		var vertices = mesh.vertices;
-		var qangle = obj.transform.rotation;
+	List<Vector3> UpdateMesh(GameObject obj) {
 
-		//updating qangle
-		for(int i = 0; i < vertices.Length; i++)
-		{
-			vertices[i] = qangle * vertices[i];
-		}
+		//grab vertices
+		List<Vector3> vertices = new List<Vector3>();
+		var meshFilter = obj.GetComponent<MeshFilter> ();
+		if (meshFilter == null) {
 
-		//THIS IS FOR YOU ERIC
-		for(int i = 0; i < vertices.Length; i++)
-		{
-			vertices[i] = obj.transform.localScale.x * vertices[i];
-			//vertices [i] = 0.1f * vertices[i];
+			var filters = obj.GetComponentsInChildren<MeshFilter> ();
+			foreach (var filter in filters) {
+				if (filter != null && filter.mesh != null)
+					vertices.AddRange (filter.mesh.vertices);
+			}
+		} else {
+			vertices = new List<Vector3>(meshFilter.mesh.vertices);
 		}
 			
+		//grab tranform
+		var angle = obj.transform.rotation;
+		var scale = obj.transform.localScale;
+		var position = obj.transform.position;
 
-
-
-		mesh.vertices = vertices;
+		//updating vertices
+		for(int i = 0; i < vertices.Count; i++)
+		{
+			vertices[i] = angle * vertices[i];
+			vertices[i] =new Vector3(vertices[i].x*scale.x,vertices[i].y*scale.y,vertices[i].z*scale.z);
+			vertices [i] += position;
+		}
+			
+		return vertices;
 
 	}
 
@@ -50,84 +52,50 @@ public class ObjectManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		points = new List<GameObject> ();
-
-
-
+		togglepoints = false;
 	}
 
 	public void ChangeObject(string name) {
-		Destroy (gameObject);
 
-		if (name=="sphere") {
-			gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-			gameObject.transform.localScale = 0.1f * Vector3.one;
-		}
-		else {
-			gameObject = (GameObject)Instantiate(Resources.Load(name + "/" + name));
-		}
-		gameObject.transform.position = this.transform.position;
-		//gameObject.transform.localScale *= 3;
-
-		UpdateMesh (gameObject);
-
-		Mesh mesh = gameObject.GetComponentInChildren<MeshFilter> ().mesh;
-		vertices = mesh.vertices;
-
-		togglepoints = false;
+		//destory previous settings
+		Destroy (currObject);
 
 		foreach (var point in points) {
 			Destroy (point);
 		}
-			points.Clear ();
+		points.Clear ();
+
+
+		//create new objects
+		currObject = (GameObject)Instantiate(Resources.Load(name + "/" + name));
+
+		//grab vertices
+		var vertices = UpdateMesh (currObject);
+
 
 		foreach (var vertex in vertices) {
-//			var v = vertex * 0.1f;
+
+			//create spheres
 			var gameObj = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 			gameObj.transform.localScale = 0.01f * Vector3.one;
 			gameObj.transform.position = vertex;
-			gameObj.SetActive (true);
+			gameObj.SetActive (togglepoints);
 			points.Add (gameObj);
 		}
 
 	}
-
-	void ApplyPhysics() {
 		
-	}
 		
 	
 	// Update is called once per frame
 	void Update () {
-			
-		if (Input.GetKey ("up")) {
-			ChangeObject ("basketball");
-		}
-
-		if (Input.GetKey ("right")) {
-			ChangeObject ("sword");
-		}
-			
-		if (Input.GetKey("down")){
-			ChangeObject ("bowl");
-		}
-
-		if (Input.GetKey("left")){
-			ChangeObject ("pencil");
-		}
-
-		if (Input.GetKey("p")) {
-
-			//0 means no points 
-
+		
+		//toggle show points
+		if (Input.GetKeyDown("p")) {
 			togglepoints = !togglepoints;
 			foreach (var point in points) {
 				point.SetActive(togglepoints);
 			}
-
-			//1 means create
-
-
-			//2 means alive but dont create
 		}
 	}
 }
