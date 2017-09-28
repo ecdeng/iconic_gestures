@@ -53,6 +53,7 @@ public class ObjectDropdownScript : MonoBehaviour {
 		model.SendMessage("ChangeObject",value);
 		hand1.SendMessage ("ResetState");
 		hand2.SendMessage ("ResetState");
+		pointsDropdown.SendMessage ("UpdateOptions", value);
 		//pointsDropdown.SendMessage ("UpdateOptions", printStringFromIndex(target.value));
 
 	}
