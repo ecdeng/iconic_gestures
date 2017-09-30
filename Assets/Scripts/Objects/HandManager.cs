@@ -9,8 +9,9 @@ public class HandManager : MonoBehaviour {
 	private Vector3 originalPos;
 	private Quaternion originalRotation;
 	private List<Vector3> vertices;
-	private int numPoints = 50;
 	private GameObject NetworkManager;
+	private List<Vector3> transformPointsToSend;
+	private List<Vector3> normalPointsToSend;
 
 
 	void Push()
@@ -30,6 +31,12 @@ public class HandManager : MonoBehaviour {
 	{
 		print ("trigger");
 		moving = false; 
+		object[] message = new object[2];
+		message [0] = transformPointsToSend;
+		message [1] = normalPointsToSend;
+		NetworkManager.SendMessage ("sendPoints",message);
+		transformPointsToSend.Clear ();
+		normalPointsToSend.Clear ();
 	}
 		
 
@@ -39,6 +46,8 @@ public class HandManager : MonoBehaviour {
 		NetworkManager = GameObject.Find ("NetworkManager");
 		originalPos = transform.position;
 		originalRotation = transform.rotation;
+		transformPointsToSend = new List<Vector3> ();
+		normalPointsToSend = new List<Vector3> ();
 
 	}
 	
@@ -55,10 +64,8 @@ public class HandManager : MonoBehaviour {
 
 		if (moving) {
 			transform.Translate(direction.normalized * speed * Time.deltaTime,Space.World);
-			object[] message = new object[2];
-			message [0] = new List<Vector3>() {transform.position};
-			message [1] = new List<Vector3>() {transform.right};
-			NetworkManager.SendMessage ("sendPoints",message);
+			transformPointsToSend.Add (transform.position);
+			normalPointsToSend.Add (transform.right);
 		}
 		
 	}
