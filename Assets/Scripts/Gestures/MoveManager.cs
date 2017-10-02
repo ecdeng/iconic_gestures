@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MoveManager : MonoBehaviour {
 
+	public int numVerts = 0;
 	public bool showObject = true;
 	protected GameObject model;
 	protected int currentPosition = 0;
