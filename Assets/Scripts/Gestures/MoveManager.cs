@@ -14,8 +14,20 @@ public class MoveManager : MonoBehaviour {
 	// Use this for initialization
 	protected virtual void Start () {
 		model = TestObjectManager.Instance.GetObject();
-		model.GetComponent<Renderer> ().enabled = showObject;
-		
+		UpdateShow ();
+
+	}
+
+	public void UpdateShow() {
+		var renderer = model.GetComponent<Renderer> ();
+		if (renderer == null) {
+			var renderers = model.GetComponentsInChildren<Renderer> ();
+			foreach (var childRenderer in renderers) {
+				childRenderer.enabled = showObject;
+			}
+		} else {
+			renderer.enabled = showObject;
+		}	
 	}
 
 	protected void ShowPoints() {
