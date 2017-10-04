@@ -22,6 +22,10 @@ public class BoxMoveManager : MoveManager {
 		new_vertices.Add(new Vector3(boundPoint2.x, boundPoint1.y, boundPoint2.z));
 		new_vertices.Add(new Vector3(boundPoint2.x, boundPoint2.y, boundPoint1.z));
 
+		for (var i = 0; i < new_vertices.Count; i++) {
+			new_vertices [i] += transform.position;
+		}
+
 		return new_vertices;
 
 	}
