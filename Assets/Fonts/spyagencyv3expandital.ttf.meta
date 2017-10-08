@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 041727d2a310344b98910c8356cbea8b
+timeCreated: 1507490678
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Spy Agency Expanded Italic
+  fontNames:
+  - Spy Agency Expanded Italic
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

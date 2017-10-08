@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: fbf0a1dbb8083460ba69a7fc5cddf44c
+timeCreated: 1507490678
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Spy Agency Condensed Italic
+  fontNames:
+  - Spy Agency Condensed Italic
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
