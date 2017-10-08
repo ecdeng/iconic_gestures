@@ -3,16 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Control_Panel : MonoBehaviour {
+public class SettingsButtonScript : MonoBehaviour {
 
 	public Button myButton;
 	private GameObject controlPanel;
-
-
-
-
-
-
 
 
 	// Use this for initialization
@@ -22,10 +16,10 @@ public class Control_Panel : MonoBehaviour {
 		});
 		controlPanel = GameObject.Find ("Control_Panel");
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
 	//make control panel appear
