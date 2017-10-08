@@ -15,6 +15,7 @@ public class SettingsButtonScript : MonoBehaviour {
 			TaskOnClick(myButton);
 		});
 		controlPanel = GameObject.Find ("Control_Panel");
+		controlPanel.SetActive(false);
 	}
 
 	// Update is called once per frame
@@ -26,6 +27,10 @@ public class SettingsButtonScript : MonoBehaviour {
 	void TaskOnClick(Button target)
 	{
 		Debug.Log ("hello is this working");
-		controlPanel.SetActive(false);
+		if (controlPanel.activeInHierarchy) {
+			controlPanel.SetActive (false);
+		} else {
+			controlPanel.SetActive (true);
+		}
 	}
 }
