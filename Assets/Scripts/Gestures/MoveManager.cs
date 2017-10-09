@@ -37,7 +37,7 @@ public class MoveManager : MonoBehaviour {
 			var gameObj = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 			gameObj.transform.position = vertex;
 			gameObj.transform.localScale = Vector3.one * 0.01f;
-			print (vertex.x + "," + vertex.y + "," + vertex.z);
+//			print (vertex.x + "," + vertex.y + "," + vertex.z);
 
 		}
 	}
