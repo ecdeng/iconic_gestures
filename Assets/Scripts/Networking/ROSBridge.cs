@@ -58,7 +58,7 @@ public class ROSBridge : MonoBehaviour {
 	void sendPoints(List<Vector3> points, List<Vector3> normals)
 	{
 		string serializedPoints = UnityEngine.JsonUtility.ToJson(new Points(points, normals));
-		Send(serializedPoints);
+		Send(serializedPoints + "\n");
 		print (serializedPoints);
 	}
 

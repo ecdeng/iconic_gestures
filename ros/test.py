@@ -13,6 +13,5 @@ def main():
 			points = ps.dequeue()
 			for point in points:
 				print (point.toString())
-
 if __name__ == '__main__':
 	main()
