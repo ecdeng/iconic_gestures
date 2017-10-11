@@ -119,9 +119,21 @@ public class MoveManager : MonoBehaviour {
 	{
 		var center = new Vector3 ((minMaxVertices [0].x + minMaxVertices [1].x) / 2, (minMaxVertices [0].y + minMaxVertices [1].y) / 2, (minMaxVertices [0].z + minMaxVertices [1].z) / 2);
 		if (vertices != null) {
-			var normal = (vertices [currentPosition] - center).normalized;
+
+			//var normal = (vertices [currentPosition] - center).normalized;
+
+			var normal = (vertices [currentPosition] - vertices[(currentPosition + vertices.Count/2) % vertices.Count]).normalized;
+			
+
+			if (currentPosition >= vertices.Count / 2) {
+				normal *= -1;
+			}
+				
+
 			transform.position = Vector3.Lerp (transform.position, vertices [currentPosition],  speed*Time.deltaTime);
-			transform.right = Vector3.Lerp (transform.right, normal,  speed*Time.deltaTime);
+
+
+			transform.up = Vector3.Lerp (transform.up, normal,  speed*Time.deltaTime);
 		}
 	}
 }

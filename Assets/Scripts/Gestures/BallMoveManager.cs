@@ -10,7 +10,7 @@ public class BallMoveManager : MoveManager {
 		base.Start ();
 		vertices = PointsOnSphere(10);
 		ShowPoints ();
-		StartCoroutine (base.Move(1));
+		StartCoroutine (base.Move(vertices.Count/2));
 	}
 
 	void Update() {

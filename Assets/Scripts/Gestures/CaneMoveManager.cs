@@ -29,6 +29,8 @@ public class CaneMoveManager : MoveManager {
 		Vector3 polemiddleright = allverts [0];
 		Vector3 canetop = allverts [0];
 		Vector3 hookleft = allverts [0];
+
+		//get polebottom right, middle, hookleft and top
 		foreach (var ver in allverts) {
 			if (ver.y <= polebottomright.y && ver.x >= polebottomright.x) {
 				polebottomright = ver;
@@ -45,6 +47,7 @@ public class CaneMoveManager : MoveManager {
 			}
 		}
 
+		//get both pole points
 		Vector3 polebottomleft = polebottomright;
 		Vector3 polemiddleleft = polemiddleright;
 		foreach (var ver in allverts) {
@@ -52,11 +55,11 @@ public class CaneMoveManager : MoveManager {
 				polebottomleft = ver;
 			}
 			if (ver.y > 0 && ver.y <= 0.1 && ver.x < polemiddleleft.x && ver.x > canetop.x) {
-				print ("RIP");
 				polemiddleleft = ver;
 			}
 		}
 
+		//get canebottom points
 		Vector3 canebottom = canetop;
 		double diff = 0.001;
 		foreach (var ver in allverts) {
@@ -65,6 +68,7 @@ public class CaneMoveManager : MoveManager {
 			}
 		}
 
+		//get final hook points
 		Vector3 hookright = hookleft;
 		foreach(var ver in allverts) {
 			if (ver.y <  hookleft.y + 0.01 && ver.y > hookleft.y - 0.01 && ver.x > hookright.x && ver.x < canebottom.x) {
