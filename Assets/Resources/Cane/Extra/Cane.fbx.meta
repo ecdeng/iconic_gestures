@@ -25,6 +25,7 @@ ModelImporter:
     2300000: object0
     3300000: object0
     4300000: object0
+    6400000: object0
     10800000: 'light #2'
     10800002: 'light #3'
     10800004: 'light #4'
@@ -58,7 +59,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1

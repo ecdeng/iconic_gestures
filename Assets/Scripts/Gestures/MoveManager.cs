@@ -36,7 +36,7 @@ public class MoveManager : MonoBehaviour {
 		foreach (var vertex in vertices) {
 			var gameObj = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 			gameObj.transform.position = vertex;
-			gameObj.transform.localScale = Vector3.one * 0.01f;
+			gameObj.transform.localScale = Vector3.one * 0.05f;
 //			print (vertex.x + "," + vertex.y + "," + vertex.z);
 
 		}

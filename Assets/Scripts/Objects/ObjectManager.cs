@@ -39,7 +39,7 @@ public class ObjectManager : MonoBehaviour {
 		{
 			vertices[i] = angle * vertices[i];
 			vertices[i] =new Vector3(vertices[i].x*scale.x,vertices[i].y*scale.y,vertices[i].z*scale.z);
-			vertices [i] += position;
+			vertices[i] += position;
 		}
 			
 		return vertices;
