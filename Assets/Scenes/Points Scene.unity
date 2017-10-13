@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numVerts: 0
-  showObject: 1
+  showObject: 0
 --- !u!114 &157383953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,6 +202,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67a8ffbf94344476b4d5c8d7a96173f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numVerts: 0
+  showObject: 1
 --- !u!114 &157383954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -749,7 +751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86654dbd8c1264bb6bee217a9b94f285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectName: Cane
+  ObjectName: Box
 --- !u!4 &1272263152
 Transform:
   m_ObjectHideFlags: 0
@@ -940,7 +942,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numVerts: 0
-  showObject: 1
+  showObject: 0
 --- !u!114 &2044671823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -952,6 +954,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67a8ffbf94344476b4d5c8d7a96173f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numVerts: 0
+  showObject: 1
 --- !u!114 &2044671824
 MonoBehaviour:
   m_ObjectHideFlags: 0
