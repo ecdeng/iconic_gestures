@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class CaneMoveManager : MoveManager {
 
-	// Use this for initialization
+
 	void Start () {
 		base.Start ();
-		vertices = this.GetCanePoints();
-		ShowPoints ();
-		StartCoroutine (base.Move(4));
 	}
 
-	List<Vector3> GetCanePoints()
-	{
+	void Update() {
 
+	}
+
+	/// <summary>
+	/// Gets the object vertices - override base class.
+	/// </summary>
+	/// <returns>The object vertices.</returns>
+	public override List<Vector3> GetObjectVertices (int n) {
 		//polebottomright
 		//polebottomleft
 		//polemiddleright
@@ -24,7 +27,7 @@ public class CaneMoveManager : MoveManager {
 		//hookright
 		//hookleft
 
-		var allverts = this.GetVertices (0);
+		var allverts = this.GetVertices ();
 		Vector3 polebottomright = allverts[0];
 		Vector3 polemiddleright = allverts [0];
 		Vector3 canetop = allverts [0];
@@ -103,15 +106,5 @@ public class CaneMoveManager : MoveManager {
 		points.Add(hookleft);
 
 		return points;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-	void FixedUpdate() {
-
-		UpdatePosition ();
 	}
 }

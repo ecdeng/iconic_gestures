@@ -4,25 +4,30 @@ using UnityEngine;
 
 public class PyramidMoveManager : MoveManager {
 
-	// Use this for initialization
+
 	void Start () {
 		base.Start ();
-		vertices = GetPyramidVertices();
-		ShowPoints ();
-		StartCoroutine (base.Move(1));
 	}
 
-	List<Vector3> GetPyramidVertices() {//(int n) {
+	void Update() {
+
+	}
+
+	/// <summary>
+	/// Gets the object vertices - override base class.
+	/// </summary>
+	/// <returns>The object vertices.</returns>
+	public override List<Vector3> GetObjectVertices (int n) {
 		List<Vector3> vlist = new List<Vector3>();
 
-		var masterlist = this.GetVertices(0);
+		var masterlist = this.GetVertices();
 
 		// Get min/max x, y, and z directions
 		float minX = masterlist[0].x, minY = masterlist[0].y, minZ = masterlist[0].z;
 		float maxX = masterlist[0].x, maxY = masterlist[0].y, maxZ = masterlist[0].z;
 
-//		Vector3 min = masterlist[0];
-//		Vector3 max = masterlist [1];
+		//		Vector3 min = masterlist[0];
+		//		Vector3 max = masterlist [1];
 		foreach (var ver in masterlist) {
 			if (ver.x < minX) {
 				minX = ver.x;
@@ -62,20 +67,11 @@ public class PyramidMoveManager : MoveManager {
 
 			vlist.Add(new Vector3(midX + lengthX, maxY - i*chunkY, midZ));
 			vlist.Add(new Vector3(midX - lengthX, maxY - i*chunkY, midZ));
-//
-//			vlist.Add(new Vector3(midX, maxY - i*chunkY, midZ + lengthZ));
-//			vlist.Add(new Vector3(midX, maxY - i*chunkY, midZ - lengthZ));
+			//
+			//			vlist.Add(new Vector3(midX, maxY - i*chunkY, midZ + lengthZ));
+			//			vlist.Add(new Vector3(midX, maxY - i*chunkY, midZ - lengthZ));
 		}
 
 		return vlist;
-	}
-	
-	// Update is called once per framer
-	void Update () {
-		
-	}
-
-	void FixedUpdate() {
-		UpdatePosition ();
 	}
 }

@@ -1,139 +1,224 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+
+/// <summary>
+/// Class is in charge of finding points for gesture path and then talks to hands to move
+/// </summary>
 public class MoveManager : MonoBehaviour {
 
-	public int numVerts = 0;
+	//object properties
+	protected int numVerts = 10;
 	public bool showObject = true;
-	protected GameObject model;
-	protected int currentPosition = 0;
+
+	//points
 	protected List<Vector3> vertices;
+	private float scale = 0.02f;
+	private List<GameObject> mesh_points = new List<GameObject>();
+
+	//hands
+	protected GameObject hand1;
+	protected GameObject hand2;
 	protected float speed = 10;
-	protected Vector3[] minMaxVertices;
+
+	//hand positions
+	protected Vector3 hand1_pos = Vector3.zero;
+	protected Vector3 hand2_pos = Vector3.zero;
+
+
+	//override to set vertices
+	public virtual List<Vector3> GetObjectVertices (int n) {
+		return this.GetVertices ();
+	}
 
 	// Use this for initialization
 	protected virtual void Start () {
-		model = TestObjectManager.Instance.GetObject();
-		minMaxVertices = GetMinMaxVertices ();
-		UpdateShow ();
+		//grab hand objects
+		hand1 = GameObject.Find ("Hand1");
+		hand2 = GameObject.Find ("Hand2");
+		UpdateShowObject ();
+		vertices = GetObjectVertices(numVerts);
+		ShowPoints ();
 
 	}
 
-	public void UpdateShow() {
-		var renderer = model.GetComponent<Renderer> ();
-		if (renderer == null) {
-			var renderers = model.GetComponentsInChildren<Renderer> ();
-			foreach (var childRenderer in renderers) {
-				childRenderer.enabled = showObject;
-			}
-		} else {
-			renderer.enabled = showObject;
-		}	
+
+	/// <summary>
+	/// Begins the gesture.
+	/// </summary>
+	public void BeginGesture() {
+		hand1.SendMessage ("StartMoving", vertices);
+		hand2.SendMessage ("StartMoving", vertices);
+
 	}
 
+
+	/// <summary>
+	/// Destroies all points and self.
+	/// </summary>
+	public void DestroyAll() {
+		foreach(var obj in mesh_points) {
+			Destroy (obj);
+		}
+		Destroy (gameObject);
+	}
+
+
+	/// <summary>
+	/// Updates the show object.
+	/// </summary>
+	public void UpdateShowObject() {
+		var renderer = GetComponent<Renderer> ();
+		renderer.enabled = showObject;
+
+	}
+
+	/// <summary>
+	/// Shows the points.
+	/// </summary>
 	protected void ShowPoints() {
 		foreach (var vertex in vertices) {
 			var gameObj = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 			gameObj.transform.position = vertex;
-			gameObj.transform.localScale = Vector3.one * 0.05f;
-//			print (vertex.x + "," + vertex.y + "," + vertex.z);
-
+			gameObj.transform.localScale = Vector3.one * scale;
+			mesh_points.Add (gameObj);
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
+	/// <summary>
+	/// Gets the minimum max vertices.
+	/// </summary>
+	/// <returns>The minimum max vertices.</returns>
 	protected Vector3[] GetMinMaxVertices() {
-		var allverts = this.GetVertices (0);
-		Vector3 min = allverts[0];
-		Vector3 max = allverts [1];
-		foreach (var ver in allverts) {
-			if (ver.y < min.y) {
-				min = ver;
-			} else if (ver.y > max.y) {
-				max = ver;
-			}
-		}
 
-		return new Vector3[2] { min, max };
+		var oldrotation = transform.rotation;
+		transform.rotation = Quaternion.identity;
+
+		var renderer = GetComponent<Collider> ();
+		var min = renderer.bounds.min;
+		var max = renderer.bounds.max;
+	
+
+		var min_max = new Vector3[2] { min, max };
+
+		transform.rotation = oldrotation;
+
+		return min_max;
+
+
+
 	}
 
-	protected List<Vector3> GetVertices(int n) {
+
+	/// <summary>
+	/// Gets the vertices on the mesh
+	/// </summary>
+	/// <returns>The vertices.</returns>
+	protected List<Vector3> GetVertices() {
 		//grab vertices
 		List<Vector3> vertices = new List<Vector3>();
-		var meshFilter = model.GetComponent<MeshFilter> ();
-		if (meshFilter == null) {
 
-			var filters = model.GetComponentsInChildren<MeshFilter> ();
-			foreach (var filter in filters) {
-				if (filter != null && filter.mesh != null)
-					vertices.AddRange (filter.mesh.vertices);
-			}
-		} else {
-			vertices = new List<Vector3>(meshFilter.mesh.vertices);
-		}
+		var meshFilter = GetComponent<MeshFilter> ();
+		vertices = new List<Vector3>(meshFilter.mesh.vertices);
+
 
 		//grab tranform
-		var angle = model.transform.rotation;
-		var scale = model.transform.localScale;
-		var position = model.transform.position;
+		var angle = transform.rotation;
+		var scale = transform.localScale;
+		var position = transform.position;
 
 		//updating vertices
 		for(int i = 0; i < vertices.Count; i++)
 		{
 			vertices[i] = angle * vertices[i];
 			vertices[i] = new Vector3(vertices[i].x*scale.x,vertices[i].y*scale.y,vertices[i].z*scale.z);
-			vertices [i] += position;
+			vertices[i] += position;
 		}
-
-		//vertices = new List<Vector3>(vertices.Where((x, i) => i % (vertices.Count/n) == 0));
-
 
 		return vertices;
 	}
 
-		
-	protected IEnumerator Move(int offset)
-	{
-		for(int i = 0; i < vertices.Count; i ++)
-		{
-			//Debug.Log (currentPosition);
-			if (gameObject.name == "Hand1") {
-				currentPosition = i;
-				//print ("Hand1: " + currentPosition);
 
-			} else {
-				currentPosition = (i + offset) % vertices.Count;
-				//print ("Hand2: " + currentPosition);
+	/// <summary>
+	/// Gets vertices specifically for box like objects
+	/// </summary>
+	/// <returns>The boxy vertices.</returns>
+	protected List<Vector3> GetBoxyVertices() {
+		List<Vector3> new_vertices = new List<Vector3>();
 
+		var minmax = this.GetMinMaxVertices ();
+
+
+		var boundPoint1 = minmax[0];
+		var boundPoint2 = minmax[1];
+
+		new_vertices.Add(boundPoint1);
+		new_vertices.Add(boundPoint2);
+		new_vertices.Add(new Vector3(boundPoint1.x, boundPoint1.y, boundPoint2.z));
+		new_vertices.Add(new Vector3(boundPoint1.x, boundPoint2.y, boundPoint1.z));
+		new_vertices.Add(new Vector3(boundPoint2.x, boundPoint1.y, boundPoint1.z));
+		new_vertices.Add(new Vector3(boundPoint1.x, boundPoint2.y, boundPoint2.z));
+		new_vertices.Add(new Vector3(boundPoint2.x, boundPoint1.y, boundPoint2.z));
+		new_vertices.Add(new Vector3(boundPoint2.x, boundPoint2.y, boundPoint1.z));
+
+
+
+
+		//var allVertices = this.GetVertices (0);
+		float minX = new_vertices [0].x;
+		float minY = new_vertices [0].y;
+		float minZ = new_vertices [0].z;
+		float maxX = new_vertices [0].x;
+		float maxY = new_vertices [0].y;
+		float maxZ = new_vertices [0].z;
+
+		List<Vector3> points = new List<Vector3>();
+
+		// get the min/max x/y/z values
+		foreach (var ver in new_vertices) {
+			if (ver.x < minX) {
+				minX = ver.x;
 			}
-			yield return new WaitForSeconds(1f);
-		}
-	}
-
-	protected void UpdatePosition()
-	{
-		var center = new Vector3 ((minMaxVertices [0].x + minMaxVertices [1].x) / 2, (minMaxVertices [0].y + minMaxVertices [1].y) / 2, (minMaxVertices [0].z + minMaxVertices [1].z) / 2);
-		if (vertices != null) {
-
-			//var normal = (vertices [currentPosition] - center).normalized;
-
-			var normal = (vertices [currentPosition] - vertices[(currentPosition + vertices.Count/2) % vertices.Count]).normalized;
-			
-
-			if (currentPosition >= vertices.Count / 2) {
-				normal *= -1;
+			if (ver.x > maxX) {
+				maxX = ver.x;
+			} 
+			if (ver.y < minY) {
+				minY = ver.y;
 			}
-				
-
-			transform.position = Vector3.Lerp (transform.position, vertices [currentPosition],  speed*Time.deltaTime);
-
-
-			transform.up = Vector3.Lerp (transform.up, normal,  speed*Time.deltaTime);
+			if (ver.y > maxY) {
+				maxY = ver.y;
+			}
+			if (ver.z < minZ) {
+				minZ = ver.z;
+			}
+			if (ver.z > maxZ) {
+				maxZ = ver.z;
+			}
+			//points.Add (ver);
 		}
+
+		float midX = (float) (maxX + minX) / (float) 2;
+		float midY = (float) (maxY + minY) / (float) 2;
+		float midZ = (float) (maxZ + minZ) / (float) 2;
+
+
+		points.Add (new Vector3(midX, midY, minZ)); //front face
+		points.Add (new Vector3(midX, minY, midZ)); //bottom face
+		points.Add (new Vector3(minX, midY, midZ)); //left face
+		points.Add (new Vector3(midX, midY, maxZ)); //back face
+		points.Add (new Vector3(midX, maxY, midZ)); // top face
+		points.Add (new Vector3(maxX, midY, midZ)); //right face
+
+		var angle = transform.rotation;
+		var scale = transform.localScale;
+		var position = transform.position;
+
+		for (var i = 0; i < points.Count; i++) {
+			points[i] = angle * points[i];
+			points [i] += position;
+		}
+		return points;
 	}
 }

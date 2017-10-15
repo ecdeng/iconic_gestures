@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+
+/// <summary>
+/// Object manager. Changes object displayed and handles input events. Displays total mesh
+/// </summary>
 public class ObjectManager : MonoBehaviour {
 
 	//current game object
@@ -13,21 +17,18 @@ public class ObjectManager : MonoBehaviour {
 	private List<GameObject> points;
 
 
+	/// <summary>
+	/// Get all points for the mesh
+	/// </summary>
+	/// <returns>The mesh.</returns>
+	/// <param name="obj">Object.</param>
 	List<Vector3> UpdateMesh(GameObject obj) {
 
 		//grab vertices
 		List<Vector3> vertices = new List<Vector3>();
 		var meshFilter = obj.GetComponent<MeshFilter> ();
-		if (meshFilter == null) {
+		vertices = new List<Vector3>(meshFilter.mesh.vertices);
 
-			var filters = obj.GetComponentsInChildren<MeshFilter> ();
-			foreach (var filter in filters) {
-				if (filter != null && filter.mesh != null)
-					vertices.AddRange (filter.mesh.vertices);
-			}
-		} else {
-			vertices = new List<Vector3>(meshFilter.mesh.vertices);
-		}
 			
 		//grab tranform
 		var angle = obj.transform.rotation;
@@ -45,9 +46,7 @@ public class ObjectManager : MonoBehaviour {
 		return vertices;
 
 	}
-
-
-
+		
 
 	// Use this for initialization
 	void Start () {
@@ -55,10 +54,16 @@ public class ObjectManager : MonoBehaviour {
 		togglepoints = false;
 	}
 
+
+	/// <summary>
+	/// Changes the object.
+	/// </summary>
+	/// <param name="name">Name.</param>
 	public void ChangeObject(string name) {
 
 		//destory previous settings
-		Destroy (currObject);
+		if (currObject != null)
+			currObject.SendMessage("DestroyAll");
 
 		foreach (var point in points) {
 			Destroy (point);
@@ -69,33 +74,57 @@ public class ObjectManager : MonoBehaviour {
 		//create new objects
 		currObject = (GameObject)Instantiate(Resources.Load(name + "/" + name));
 
+
+	}
+
+	/// <summary>
+	/// Get access to the object.
+	/// </summary>
+	/// <returns>The object.</returns>
+	public GameObject GetObject () {
+		return currObject;
+
+	}
+
+
+	/// <summary>
+	/// Toggle Points
+	/// </summary>
+	void AddTotalMeshPoints() {
 		//grab vertices
-		var vertices = UpdateMesh (currObject);
+		if (points.Count == 0) {
+			var vertices = UpdateMesh (currObject);
+			foreach (var vertex in vertices) {
 
+				//create spheres
+				var gameObj = GameObject.CreatePrimitive (PrimitiveType.Sphere);
+				gameObj.transform.localScale = 0.01f * Vector3.one;
+				gameObj.transform.position = vertex;
+				gameObj.SetActive (togglepoints);
+				points.Add (gameObj);
+			}
 
-		foreach (var vertex in vertices) {
-
-			//create spheres
-			var gameObj = GameObject.CreatePrimitive (PrimitiveType.Sphere);
-			gameObj.transform.localScale = 0.01f * Vector3.one;
-			gameObj.transform.position = vertex;
-			gameObj.SetActive (togglepoints);
-			points.Add (gameObj);
+		}
+		togglepoints = !togglepoints;
+		foreach (var point in points) {
+			point.SetActive(togglepoints);
 		}
 
 	}
 		
 		
-	
 	// Update is called once per frame
 	void Update () {
 		
 		//toggle show points
 		if (Input.GetKeyDown("p")) {
-			togglepoints = !togglepoints;
-			foreach (var point in points) {
-				point.SetActive(togglepoints);
-			}
+			
+			AddTotalMeshPoints ();
+		}
+
+		//start moving the hands
+		if (Input.GetKeyDown("m")) {
+			currObject.SendMessage ("BeginGesture");
 		}
 	}
 }

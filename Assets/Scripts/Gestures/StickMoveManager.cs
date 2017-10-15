@@ -5,18 +5,20 @@ using UnityEngine;
 
 public class StickMoveManager : MoveManager {
 
-	// Use this for initialization
 	void Start () {
 		base.Start ();
-		vertices = this.GetStickPoints();
-		ShowPoints ();
-		StartCoroutine (base.Move(2));
 	}
 
-	List<Vector3> GetStickPoints()
-	{
+	void Update() {
 
-		var allVertices = this.GetVertices (0);
+	}
+
+	/// <summary>
+	/// Gets the object vertices - override base class.
+	/// </summary>
+	/// <returns>The object vertices.</returns>
+	public override List<Vector3> GetObjectVertices (int n) {
+		var allVertices = this.GetVertices ();
 		Vector3 minY = allVertices [0]; // lower endpoint
 		Vector3 maxY = allVertices [0]; // upper endpoint
 
@@ -43,29 +45,20 @@ public class StickMoveManager : MoveManager {
 				}
 			}
 		}
-			
-//		Vector3 avg1 = new Vector3 (min.x - 0.05f, (min.y + max.y) / 2, min.z);
-//		Vector3 avg2 = new Vector3 (min.x + 0.05f, (min.y + max.y) / 2, min.z);
-//
+
+		//		Vector3 avg1 = new Vector3 (min.x - 0.05f, (min.y + max.y) / 2, min.z);
+		//		Vector3 avg2 = new Vector3 (min.x + 0.05f, (min.y + max.y) / 2, min.z);
+		//
 		List<Vector3> points = new List<Vector3>();
-//		points.Add(min);
-//		points.Add(avg1);
-//		points.Add (max);
-//		points.Add (avg2);
+		//		points.Add(min);
+		//		points.Add(avg1);
+		//		points.Add (max);
+		//		points.Add (avg2);
 		points.Add(minY);
 		points.Add (maxY);
 		points.Add (minX);
 		points.Add (maxX);
 		return points;
 	}
-
-	// Update is called once per frame
-	void Update () {
-
-	}
-
-	void FixedUpdate() {
-
-		UpdatePosition ();
-	}
+		
 }

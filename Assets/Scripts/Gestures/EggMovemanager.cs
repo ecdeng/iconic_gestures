@@ -4,20 +4,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class EggMovemanager : MoveManager {
+public class EggMoveManager : MoveManager {
+
 
 	void Start () {
 		base.Start ();
-		vertices = this.GetEggPoints();
-		ShowPoints ();
-		StartCoroutine (base.Move(1));
 	}
 
-	List<Vector3> GetEggPoints()
-	{
+	void Update() {
 
+	}
+
+	/// <summary>
+	/// Gets the object vertices - override base class.
+	/// </summary>
+	/// <returns>The object vertices.</returns>
+	public override List<Vector3> GetObjectVertices (int n) {
 		//get all y
-		var allVertices = this.GetVertices (0);
+		var allVertices = this.GetVertices ();
 		List<Vector3> answer = new List<Vector3>();
 
 		//get point with highest y value
@@ -38,6 +42,7 @@ public class EggMovemanager : MoveManager {
 		}
 
 		return answer;
+
 		//		divide up the points
 		//		points = new List<Vector3>(points.Where((x, i) => i % (5) == 0));
 
@@ -57,15 +62,5 @@ public class EggMovemanager : MoveManager {
 		//		}
 
 		//return answer;
-	}
-
-	// Update is called once per frame
-	void Update () {
-
-	}
-
-	void FixedUpdate() {
-
-		UpdatePosition ();
 	}
 }

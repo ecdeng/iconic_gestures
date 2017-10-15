@@ -276,6 +276,15 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 1677041246084950, guid: b9a6b3d8cb5da40d4ba224b625c6332a, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 23718308482801044, guid: b9a6b3d8cb5da40d4ba224b625c6332a,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114655385649666084, guid: b9a6b3d8cb5da40d4ba224b625c6332a, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: b9a6b3d8cb5da40d4ba224b625c6332a, type: 2}
@@ -563,6 +572,15 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -85
       objectReference: {fileID: 0}
+    - target: {fileID: 1001585858768580, guid: 3fe4ceac050494ff2872e850e69c104f, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 23053640730676096, guid: 3fe4ceac050494ff2872e850e69c104f,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114420475377740266, guid: 3fe4ceac050494ff2872e850e69c104f, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 3fe4ceac050494ff2872e850e69c104f, type: 2}
@@ -751,7 +769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86654dbd8c1264bb6bee217a9b94f285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectName: Box
+  ObjectName: Book
 --- !u!4 &1272263152
 Transform:
   m_ObjectHideFlags: 0
