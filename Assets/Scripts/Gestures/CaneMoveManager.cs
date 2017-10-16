@@ -18,6 +18,8 @@ public class CaneMoveManager : MoveManager {
 	/// </summary>
 	/// <returns>The object vertices.</returns>
 	public override List<Vector3> GetObjectVertices (int n) {
+
+
 		//polebottomright
 		//polebottomleft
 		//polemiddleright

@@ -10,7 +10,7 @@ using System;
 public class MoveManager : MonoBehaviour {
 
 	//object properties
-	protected int numVerts = 10;
+	protected int numVerts = 15;
 	public bool showObject = true;
 
 	//points
@@ -30,7 +30,31 @@ public class MoveManager : MonoBehaviour {
 
 	//override to set vertices
 	public virtual List<Vector3> GetObjectVertices (int n) {
-		return this.GetVertices ();
+
+		//get all y
+		var allVertices = this.GetVertices ();
+		List<Vector3> answer = new List<Vector3>();
+
+		//get point with highest y value
+		Vector3 max = allVertices[0];
+		foreach (var ver in allVertices) {
+			if (ver.y > max.y) {
+				max = ver;
+			}
+		}
+
+		float targetZ = max.z;
+
+		// get all points that have the target Z value
+		foreach (var ver in allVertices) {
+			if (Math.Abs(ver.z - targetZ) <= 0.005) {
+				answer.Add (ver);
+			}
+		}
+
+		return answer;
+
+		//return this.GetVertices ();
 	}
 
 	// Use this for initialization

@@ -18,6 +18,8 @@ public class BookMoveManager : MoveManager {
 	/// </summary>
 	/// <returns>The object vertices.</returns>
 	public override List<Vector3> GetObjectVertices (int n) {
+		return base.GetObjectVertices (n);
+
 		return this.GetBoxyVertices ();
 	}
 }
