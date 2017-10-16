@@ -16,7 +16,7 @@ public class BallMoveManager : MoveManager {
 	}
 
 	public override List<Vector3> GetObjectVertices (int n) {
-
+        return this.GetCrossSectionVertices(n, 'z', 1000);
 		List<Vector3> vertices = this.GetVertices();
 		SortedList<int, List<Vector3>> crossSection = new SortedList<int, List<Vector3>>();
 		foreach (var vert in vertices)

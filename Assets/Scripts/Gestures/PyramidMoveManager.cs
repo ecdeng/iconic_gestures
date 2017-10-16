@@ -19,6 +19,7 @@ public class PyramidMoveManager : MoveManager {
 	/// </summary>
 	/// <returns>The object vertices.</returns>
 	public override List<Vector3> GetObjectVertices (int n) {
+        return this.GetCrossSectionVertices(n, 'z', 1000);
 
 		List<Vector3> vertices = this.GetVertices();
 		SortedList<int, List<Vector3>> crossSection = new SortedList<int, List<Vector3>>();
