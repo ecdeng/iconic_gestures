@@ -22,9 +22,8 @@ public class HandManager : MonoBehaviour {
 	private List<Vector3> transformPointsToSend;
 	private List<Vector3> normalPointsToSend;
 
-
 	//name of hand
-	private bool isHand1;
+	private bool isLeftHand;
 
 
 	/// <summary>
@@ -82,7 +81,7 @@ public class HandManager : MonoBehaviour {
 		originalRotation = transform.rotation;
 		transformPointsToSend = new List<Vector3> ();
 		normalPointsToSend = new List<Vector3> ();
-		isHand1 = name == "Hand1";
+		isLeftHand = name == "Hand1";
 
 	}
 		
@@ -106,6 +105,16 @@ public class HandManager : MonoBehaviour {
 			hand1_pos = vertices [i];
 			hand2_pos = vertices [(i + vertices.Count / 2) % vertices.Count];
 
+			if (isLeftHand) {
+				var outside_point = hand1_pos + new Vector3(-1.0f,0f,0f) * 0.1f;
+				Ray ray = new Ray (outside_point, hand1_pos - outside_point);
+				RaycastHit hit;
+				if (Physics.Raycast(ray, out hit, 100, 1<< 1)) {
+					var transform = hit.collider.gameObject.transform;
+					Debug.DrawRay (outside_point, hit.normal, Color.green,100);
+				}
+			}
+
 			yield return new WaitForSeconds(1f);
 		}
 	}
@@ -118,9 +127,18 @@ public class HandManager : MonoBehaviour {
 
 		if (vertices != null) {
 
-			var normal = (hand1_pos - hand2_pos).normalized;
-			if (isHand1)
+			var normal = (hand1_pos).normalized;
+			if (isLeftHand) {
+				/*var outside_point = hand1_pos + normal * 0.1f;
+				Ray ray = new Ray (outside_point, hand1_pos - outside_point);
+				RaycastHit hit;
+				if (Physics.Raycast(ray, out hit, 100, 1<< 1)) {
+					var transform = hit.collider.gameObject.transform;
+					normal = hit.normal;
+					Debug.DrawRay (transform.position, hit.normal, Color.green,100);
+				}*/
 				MoveHand (hand1_pos, normal);
+			}
 			else
 				MoveHand (hand2_pos, normal);
 		}

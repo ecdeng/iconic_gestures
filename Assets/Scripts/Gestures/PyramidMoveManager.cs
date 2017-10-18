@@ -6,13 +6,6 @@ using System;
 public class PyramidMoveManager : MoveManager {
 
 
-	void Start () {
-		base.Start ();
-	}
-
-	void Update() {
-
-	}
 
 	/// <summary>
 	/// Gets the object vertices - override base class.

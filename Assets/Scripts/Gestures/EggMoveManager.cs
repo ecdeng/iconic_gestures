@@ -7,14 +7,6 @@ using System.Linq;
 public class EggMoveManager : MoveManager {
 
 
-	void Start () {
-		base.Start ();
-	}
-
-	void Update() {
-
-	}
-
 	/// <summary>
 	/// Gets the object vertices - override base class.
 	/// </summary>

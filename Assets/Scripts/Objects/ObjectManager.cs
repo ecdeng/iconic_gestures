@@ -73,6 +73,7 @@ public class ObjectManager : MonoBehaviour {
 
 		//create new objects
 		currObject = (GameObject)Instantiate(Resources.Load(name + "/" + name));
+		currObject.layer = 1;
 
 
 	}
