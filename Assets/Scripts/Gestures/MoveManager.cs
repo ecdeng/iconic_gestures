@@ -248,6 +248,100 @@ public class MoveManager : MonoBehaviour {
 		return points;
 	}
 
+	/// <summary>
+	/// Gets vertices specifically for box like objects with generalized n
+	/// </summary>
+	/// <returns>The boxy vertices.</returns>
+	protected List<Vector3> GetBoxyVertices(int n) {
+		List<Vector3> new_vertices = new List<Vector3>();
+
+		var minmax = this.GetMinMaxVertices ();
+
+
+		var boundPoint1 = minmax[0];
+		var boundPoint2 = minmax[1];
+
+		new_vertices.Add(boundPoint1);
+		new_vertices.Add(boundPoint2);
+		new_vertices.Add(new Vector3(boundPoint1.x, boundPoint1.y, boundPoint2.z));
+		new_vertices.Add(new Vector3(boundPoint1.x, boundPoint2.y, boundPoint1.z));
+		new_vertices.Add(new Vector3(boundPoint2.x, boundPoint1.y, boundPoint1.z));
+		new_vertices.Add(new Vector3(boundPoint1.x, boundPoint2.y, boundPoint2.z));
+		new_vertices.Add(new Vector3(boundPoint2.x, boundPoint1.y, boundPoint2.z));
+		new_vertices.Add(new Vector3(boundPoint2.x, boundPoint2.y, boundPoint1.z));
+
+
+		//var allVertices = this.GetVertices (0);
+		float minX = new_vertices [0].x;
+		float minY = new_vertices [0].y;
+		float minZ = new_vertices [0].z;
+		float maxX = new_vertices [0].x;
+		float maxY = new_vertices [0].y;
+		float maxZ = new_vertices [0].z;
+
+		List<Vector3> points = new List<Vector3>();
+
+		// get the min/max x/y/z values
+		foreach (var ver in new_vertices) {
+			if (ver.x < minX) {
+				minX = ver.x;
+			}
+			if (ver.x > maxX) {
+				maxX = ver.x;
+			} 
+			if (ver.y < minY) {
+				minY = ver.y;
+			}
+			if (ver.y > maxY) {
+				maxY = ver.y;
+			}
+			if (ver.z < minZ) {
+				minZ = ver.z;
+			}
+			if (ver.z > maxZ) {
+				maxZ = ver.z;
+			}
+			//points.Add (ver);
+		}
+
+		float midX = (float) (maxX + minX) / (float) 2;
+		float midY = (float) (maxY + minY) / (float) 2;
+		float midZ = (float) (maxZ + minZ) / (float) 2;
+
+
+		points.Add (new Vector3(midX, midY, minZ)); //front face
+		points.Add (new Vector3(midX, minY, midZ)); //bottom face
+		points.Add (new Vector3(minX, midY, midZ)); //left face
+		points.Add (new Vector3(midX, midY, maxZ)); //back face
+		points.Add (new Vector3(midX, maxY, midZ)); // top face
+		points.Add (new Vector3(maxX, midY, midZ)); //right face
+
+		n = n - 6;
+		if (n < 0) {
+			n = 0;
+		} else if (n > 8) {
+			n = 8;
+			for (int i = 0; i < n; i++) {
+				points.Add (new_vertices [i]);
+			}
+		} else {
+			for (int i = 0; i < n; i++) {
+				points.Add (new_vertices [i]);
+			}
+		}
+
+		var angle = transform.rotation;
+		var scale = transform.localScale;
+		var position = transform.position;
+
+		for (var i = 0; i < points.Count; i++) {
+			points[i] = angle * points[i];
+			points [i] += position;
+		}
+		return points;
+	}
+
+
     public List<Vector3> GetCrossSectionVertices(int n, char axis, int precision)
     {
         List<Vector3> vertices = this.GetVertices();
