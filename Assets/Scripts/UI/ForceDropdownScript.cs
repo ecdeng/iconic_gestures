@@ -12,6 +12,7 @@ public class ForceDropdownScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		model = GameObject.Find ("Model");
 		myForceDropdown.onValueChanged.AddListener(delegate {
 			myForceDropdownValueChangedHandler(myForceDropdown);
 		});
@@ -27,6 +28,7 @@ public class ForceDropdownScript : MonoBehaviour {
 
 	private void myForceDropdownValueChangedHandler(Dropdown target) {
 		Debug.Log("selected force: "+ target.value);
+
 
 	}
 

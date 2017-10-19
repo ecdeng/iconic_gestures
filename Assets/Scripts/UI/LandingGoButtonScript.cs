@@ -16,6 +16,6 @@ public class LandingGoButtonScript : MonoBehaviour {
 
 	void TaskOnClick()
 	{
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene(2);
 	}
 }

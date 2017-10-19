@@ -10,12 +10,23 @@ using System.IO;
 public class ObjectManager : MonoBehaviour {
 
 	//current game object
-	private GameObject currObject;
+	public GameObject currObject;
+	public string currName;
+	public int currPoints;
 	//show mesh
 	private bool togglepoints;
 	//points for mesh
 	private List<GameObject> points;
 
+	//get instance of object
+	public static ObjectManager Instance;
+
+
+
+
+	void Awake() {
+		Instance = this;
+	}
 
 	/// <summary>
 	/// Get all points for the mesh
@@ -55,11 +66,16 @@ public class ObjectManager : MonoBehaviour {
 	}
 
 
+
 	/// <summary>
 	/// Changes the object.
 	/// </summary>
 	/// <param name="name">Name.</param>
-	public void ChangeObject(string name) {
+	public void ChangeObject(string[] details) {
+		currName = string.IsNullOrEmpty(details[0]) ? currName : details[0];
+		currPoints = string.IsNullOrEmpty (details [1]) ? currPoints : int.Parse (details [1]);
+
+
 
 		//destory previous settings
 		if (currObject != null)
@@ -72,9 +88,10 @@ public class ObjectManager : MonoBehaviour {
 
 
 		//create new objects
-		currObject = (GameObject)Instantiate(Resources.Load(name + "/" + name));
-		currObject.layer = 1;
 
+		currObject = (GameObject)Instantiate(Resources.Load(currName + "/" + currName));
+		currObject.layer = 1;
+		currObject.SendMessage ("CreateVertices", currPoints);
 
 	}
 

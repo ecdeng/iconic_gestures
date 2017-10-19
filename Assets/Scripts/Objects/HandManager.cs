@@ -6,7 +6,7 @@ public class HandManager : MonoBehaviour {
 
 	//hand specific info
 	private bool moving = false;
-	private float speed = 10f;
+	private float speed = 5f;
 
 	//original postion
 	private Vector3 originalPos;
@@ -16,6 +16,10 @@ public class HandManager : MonoBehaviour {
 	private List<Vector3> vertices;
 	private Vector3 hand1_pos;
 	private Vector3 hand2_pos;
+	private Vector3 hand1_norm;
+	private Vector3 hand2_norm;
+	private Vector3 hand_pos;
+	private Vector3 hand_norm;
 
 	//network
 	private GameObject NetworkManager;
@@ -30,9 +34,9 @@ public class HandManager : MonoBehaviour {
 	/// Resets the states
 	/// </summary>
 	void ResetState() {
-		hand1_pos = originalPos;
-		hand2_pos = originalPos;
+		transform.position = originalPos;
 		transform.rotation = originalRotation;
+		moving = false;
 	}
 
 
@@ -40,10 +44,8 @@ public class HandManager : MonoBehaviour {
 	/// Raises the trigger enter event.
 	/// </summary>
 	/// <param name="collider">Collider.</param>
-	void OnTriggerEnter(Collider collider) {
-		/*print ("trigger");
-		moving = false; 
-		object[] message = new object[2];
+	void OnTriggerEnter(Collider c) {
+		/*object[] message = new object[2];
 		message [0] = transformPointsToSend;
 		message [1] = normalPointsToSend;
 		NetworkManager.SendMessage ("sendPoints",message);
@@ -95,6 +97,40 @@ public class HandManager : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Get Normals of surface
+	/// </summary>
+	protected void CalculateRoundNormals() {
+
+		//get model
+		var model = ObjectManager.Instance.currObject;
+
+		//get horizontal norm
+		var norm1 = (hand1_pos - hand2_pos).normalized;
+
+		//inverse it for right hand
+		if (!isLeftHand)
+			norm1 *= -1;
+
+		//get norm of point to center
+		var norm2 = (hand_pos).normalized;
+		var norm = norm1.magnitude > 0 && model.name.Contains("Flask") ? norm1 : norm2;
+		var outside_point = hand_pos + norm;
+
+		//perform ray cast to object
+		Ray ray = new Ray (outside_point, hand_pos - outside_point);
+		RaycastHit hit;
+		if (Physics.Raycast(ray, out hit, 100, 1<< 1)) {
+
+			//store normals and hand_pos
+			Debug.DrawRay(hit.point,hit.normal,Color.green,100);
+			hand_norm = hit.normal;
+			hand_pos = hand_pos + hand_norm * 0.03f;
+		}
+
+		
+	}
+		
+	/// <summary>
 	/// Sets ups the hand position .
 	/// </summary>
 	protected IEnumerator Move()
@@ -104,64 +140,27 @@ public class HandManager : MonoBehaviour {
 
 			hand1_pos = vertices [i];
 			hand2_pos = vertices [(i + vertices.Count / 2) % vertices.Count];
-
-			if (isLeftHand) {
-				var outside_point = hand1_pos + new Vector3(-1.0f,0f,0f) * 0.1f;
-				Ray ray = new Ray (outside_point, hand1_pos - outside_point);
-				RaycastHit hit;
-				if (Physics.Raycast(ray, out hit, 100, 1<< 1)) {
-					var transform = hit.collider.gameObject.transform;
-					Debug.DrawRay (outside_point, hit.normal, Color.green,100);
-				}
-			}
+			hand_pos = isLeftHand ? hand1_pos : hand2_pos;
+			CalculateRoundNormals ();
+			moving = true;
 
 			yield return new WaitForSeconds(1f);
 		}
+		ResetState ();
 	}
 
 	/// <summary>
-	/// Updates the position of hands.
-	/// </summary>
-	protected void UpdateHandPosition()
-	{
-
-		if (vertices != null) {
-
-			var normal = (hand1_pos).normalized;
-			if (isLeftHand) {
-				/*var outside_point = hand1_pos + normal * 0.1f;
-				Ray ray = new Ray (outside_point, hand1_pos - outside_point);
-				RaycastHit hit;
-				if (Physics.Raycast(ray, out hit, 100, 1<< 1)) {
-					var transform = hit.collider.gameObject.transform;
-					normal = hit.normal;
-					Debug.DrawRay (transform.position, hit.normal, Color.green,100);
-				}*/
-				MoveHand (hand1_pos, normal);
-			}
-			else
-				MoveHand (hand2_pos, normal);
-		}
-	}
-
-	/// <summary>
-	/// Moves the hand.
-	/// </summary>
-	/// <param name="hand">Hand.</param>
-	/// <param name="position">Position.</param>
-	/// <param name="normal">Normal.</param>
-	private void MoveHand(Vector3 position, Vector3 normal) {
-
-		transform.position = Vector3.Lerp (transform.position, position,  speed*Time.deltaTime);
-		transform.up = Vector3.Lerp (transform.up, normal,  speed*Time.deltaTime);	
-	}
-
-	/// <summary>
-	/// Calls update hand position every frame
+	/// Updates position of hands
 	/// </summary>
 	void FixedUpdate() {
 
-		UpdateHandPosition ();
+		if (vertices != null && moving) {
+			transform.position = Vector3.Lerp (transform.position, hand_pos,  speed*Time.deltaTime);
+			var actual_norm = isLeftHand ? hand_norm : -1 * hand_norm; 
+			var quat = Quaternion.LookRotation (transform.forward, actual_norm);
+			transform.rotation = Quaternion.Lerp (transform.rotation, quat, speed * Time.deltaTime);
+			//transform.up = Vector3.Lerp (transform.up, hand_norm,  speed*Time.deltaTime);	
+		}
 	}
 
 

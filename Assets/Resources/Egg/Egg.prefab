@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33692360698112176}
   - component: {fileID: 23935245037873970}
   - component: {fileID: 64172515848165410}
-  - component: {fileID: 114360112823009042}
+  - component: {fileID: 114383745907121170}
   m_Layer: 0
   m_Name: Egg
   m_TagString: Untagged
@@ -96,7 +96,7 @@ MeshCollider:
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 796ead69156aa4994888183716718ab0, type: 3}
---- !u!114 &114360112823009042
+--- !u!114 &114383745907121170
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -107,5 +107,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c91d6fbdf348f4ed49f3b68e3343f1f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numVerts: 0
   showObject: 1

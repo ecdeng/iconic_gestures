@@ -57,15 +57,17 @@ public class MoveManager : MonoBehaviour {
 		//return this.GetVertices ();
 	}
 
-	// Use this for initialization
-	protected virtual void Start () {
-		//grab hand objects
+	void Start() {
 		hand1 = GameObject.Find ("Hand1");
 		hand2 = GameObject.Find ("Hand2");
 		UpdateShowObject ();
-		vertices = GetObjectVertices(numVerts);
+	}
+		
+	void CreateVertices(int n) {
+		UpdateShowObject ();
+		numVerts = n;
+		vertices = GetObjectVertices(n);
 		ShowPoints ();
-
 	}
 
 

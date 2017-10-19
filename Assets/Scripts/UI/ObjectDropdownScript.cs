@@ -27,7 +27,7 @@ public class ObjectDropdownScript : MonoBehaviour {
 		//get the string value of the selected index
 		string value = menuOptions [0].text;
 
-		model.SendMessage("ChangeObject",value);
+		model.SendMessage("ChangeObject",new string[]{value,"10"});
 		hand1.SendMessage ("ResetState");
 		hand2.SendMessage ("ResetState");
 		pointsDropdown.SendMessage ("UpdateOptions", value);
@@ -50,7 +50,7 @@ public class ObjectDropdownScript : MonoBehaviour {
 
 
 
-		model.SendMessage("ChangeObject",value);
+		model.SendMessage("ChangeObject",new string[]{value,""});
 		hand1.SendMessage ("ResetState");
 		hand2.SendMessage ("ResetState");
 		pointsDropdown.SendMessage ("UpdateOptions", value);
@@ -61,25 +61,5 @@ public class ObjectDropdownScript : MonoBehaviour {
 	public void SetDropdownIndex(int index) {
 		myDropdown.value = index;
 	}
-
-	/*public string printStringFromIndex(int index) {
-		string result;
-		if (index == 0) {
-			result = "Arrow";
-		} else if (index == 1) {
-			result = "Ball"; //1-20
-		} else if (index == 2) {
-			result = "Book"; 
-		} else if (index == 3) {
-			result = "Cane";
-		} else if (index == 4) {
-			result = "Egg";
-		}  
-		else if (index == 4) {
-			result = "Egg";
-		}else {
-			result = "ERROR";
-		}
-		return result;
-	}*/
+		
 }
