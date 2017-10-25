@@ -24,7 +24,10 @@ public class ListControllerScript : MonoBehaviour {
 				listItemScript.y.ToString ("0.0000") + "," +
 				listItemScript.z.ToString ("0.0000") + ")";
 			listItemScript.selected = false;
-			newListItem.transform.parent = ContentPanel.transform;
+
+			newListItem.transform.SetParent (ContentPanel.transform);
+
+//			newListItem.transform.parent = ContentPanel.transform;
 			newListItem.transform.localScale = Vector3.one;
 
 		}

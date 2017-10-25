@@ -20,4 +20,10 @@ public class ListItemScript : MonoBehaviour {
 	void Update () {
 		
 	}
+
+	void OnMouseEnter()
+	{
+		//If your mouse hovers over the GameObject with the script attached, output this message
+		Debug.Log("Mouse is over point " + id);
+	}
 }

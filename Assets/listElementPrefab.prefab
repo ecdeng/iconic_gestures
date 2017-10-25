@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 114744073624880642}
   - component: {fileID: 114409204165592892}
   - component: {fileID: 114227655868040342}
+  - component: {fileID: 65060466828183374}
   m_Layer: 5
   m_Name: listElementPrefab
   m_TagString: Untagged
@@ -47,6 +48,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &65060466828183374
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1633117603112372}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114083660413754550
 MonoBehaviour:
   m_ObjectHideFlags: 1
