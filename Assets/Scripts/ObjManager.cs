@@ -18,8 +18,8 @@ public class ObjManager : Singleton<ObjManager> {
 
 		ObjManager.Instance.LoadModel ("hello");
 	}
-
-	void LoadModel(string filepath) {
+		
+	public void LoadModel(string filepath) {
 		point_ids.Clear ();
 		Destroy (model);
 		model = OBJLoader.LoadOBJFile (filepath);
