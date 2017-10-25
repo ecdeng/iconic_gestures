@@ -39,26 +39,31 @@ public class ROSBridge : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		List<Vector3> points = new List<Vector3>();
-		points.Add(new Vector3(1, 2, 3));
-		points.Add(new Vector3(4, 5, 6));
+        Coordinate c1 = new Coordinate(new Vector3(1, 1, 1), new Vector3(2, 2, 2));
+        Coordinate c2 = new Coordinate(new Vector3(2, 2, 2), new Vector3(3, 3, 3));
+        Coordinate c3 = new Coordinate(new Vector3(3, 3, 3), new Vector3(4, 4, 4));
+        Coordinate c4 = new Coordinate(new Vector3(4, 4, 4), new Vector3(5, 5, 5));
 
-		List<Vector3> normals = new List<Vector3>();
-		normals.Add(new Vector3(0, 1, 0));
-		normals.Add(new Vector3(1, 0, 0));
+        List<Coordinate> hand1 = new List<Coordinate>();
+        hand1.Add(c1); hand1.Add(c2);
+        List<Coordinate> hand2 = new List<Coordinate>();
+        hand2.Add(c3); hand2.Add(c4);
 
-		//sendPoints(points, normals);
-	}
+        List<List<Coordinate>> gestures = new List<List<Coordinate>>();
+        gestures.Add(hand1); gestures.Add(hand2);
+
+        sendPoints(gestures);
+    }
 
 	public void sendPoints(object[] point_normals) 
 	{
-		sendPoints ((List<Vector3>)point_normals [0], (List<Vector3>) point_normals [1]);
+		// sendPoints ((List<Vector3>)point_normals [0], (List<Vector3>) point_normals [1]);
 	}
 
-	void sendPoints(List<Vector3> points, List<Vector3> normals)
+	void sendPoints(List<List<Coordinate>> coordinates)
 	{
-		string serializedPoints = UnityEngine.JsonUtility.ToJson(new Points(points, normals));
-		Send(serializedPoints + "\n");
+		string serializedPoints = UnityEngine.JsonUtility.ToJson(coordinates[0][0]);
+		//Send(serializedPoints + "\n");
 		print (serializedPoints);
 	}
 
@@ -85,12 +90,37 @@ public class ROSBridge : MonoBehaviour {
 // Wrapper class to be able to serialize out the points
 public class Points
 {
-	public List<Vector3> points;
-	public List<Vector3> normals;
+    public List<List<Coordinate>> coordinates;
 
-	public Points(List<Vector3> points, List<Vector3> normals)
-	{
-		this.normals = normals;
-		this.points = points;
-	}
+    public Points(List<List<Coordinate>> coordinates)
+    {
+        this.coordinates = coordinates;
+    }
+
+    public List<List<Coordinate>> getCoordinates()
+    {
+        return coordinates;
+    }
+}
+
+public class Coordinate
+{
+    public Vector3 point;
+    public Vector3 normal;
+
+    public Coordinate(Vector3 point, Vector3 normal)
+    {
+        this.point = point;
+        this.normal = normal;
+    }
+
+    public Vector3 getPoint()
+    {
+        return point;
+    }
+
+    public Vector3 getNormal()
+    {
+        return normal;
+    }
 }
