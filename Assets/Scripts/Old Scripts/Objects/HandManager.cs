@@ -139,7 +139,7 @@ public class HandManager : MonoBehaviour {
 		{
 
 			hand1_pos = vertices [i];
-			hand2_pos = vertices [(i + vertices.Count / 2) % vertices.Count];
+			hand2_pos = vertices [(i + 4) % vertices.Count];
 			hand_pos = isLeftHand ? hand1_pos : hand2_pos;
 			CalculateRoundNormals ();
 			moving = true;

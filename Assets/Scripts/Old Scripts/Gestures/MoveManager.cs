@@ -390,7 +390,7 @@ public class MoveManager : MonoBehaviour {
         {
             rightHalf.Add(right[right.Count - 1]);
         }
-
+		rightHalf.Reverse ();
         points.AddRange(leftHalf);
         points.AddRange(rightHalf);
 
