@@ -71,9 +71,29 @@ public class ObjManager : Singleton<ObjManager> {
 		foreach (var vertex in points) {
 			var gameObj = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 			gameObj.transform.position = vertex;
-			gameObj.transform.localScale = Vector3.one * scale;
+			gameObj.transform.localScale = Vector3.one * scale * 5;
 			point_ids.Add (id++, gameObj);
 		}
+	}
+
+	public void Select(GameObject sphere) {
+		Renderer renderer = sphere.GetComponent<Renderer>();
+		renderer.material.color = Color.green;
+	}
+
+	public void Highlight(GameObject sphere) {
+		Renderer renderer = sphere.GetComponent<Renderer>();
+		renderer.material.color = Color.red;
+	}
+
+	public void Unhighlight(GameObject sphere) {
+		Renderer renderer = sphere.GetComponent<Renderer>();
+		renderer.material.color = Color.white;
+	}
+		
+	// returns gameobject for the sphere given id
+	public GameObject GetGameObject(int id) {
+		return point_ids [id];
 	}
 
 	void UpdatePoints(Quaternion rotation, Vector3 p_scale) {
@@ -148,5 +168,10 @@ public class ObjManager : Singleton<ObjManager> {
 		}
 
 		return vertices;
+	}
+
+	public Dictionary<int,GameObject> GetVerticesWithIDs() {
+
+		return point_ids;
 	}
 }
