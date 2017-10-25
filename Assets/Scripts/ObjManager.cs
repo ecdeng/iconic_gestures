@@ -5,9 +5,10 @@ using UnityEngine;
 public class ObjManager : Singleton<ObjManager> {
 
 	public GameObject model;
-	private float movespeed = 1.0f;
+	private float movespeed = 2.0f;
 	private float scale = 0.05f;
 	private Dictionary<int,GameObject> point_ids;
+
 
 	// Use this for initialization
 	void Start () {
@@ -15,14 +16,16 @@ public class ObjManager : Singleton<ObjManager> {
 		point_ids = new Dictionary<int, GameObject> ();
 		LoadModel (filepath);
 
-
+		ObjManager.Instance.LoadModel ("hello");
 	}
 
 	void LoadModel(string filepath) {
 		point_ids.Clear ();
+		Destroy (model);
 		model = OBJLoader.LoadOBJFile (filepath);
 		model.transform.parent = transform;
-		model.transform.position = transform.position + new Vector3(0,transform.localScale.y,0);
+		model.transform.position += transform.position;
+		model.transform.position = new Vector3(0,transform.localScale.y,0);
 		CreatePoints ();
 	}
 
@@ -38,37 +41,48 @@ public class ObjManager : Singleton<ObjManager> {
 		}
 	}
 
-	void UpdatePoints(Quaternion rot, Vector3 scale) {
-		/*foreach (var obj in point_ids.Values) {
-			obj.transform.position = rot * obj.transform.position;
-			var pos = obj.transform.position;
-			obj.transform.position = new Vector3(pos.x*scale.x,pos.y*scale.y,pos*scale.z);
-		}*/
+	void UpdatePoints(Quaternion rotation, Vector3 p_scale) {
+		foreach(KeyValuePair<int, GameObject> entry in point_ids)
+		{
+			var pos = entry.Value.transform.position;
+			pos = rotation * pos;
+			pos = new Vector3(pos.x*p_scale.x,pos.y*p_scale.y,pos.z*p_scale.z);
+			point_ids [entry.Key].transform.position = pos;
+		}
+
 	}
 
 	// Update is called once per frame
 	void Update () {
+		var quat = Quaternion.identity;
+		var model_scale = Vector3.one;
+		var rotate = new Vector3 (0, movespeed, 0);
 		if (model != null) {
 			if (Input.GetKey ("left")) {
-				model.transform.Rotate(0, movespeed, 0);
+				model.transform.Rotate(rotate);
+				quat = Quaternion.Euler (rotate);
 			}
 			if (Input.GetKey ("right")) {
-				model.transform.Rotate(0, -1*movespeed, 0);
+				model.transform.Rotate(-1*rotate);
+				quat = Quaternion.Euler (-1*rotate);
 			}
 			if (Input.GetKeyDown ("r")) {	
 				Vector3 rot = model.transform.rotation.eulerAngles;
 				rot = new Vector3(rot.x,rot.y+180,rot.z);
+				quat = Quaternion.Euler (rot);
 				model.transform.rotation = Quaternion.Euler(rot);
 			}
 
 			if (Input.GetKey ("up")) {
 				model.transform.localScale *= (1 + scale);
+				model_scale *= (1 + scale); 
 			}
 			if (Input.GetKey ("down")) {
 				model.transform.localScale *= (1 - scale);
+				model_scale *= (1 - scale); 
 
 			}
-			//UpdatePoints (model.transform.localRotation,model.transform.localScale);
+			UpdatePoints (quat,model_scale);
 		}
 	}
 
@@ -90,20 +104,12 @@ public class ObjManager : Singleton<ObjManager> {
 		else
 			vertices = new List<Vector3>(meshFilter.mesh.vertices);
 
-
-		//grab tranform
-		/*var angle = model.transform.rotation;
-		var scale = model.transform.localScale;*/
-		var position = model.transform.position;
+	
 
 		//updating vertices
 		for(int i = 0; i < vertices.Count; i++)
 		{
-			//vertices[i] = angle * vertices[i];
-			//vertices[i] = new Vector3(vertices[i].x*scale.x,vertices[i].y*scale.y,vertices[i].z*scale.z);
-			//vertices[i] += position;
 			vertices[i] += new Vector3(0,transform.localScale.y,0);
-			vertices [i] += position;
 		}
 
 		return vertices;
