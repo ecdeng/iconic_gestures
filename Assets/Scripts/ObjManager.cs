@@ -42,6 +42,11 @@ public class ObjManager : Singleton<ObjManager> {
 		}
 	}
 
+	public void Select(GameObject sphere) {
+		Renderer renderer = sphere.GetComponent<Renderer>();
+		renderer.material.color = Color.green;
+	}
+
 	public void Highlight(GameObject sphere) {
 		Renderer renderer = sphere.GetComponent<Renderer>();
 		renderer.material.color = Color.red;
@@ -51,7 +56,7 @@ public class ObjManager : Singleton<ObjManager> {
 		Renderer renderer = sphere.GetComponent<Renderer>();
 		renderer.material.color = Color.white;
 	}
-
+		
 	// returns gameobject for the sphere given id
 	public GameObject GetGameObject(int id) {
 		return point_ids [id];

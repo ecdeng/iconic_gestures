@@ -25,18 +25,33 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 	public void OnPointerClick (PointerEventData evd)
 	{
 		Debug.Log ("OnPointerClick: " + id);
+		if (!selected) { // if point was previously not selected, toggle
+			selected = true;
+			ObjManager.Instance.Select (ObjManager.Instance.GetGameObject (id));
+			gameObject.GetComponent<Image>().color = UnityEngine.Color.green;
+
+		} else {
+			selected = false;
+			ObjManager.Instance.Unhighlight (ObjManager.Instance.GetGameObject (id));
+			gameObject.GetComponent<Image>().color = UnityEngine.Color.clear;
+		}
 	}
 
 	public void OnPointerEnter (PointerEventData evd)
 	{
 		Debug.Log ("OnPointerEntered: " + id);
-		ObjManager.Instance.Highlight (ObjManager.Instance.GetGameObject(id));
+		if (!selected) {
+			gameObject.GetComponent<Image> ().color = UnityEngine.Color.red;
+			ObjManager.Instance.Highlight (ObjManager.Instance.GetGameObject (id));
+		}
 	}
 
 	public void OnPointerExit (PointerEventData evd)
 	{
-		Debug.Log ("OnPointerExited: " + id);
-		ObjManager.Instance.Unhighlight (ObjManager.Instance.GetGameObject(id));
+		if (!selected) {
+			gameObject.GetComponent<Image>().color = UnityEngine.Color.clear;
+			ObjManager.Instance.Unhighlight (ObjManager.Instance.GetGameObject (id));
+		}
 
 	}
 }
