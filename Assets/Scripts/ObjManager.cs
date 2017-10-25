@@ -115,4 +115,9 @@ public class ObjManager : Singleton<ObjManager> {
 
 		return vertices;
 	}
+
+	public Dictionary<int,GameObject> GetVerticesWithIDs() {
+
+		return point_ids;
+	}
 }
