@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class ListItemScript : MonoBehaviour {
+public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 	public Text text;
 	public int id;
 	public float x;
@@ -21,9 +22,18 @@ public class ListItemScript : MonoBehaviour {
 		
 	}
 
-	void OnMouseEnter()
+	public void OnPointerClick (PointerEventData evd)
 	{
-		//If your mouse hovers over the GameObject with the script attached, output this message
-		Debug.Log("Mouse is over point " + id);
+		Debug.Log ("OnPointerClick: " + id);
+	}
+
+	public void OnPointerEnter (PointerEventData evd)
+	{
+		Debug.Log ("OnPointerEntered: " + id);
+	}
+
+	public void OnPointerExit (PointerEventData evd)
+	{
+		Debug.Log ("OnPointerExited: " + id);
 	}
 }
