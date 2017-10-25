@@ -30,10 +30,13 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 	public void OnPointerEnter (PointerEventData evd)
 	{
 		Debug.Log ("OnPointerEntered: " + id);
+		ObjManager.Instance.Highlight (ObjManager.Instance.GetGameObject(id));
 	}
 
 	public void OnPointerExit (PointerEventData evd)
 	{
 		Debug.Log ("OnPointerExited: " + id);
+		ObjManager.Instance.Unhighlight (ObjManager.Instance.GetGameObject(id));
+
 	}
 }

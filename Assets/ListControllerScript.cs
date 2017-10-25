@@ -19,10 +19,14 @@ public class ListControllerScript : MonoBehaviour {
 			listItemScript.x = point.Value.transform.position.x;
 			listItemScript.y = point.Value.transform.position.y;
 			listItemScript.z = point.Value.transform.position.z;
+//			listItemScript.text.text = listItemScript.id.ToString () + ": (" +
+//				listItemScript.x.ToString ("0.0000") + "," +
+//				listItemScript.y.ToString ("0.0000") + "," +
+//				listItemScript.z.ToString ("0.0000") + ")";
 			listItemScript.text.text = listItemScript.id.ToString () + ": (" +
-				listItemScript.x.ToString ("0.0000") + "," +
-				listItemScript.y.ToString ("0.0000") + "," +
-				listItemScript.z.ToString ("0.0000") + ")";
+				System.Math.Round(listItemScript.x,3).ToString() + "," +
+				System.Math.Round(listItemScript.y,3).ToString() + "," +
+				System.Math.Round(listItemScript.z,3).ToString() + ")";
 			listItemScript.selected = false;
 
 			newListItem.transform.SetParent (ContentPanel.transform);
