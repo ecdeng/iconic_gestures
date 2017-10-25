@@ -15,11 +15,12 @@ public class ObjManager : Singleton<ObjManager> {
 		var filepath = "Assets/Models/pikachu.obj";
 		point_ids = new Dictionary<int, GameObject> ();
 		LoadModel (filepath);
-
-		ObjManager.Instance.LoadModel ("hello");
 	}
 		
 	public void LoadModel(string filepath) {
+		foreach (KeyValuePair<int, GameObject> entry in point_ids) {
+			Destroy (entry.Value);
+		}
 		point_ids.Clear ();
 		Destroy (model);
 		model = OBJLoader.LoadOBJFile (filepath);
