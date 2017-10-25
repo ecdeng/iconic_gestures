@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ObjManager : Singleton<ObjManager> {
 
+	public GameObject parent;
 	public GameObject model;
 	private float movespeed = 2.0f;
 	private float scale = 0.05f;
@@ -12,43 +13,24 @@ public class ObjManager : Singleton<ObjManager> {
 	Vector2 scrollPosition = Vector2.zero;
 
 
-	void OnGUI () {
-		string[] listItems = 
-		{
-			"Hello world,",
-			"this",
-			"is a",
-			"very",
-			"very",
-			"very",
-			"very",
-			"very",
-			"very",
-			"long",
-			"list.",
-		};
-
-		GUILayout.BeginArea(new Rect(0f, 0f, 300f, 200f), GUI.skin.window);
-		scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true); 
-		GUILayout.BeginVertical(GUI.skin.box);
-
-		foreach (string item in listItems)
-		{
-			GUILayout.Label(item, GUI.skin.box, GUILayout.ExpandWidth(true));
-		}
-
-		GUILayout.EndVertical();
-		GUILayout.EndScrollView();
-		GUILayout.EndArea();
-	}
-
 	// Use this for initialization
 	void Start () {
-		var filepath = "Assets/Models/pikachu.obj";
+		parent = new GameObject ("parent");
+		parent.transform.parent = transform;
+		var filepath = "Assets/Models/flask.obj";
 		point_ids = new Dictionary<int, GameObject> ();
 		LoadModel (filepath);
 
 
+	}
+
+	public float GetMinVertex(GameObject obj) {
+		var min = obj.transform.position.y;
+		var renderers = obj.GetComponentsInChildren<Renderer> ();
+		foreach (var renderer in renderers) {
+			min = Mathf.Min (min, renderer.bounds.min.y);
+		}
+		return min;
 	}
 		
 	public void LoadModel(string filepath) {
@@ -58,19 +40,24 @@ public class ObjManager : Singleton<ObjManager> {
 		point_ids.Clear ();
 		Destroy (model);
 		model = OBJLoader.LoadOBJFile (filepath);
-		model.transform.parent = transform;
-		model.transform.position += transform.position;
-		model.transform.position = new Vector3(0,transform.localScale.y,0);
-		CreatePoints ();
+
+		var min = GetMinVertex (model);
+		var offset = model.transform.position.y - min;
+		var vec = new Vector3(0,offset,0);
+		model.transform.position += vec;
+	
+		model.transform.parent = parent.transform;
+		CreatePoints (vec);
 	}
 
-	void CreatePoints() {
+	void CreatePoints(Vector3 offset) {
 		var points = GetVertices ();
 
 		int id = 0;
 		foreach (var vertex in points) {
 			var gameObj = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 			gameObj.transform.position = vertex;
+			gameObj.transform.position += offset;
 			gameObj.transform.localScale = Vector3.one * scale * 5;
 			point_ids.Add (id++, gameObj);
 		}
@@ -114,26 +101,25 @@ public class ObjManager : Singleton<ObjManager> {
 		var rotate = new Vector3 (0, movespeed, 0);
 		if (model != null) {
 			if (Input.GetKey ("left")) {
-				model.transform.Rotate(rotate);
+				parent.transform.Rotate(rotate);
 				quat = Quaternion.Euler (rotate);
 			}
 			if (Input.GetKey ("right")) {
-				model.transform.Rotate(-1*rotate);
+				parent.transform.Rotate(-1*rotate);
 				quat = Quaternion.Euler (-1*rotate);
 			}
 			if (Input.GetKeyDown ("r")) {	
-				Vector3 rot = model.transform.rotation.eulerAngles;
-				rot = new Vector3(rot.x,rot.y+180,rot.z);
+				var rot = new Vector3(0,180,0);
+				parent.transform.Rotate(rot);
 				quat = Quaternion.Euler (rot);
-				model.transform.rotation = Quaternion.Euler(rot);
 			}
 
 			if (Input.GetKey ("up")) {
-				model.transform.localScale *= (1 + scale);
+				parent.transform.localScale *= (1 + scale);
 				model_scale *= (1 + scale); 
 			}
 			if (Input.GetKey ("down")) {
-				model.transform.localScale *= (1 - scale);
+				parent.transform.localScale *= (1 - scale);
 				model_scale *= (1 - scale); 
 
 			}
