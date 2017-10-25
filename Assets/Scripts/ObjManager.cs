@@ -14,7 +14,7 @@ public class ObjManager : Singleton<ObjManager> {
 		LoadModel (filepath);
 	}
 
-	void LoadModel(string filepath) {
+	public void LoadModel(string filepath) {
 		model = OBJLoader.LoadOBJFile (filepath);
 		model.transform.parent = transform;
 		model.transform.position = transform.position + new Vector3(0,transform.localScale.y,0);
