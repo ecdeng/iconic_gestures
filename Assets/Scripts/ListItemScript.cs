@@ -32,7 +32,7 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 
 		} else {
 			selected = false;
-			ObjManager.Instance.Unhighlight (ObjManager.Instance.GetGameObject (id));
+			ObjManager.Instance.Unhighlight (ObjManager.Instance.GetGameObject (id), true);
 			gameObject.GetComponent<Image>().color = UnityEngine.Color.clear;
 		}
 	}
@@ -50,7 +50,7 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 	{
 		if (!selected) {
 			gameObject.GetComponent<Image>().color = UnityEngine.Color.clear;
-			ObjManager.Instance.Unhighlight (ObjManager.Instance.GetGameObject (id));
+			ObjManager.Instance.Unhighlight (ObjManager.Instance.GetGameObject (id), false);
 		}
 
 	}

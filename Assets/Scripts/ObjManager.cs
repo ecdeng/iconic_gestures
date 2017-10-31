@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ObjManager : Singleton<ObjManager> {
 
@@ -9,6 +10,8 @@ public class ObjManager : Singleton<ObjManager> {
 	private float movespeed = 2.0f;
 	private float scale = 0.05f;
 	private Dictionary<int,GameObject> point_ids;
+	public int counter = 0;
+	private GameObject counterText;
 
 	Vector2 scrollPosition = Vector2.zero;
 
@@ -20,8 +23,8 @@ public class ObjManager : Singleton<ObjManager> {
 		var filepath = "Assets/Models/flask.obj";
 		point_ids = new Dictionary<int, GameObject> ();
 		LoadModel (filepath);
-
-
+		counter = 0;
+		counterText = GameObject.Find ("Counter");
 	}
 
 	public float GetMinVertex(GameObject obj) {
@@ -66,6 +69,8 @@ public class ObjManager : Singleton<ObjManager> {
 	public void Select(GameObject sphere) {
 		Renderer renderer = sphere.GetComponent<Renderer>();
 		renderer.material.color = Color.green;
+		counter++;
+		counterText.GetComponent<Text> ().text = counter.ToString ();
 	}
 
 	public void Highlight(GameObject sphere) {
@@ -73,7 +78,11 @@ public class ObjManager : Singleton<ObjManager> {
 		renderer.material.color = Color.red;
 	}
 
-	public void Unhighlight(GameObject sphere) {
+	public void Unhighlight(GameObject sphere, bool unSelect) {
+		if (unSelect) {
+			counter--;
+			counterText.GetComponent<Text> ().text = counter.ToString ();
+		}
 		Renderer renderer = sphere.GetComponent<Renderer>();
 		renderer.material.color = Color.white;
 	}
