@@ -57,6 +57,7 @@ public class ObjManager : Singleton<ObjManager> {
 		}
 		point_ids.Clear ();
 		point_normals.Clear ();
+		y_set.Clear ();
 		Destroy (model);
 		model = OBJLoader.LoadOBJFile (filepath);
 		//model = GameObject.CreatePrimitive (PrimitiveType.Sphere);
@@ -115,7 +116,7 @@ public class ObjManager : Singleton<ObjManager> {
 
 		//points = points.OrderBy (obj => obj.pos.y).ThenBy(obj => obj.pos.x).ThenBy(obj => obj.pos.z).ToList();
 
-		points = points.OrderBy(obj => obj.pos.y).ThenBy(obj => Mathf.Abs(180 - CartesianToPolar(obj.pos).y)).ToList();
+		points = points.OrderBy(obj => obj.pos.y).ThenBy(obj => Mathf.Abs(CartesianToPolar(obj.pos).y)).ToList();
 		return points;
 	}
 
@@ -158,6 +159,7 @@ public class ObjManager : Singleton<ObjManager> {
 
 	// Update is called once per frame
 	void Update () {
+		var cam = Camera.main;
 		var quat = Quaternion.identity;
 		var model_scale = Vector3.one;
 		var rotate = new Vector3 (0, movespeed, 0);
@@ -166,23 +168,47 @@ public class ObjManager : Singleton<ObjManager> {
 				parent.transform.Rotate(rotate);
 				quat = Quaternion.Euler (rotate);
 			}
+
 			if (Input.GetKey ("right")) {
 				parent.transform.Rotate(-1*rotate);
 				quat = Quaternion.Euler (-1*rotate);
 			}
+
 			if (Input.GetKeyDown ("r")) {	
 				var rot = new Vector3(0,180,0);
 				parent.transform.Rotate(rot);
 				quat = Quaternion.Euler (rot);
 			}
 
+			if (Input.GetKeyDown ("w")) {
+				cam.transform.position += new Vector3 (0, movespeed, 0);
+			}
+			if (Input.GetKeyDown ("a")) {
+				cam.transform.position += new Vector3 (-1*movespeed, 0, 0);
+
+			}
+			if (Input.GetKeyDown ("s")) {
+				cam.transform.position += new Vector3 (0, -1*movespeed,0);
+
+			}
+			if (Input.GetKeyDown ("d")) {
+				cam.transform.position += new Vector3 (1*movespeed, 0, 0);
+
+			}
+
 			if (Input.GetKey ("up")) {
 				parent.transform.localScale *= (1 + scale);
-				model_scale *= (1 + scale); 
+				model_scale *= (1 + scale);
+				/*var rot = new Vector3(movespeed,0,0);
+				transform.Rotate(rot,Space.Self);
+				quat = Quaternion.Euler (rot);*/
 			}
 			if (Input.GetKey ("down")) {
 				parent.transform.localScale *= (1 - scale);
 				model_scale *= (1 - scale); 
+				/*var rot = new Vector3(-1*movespeed,0,0);
+				transform.Rotate(rot);
+				quat = Quaternion.Euler (rot);*/
 
 			}
 			UpdatePoints (quat,model_scale);
@@ -211,10 +237,6 @@ public class ObjManager : Singleton<ObjManager> {
 			normals = new List<Vector3> (meshFilter.mesh.normals);
 		}
 
-
-			
-
-	
 
 		//updating vertices
 		for(int i = 0; i < vertices.Count; i++)
