@@ -24,6 +24,7 @@ public class ObjManager : Singleton<ObjManager> {
 	private Dictionary<int,PositionNormals> point_normals;
 	public int counter = 0;
 	private GameObject counterText;
+	private HashSet<float> y_set;
 
 	Vector2 scrollPosition = Vector2.zero;
 
@@ -35,6 +36,7 @@ public class ObjManager : Singleton<ObjManager> {
 		var filepath = "Assets/Models/pikachu.obj";
 		point_ids = new Dictionary<int, GameObject> ();
 		point_normals = new Dictionary<int, PositionNormals> ();
+		y_set = new HashSet<float> ();
 		LoadModel (filepath);
 		counter = 0;
 		counterText = GameObject.Find ("Counter");
@@ -54,9 +56,10 @@ public class ObjManager : Singleton<ObjManager> {
 			Destroy (entry.Value);
 		}
 		point_ids.Clear ();
+		point_normals.Clear ();
 		Destroy (model);
 		model = OBJLoader.LoadOBJFile (filepath);
-
+		//model = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 		var min = GetMinVertex (model);
 		var offset = model.transform.position.y - min;
 		var vec = new Vector3(0,offset,0);
@@ -105,9 +108,15 @@ public class ObjManager : Singleton<ObjManager> {
 	List<PositionNormals> SortPoints(List<PositionNormals> points) {
 
 		//var new_vertices = vertices.Where ((x, i) => i % 1 == 0).ToList ();
-		var vert = points.OrderBy (obj => obj.pos.y).ThenBy(obj => obj.pos.x).ThenBy(obj => obj.pos.z).ToList();
-		vert = vert.Where ((x, i) => i % 5 == 0).ToList();
-		return vert;
+
+		y_set = new HashSet<float> (y_set.Where ((x, i) => i % 2 == 0)); 
+		//points = points.Where ((x, i) => i % 1 == 0).ToList();
+		points = points.Where ((x, i) => y_set.Contains (x.pos.y)).ToList();
+
+		//points = points.OrderBy (obj => obj.pos.y).ThenBy(obj => obj.pos.x).ThenBy(obj => obj.pos.z).ToList();
+
+		points = points.OrderBy(obj => obj.pos.y).ThenBy(obj => Mathf.Abs(180 - CartesianToPolar(obj.pos).y)).ToList();
+		return points;
 	}
 
 	public void Select(GameObject sphere) {
@@ -212,6 +221,7 @@ public class ObjManager : Singleton<ObjManager> {
 		{
 			vertices[i] += new Vector3(0,transform.localScale.y,0);
 			posnormals.Add (new PositionNormals(vertices [i], normals [i]));
+			y_set.Add (vertices [i].y);
 		}
 
 		return posnormals;
