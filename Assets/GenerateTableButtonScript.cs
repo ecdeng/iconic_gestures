@@ -23,6 +23,9 @@ public class GenerateTableButtonScript : MonoBehaviour {
 	}
 
 	public void GenerateTable(int rows, int cols) {
+		ObjManager.Instance.setInSelectionMode(false); // change the state we're in
+		ListControllerScript.Instance.RemoveUnselectedPoints();
+
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				GameObject newListItem = Instantiate(ListItemPrefab) as GameObject;

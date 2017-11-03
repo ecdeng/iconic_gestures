@@ -507,9 +507,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cb414fe925ed4aaaaf191241647c808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  generateTableButton: {fileID: 0}
+  generateTableButton: {fileID: 317870120}
   TablePanel: {fileID: 0}
-  ListItemPrefab: {fileID: 0}
+  ListItemPrefab: {fileID: 1633117603112372, guid: 25185bac9a6d14908874c7aad6762266,
+    type: 2}
 --- !u!1 &581002186
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,6 +922,7 @@ MonoBehaviour:
   parent: {fileID: 0}
   model: {fileID: 0}
   counter: 0
+  isInSelectionMode: 0
 --- !u!1001 &990398913
 Prefab:
   m_ObjectHideFlags: 0
@@ -1922,6 +1924,7 @@ MonoBehaviour:
   ContentPanel: {fileID: 581002186}
   ListItemPrefab: {fileID: 1633117603112372, guid: 25185bac9a6d14908874c7aad6762266,
     type: 2}
+  selectedListItemIDs: 
 --- !u!1 &2046709840
 GameObject:
   m_ObjectHideFlags: 0

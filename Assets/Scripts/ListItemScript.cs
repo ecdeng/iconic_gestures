@@ -24,7 +24,7 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 
 	public void OnPointerClick (PointerEventData evd)
 	{
-		Debug.Log ("OnPointerClick: " + id);
+//		Debug.Log ("OnPointerClick: " + id);
 		if (!selected) { // if point was previously not selected, toggle
 			selected = true;
 			ObjManager.Instance.Select (ObjManager.Instance.GetGameObject (id));
@@ -39,7 +39,7 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 
 	public void OnPointerEnter (PointerEventData evd)
 	{
-		Debug.Log ("OnPointerEntered: " + id);
+//		Debug.Log ("OnPointerEntered: " + id);
 		if (!selected) {
 			gameObject.GetComponent<Image> ().color = UnityEngine.Color.red;
 			ObjManager.Instance.Highlight (ObjManager.Instance.GetGameObject (id));
