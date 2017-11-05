@@ -40,10 +40,13 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 	public void OnPointerEnter (PointerEventData evd)
 	{
 		Debug.Log ("OnPointerEntered: " + id);
+		var obj = ObjManager.Instance.GetGameObject (id);
 		if (!selected) {
 			gameObject.GetComponent<Image> ().color = UnityEngine.Color.red;
 			ObjManager.Instance.Highlight (ObjManager.Instance.GetGameObject (id));
 		}
+		ObjManager.Instance.FollowCamera (obj);
+
 	}
 
 	public void OnPointerExit (PointerEventData evd)

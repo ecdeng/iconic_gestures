@@ -19,12 +19,14 @@ public class ObjManager : Singleton<ObjManager> {
 	public GameObject parent;
 	public GameObject model;
 	private float movespeed = 2.0f;
+	private float camspeed = 0.5f;
 	private float scale = 0.05f;
 	private Dictionary<int,GameObject> point_ids;
 	private Dictionary<int,PositionNormals> point_normals;
 	public int counter = 0;
 	private GameObject counterText;
 	private HashSet<float> y_set;
+	private bool followMode = false;
 
 	Vector2 scrollPosition = Vector2.zero;
 
@@ -92,7 +94,7 @@ public class ObjManager : Singleton<ObjManager> {
 	{
 		Vector2 polar;
 
-		//calc longitude
+		//calc longitude angle
 		polar.y = Mathf.Atan2(point.x,point.z);
 
 		//this is easier to write and read than sqrt(pow(x,2), pow(y,2))!
@@ -116,7 +118,7 @@ public class ObjManager : Singleton<ObjManager> {
 
 		//points = points.OrderBy (obj => obj.pos.y).ThenBy(obj => obj.pos.x).ThenBy(obj => obj.pos.z).ToList();
 
-		points = points.OrderBy(obj => obj.pos.y).ThenBy(obj => Mathf.Abs(CartesianToPolar(obj.pos).y)).ToList();
+		points = points.OrderBy(obj => AngleToCamera(obj.pos)).ThenBy(obj => obj.pos.y).ToList();
 		return points;
 	}
 
@@ -130,6 +132,30 @@ public class ObjManager : Singleton<ObjManager> {
 	public void Highlight(GameObject sphere) {
 		Renderer renderer = sphere.GetComponent<Renderer>();
 		renderer.material.color = Color.red;
+
+	}
+
+	float AngleToCamera(Vector3 pos) {
+		var vec1 = new Vector2(pos.x,pos.z);
+		var vec2 = new Vector2 (Camera.main.transform.position.x, Camera.main.transform.position.z);
+		return -1 * AngleBetweenVector2 (vec1, vec2);
+	}
+
+	float AngleBetweenVector2(Vector2 vec1, Vector2 vec2)
+	{
+		Vector2 vec1Rotated90 = new Vector2(-vec1.y, vec1.x);
+		float sign = (Vector2.Dot(vec1Rotated90, vec2) < 0) ? -1.0f : 1.0f;
+		return Vector2.Angle(vec1, vec2) * sign;
+	}
+
+
+	public void FollowCamera(GameObject sphere) {
+
+		if (!followMode)
+			return;
+		var angle = AngleToCamera(sphere.transform.position);
+		UpdatePoints(Quaternion.Euler(new Vector3(0,angle,0)),Vector3.one);
+		Debug.Log (angle);
 	}
 
 	public void Unhighlight(GameObject sphere, bool unSelect) {
@@ -147,6 +173,8 @@ public class ObjManager : Singleton<ObjManager> {
 	}
 
 	void UpdatePoints(Quaternion rotation, Vector3 p_scale) {
+		parent.transform.Rotate(rotation.eulerAngles);
+
 		foreach(KeyValuePair<int, GameObject> entry in point_ids)
 		{
 			var pos = entry.Value.transform.position;
@@ -157,6 +185,7 @@ public class ObjManager : Singleton<ObjManager> {
 
 	}
 
+
 	// Update is called once per frame
 	void Update () {
 		var cam = Camera.main;
@@ -165,51 +194,46 @@ public class ObjManager : Singleton<ObjManager> {
 		var rotate = new Vector3 (0, movespeed, 0);
 		if (model != null) {
 			if (Input.GetKey ("left")) {
-				parent.transform.Rotate(rotate);
-				quat = Quaternion.Euler (rotate);
+				quat = Quaternion.Euler (-1*rotate);
 			}
 
 			if (Input.GetKey ("right")) {
-				parent.transform.Rotate(-1*rotate);
-				quat = Quaternion.Euler (-1*rotate);
+				quat = Quaternion.Euler (rotate);
 			}
 
 			if (Input.GetKeyDown ("r")) {	
 				var rot = new Vector3(0,180,0);
-				parent.transform.Rotate(rot);
 				quat = Quaternion.Euler (rot);
 			}
 
-			if (Input.GetKeyDown ("w")) {
-				cam.transform.position += new Vector3 (0, movespeed, 0);
+			if (Input.GetKey ("w")) {
+				cam.transform.position += new Vector3 (0, camspeed, 0);
 			}
-			if (Input.GetKeyDown ("a")) {
-				cam.transform.position += new Vector3 (-1*movespeed, 0, 0);
+			if (Input.GetKey ("a")) {
+				cam.transform.position += new Vector3 (-1*camspeed, 0, 0);
 
 			}
-			if (Input.GetKeyDown ("s")) {
-				cam.transform.position += new Vector3 (0, -1*movespeed,0);
+			if (Input.GetKey ("s")) {
+				cam.transform.position += new Vector3 (0, -1*camspeed,0);
 
 			}
-			if (Input.GetKeyDown ("d")) {
-				cam.transform.position += new Vector3 (1*movespeed, 0, 0);
+			if (Input.GetKey ("d")) {
+				cam.transform.position += new Vector3 (1*camspeed, 0, 0);
 
 			}
 
 			if (Input.GetKey ("up")) {
 				parent.transform.localScale *= (1 + scale);
 				model_scale *= (1 + scale);
-				/*var rot = new Vector3(movespeed,0,0);
-				transform.Rotate(rot,Space.Self);
-				quat = Quaternion.Euler (rot);*/
+
 			}
 			if (Input.GetKey ("down")) {
 				parent.transform.localScale *= (1 - scale);
-				model_scale *= (1 - scale); 
-				/*var rot = new Vector3(-1*movespeed,0,0);
-				transform.Rotate(rot);
-				quat = Quaternion.Euler (rot);*/
+				model_scale *= (1 - scale);;
 
+			}
+			if (Input.GetKeyDown ("f")) {
+				followMode = !followMode;
 			}
 			UpdatePoints (quat,model_scale);
 		}
