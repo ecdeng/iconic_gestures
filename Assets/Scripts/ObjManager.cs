@@ -51,7 +51,7 @@ public class ObjManager : Singleton<ObjManager> {
 		LoadModel ("Assets/Models/flask.obj");
 
 	}
-
+		
 	// Update is called once per frame
 	void Update () {
 		var cam = Camera.main;

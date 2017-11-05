@@ -11,6 +11,7 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 	public float y;
 	public float z;
 	public bool selected;
+	private float scale = 0.05f;
 
 	// Use this for initialization
 	void Start () {
@@ -24,26 +25,30 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 
 	public void OnPointerClick (PointerEventData evd)
 	{
-//		Debug.Log ("OnPointerClick: " + id);
-		if (!selected) { // if point was previously not selected, toggle
-			selected = true;
-			ObjManager.Instance.Select (ObjManager.Instance.GetGameObject (id));
-			gameObject.GetComponent<Image>().color = UnityEngine.Color.green;
+		// only do something if in first stage/selection mode for now
+		if (ObjManager.Instance.isInSelectionMode) {
+			if (!selected) { // if point was previously not selected, toggle
+				selected = true;
+				ObjManager.Instance.Select (ObjManager.Instance.GetGameObject (id));
+				gameObject.GetComponent<Image> ().color = UnityEngine.Color.green;
 
-		} else {
-			selected = false;
-			ObjManager.Instance.Unhighlight (ObjManager.Instance.GetGameObject (id), true);
-			gameObject.GetComponent<Image>().color = UnityEngine.Color.clear;
+			} else {
+				selected = false;
+				ObjManager.Instance.Unhighlight (ObjManager.Instance.GetGameObject (id), true);
+				gameObject.GetComponent<Image> ().color = UnityEngine.Color.clear;
+			}
 		}
 	}
 
 	public void OnPointerEnter (PointerEventData evd)
 	{
-		Debug.Log ("OnPointerEntered: " + id);
 		var obj = ObjManager.Instance.GetGameObject (id);
-		if (!selected) {
+		if (!selected && ObjManager.Instance.isInSelectionMode) { // stage one
 			gameObject.GetComponent<Image> ().color = UnityEngine.Color.red;
 			ObjManager.Instance.Highlight (ObjManager.Instance.GetGameObject (id));
+		} else if (!ObjManager.Instance.isInSelectionMode) { // stage 2
+			GameObject sphere = ObjManager.Instance.GetGameObject (id);
+			sphere.transform.localScale = Vector3.one * scale * 10;
 		}
 		ObjManager.Instance.FollowCamera (obj);
 
@@ -51,9 +56,12 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 
 	public void OnPointerExit (PointerEventData evd)
 	{
-		if (!selected) {
-			gameObject.GetComponent<Image>().color = UnityEngine.Color.clear;
+		if (!selected && ObjManager.Instance.isInSelectionMode) {
+			gameObject.GetComponent<Image> ().color = UnityEngine.Color.clear;
 			ObjManager.Instance.Unhighlight (ObjManager.Instance.GetGameObject (id), false);
+		} else if (!ObjManager.Instance.isInSelectionMode) {
+			GameObject sphere = ObjManager.Instance.GetGameObject (id);
+			sphere.transform.localScale = Vector3.one * scale * 5;
 		}
 
 	}

@@ -13,9 +13,22 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 		public List<int> selectedListItemIDs;
 
 	void Start () {
+	}
+
+	void DestroyListIfAny() {
+		if (listItemGameObjects.Count > 0) {
+			foreach (GameObject gameObject in listItemGameObjects) {
+				Destroy (gameObject);
+			}
+		}
+	}
+
+	public void CreateListForModel () {
 		listItems = new List<ListItemScript> ();
 		listItemGameObjects = new List<GameObject> ();
 		selectedListItemIDs = new List<int> ();
+
+		DestroyListIfAny ();
 
 		Dictionary<int,GameObject> point_ids = ObjManager.Instance.GetVerticesWithIDs();
 		foreach(KeyValuePair<int, GameObject> point in point_ids)
@@ -62,9 +75,7 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 		ObjManager.Instance.setSelectedPoints (selectedListItemIDs);
 
 		// go through and destroy all game objects to reset the list
-		foreach (GameObject gameObject in listItemGameObjects) {
-			Destroy(gameObject);
-		}
+		DestroyListIfAny ();
 
 		listItems.Clear ();
 		listItemGameObjects.Clear ();
