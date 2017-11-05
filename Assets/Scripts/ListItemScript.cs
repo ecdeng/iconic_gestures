@@ -42,6 +42,7 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 
 	public void OnPointerEnter (PointerEventData evd)
 	{
+		var obj = ObjManager.Instance.GetGameObject (id);
 		if (!selected && ObjManager.Instance.isInSelectionMode) { // stage one
 			gameObject.GetComponent<Image> ().color = UnityEngine.Color.red;
 			ObjManager.Instance.Highlight (ObjManager.Instance.GetGameObject (id));
