@@ -82,6 +82,7 @@ public class ObjManager : Singleton<ObjManager> {
 	
 		model.transform.parent = parent.transform;
 		CreatePoints (vec);
+		ListControllerScript.Instance.CreateListForModel ();
 	}
 
 	void CreatePoints(Vector3 offset) {
