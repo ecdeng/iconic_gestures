@@ -39,7 +39,7 @@ public class ObjManager : Singleton<ObjManager> {
 	//selection and follow mode
 	private bool followMode;
 	public bool isInSelectionMode; // in selection mode is first stage
-	private List<int> selected_point_ids;
+	private HashSet<int> selected_point_ids;
 
 	//scrolling
 	Vector2 scrollPosition = Vector2.zero;
@@ -113,7 +113,7 @@ public class ObjManager : Singleton<ObjManager> {
 		counterText = GameObject.Find ("Counter");
 
 		isInSelectionMode = true;
-		selected_point_ids = new List<int> ();
+		selected_point_ids = new HashSet<int> ();
 
 		followMode = false;
 
@@ -140,7 +140,6 @@ public class ObjManager : Singleton<ObjManager> {
 	public void LoadModel(string filepath) {
 		DestroyModel ();
 		model = OBJLoader.LoadOBJFile (filepath);
-		//model = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 		var min = GetMinVertex (model);
 		var offset = model.transform.position.y - min;
 		var vec = new Vector3(0,offset,0);
@@ -148,6 +147,7 @@ public class ObjManager : Singleton<ObjManager> {
 
 		model.transform.parent = parent.transform;
 		CreatePoints (vec);
+		ListControllerScript.Instance.CreateListForModel ();
 	}
 
 	/// <summary>
@@ -259,6 +259,7 @@ public class ObjManager : Singleton<ObjManager> {
 
 		//order points
 		points = points.OrderBy(obj => obj.pos.y).ThenBy(obj => AngleToCamera(obj.pos)).ToList();
+
 		return points;
 	}
 
@@ -328,7 +329,15 @@ public class ObjManager : Singleton<ObjManager> {
 	//selection and highlighting
 	public void setSelectedPoints(List<int>selected)
 	{
-		selected_point_ids = selected;
+		selected_point_ids = new HashSet<int>(selected);
+		foreach(var entry in point_ids) {
+			if (!selected_point_ids.Contains (entry.Key)) {
+				Destroy (entry.Value);
+			}
+		}
+			
+		point_ids = point_ids.Where (entry => selected_point_ids.Contains (entry.Key)).ToDictionary(entry => entry.Key, entry => entry.Value);
+
 	}
 
 	public void setInSelectionMode(bool inSelectionMode)
