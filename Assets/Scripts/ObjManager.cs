@@ -140,6 +140,7 @@ public class ObjManager : Singleton<ObjManager> {
 	public void LoadModel(string filepath) {
 		DestroyModel ();
 		model = OBJLoader.LoadOBJFile (filepath);
+
 		var min = GetMinVertex (model);
 		var offset = model.transform.position.y - min;
 		var vec = new Vector3(0,offset,0);
@@ -249,7 +250,7 @@ public class ObjManager : Singleton<ObjManager> {
 
 		//restrict current points by height and radians
 		var y_distro = 10;
-		var rad_distro = 10;
+		var rad_distro = 5;
 		y_set = new HashSet<float> (y_set.Where ((x, i) => i % y_distro == 0));
 		radial_set = new HashSet<float> (radial_set.Where ((x, i) => i % rad_distro == 0));
 
