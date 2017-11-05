@@ -27,6 +27,8 @@ public class ObjManager : Singleton<ObjManager> {
 	private GameObject counterText;
 	private HashSet<float> y_set;
 	private bool followMode = false;
+	public bool isInSelectionMode; // in selection mode is first stage
+	private List<int> selected_point_ids;
 
 	Vector2 scrollPosition = Vector2.zero;
 
@@ -42,6 +44,19 @@ public class ObjManager : Singleton<ObjManager> {
 		LoadModel (filepath);
 		counter = 0;
 		counterText = GameObject.Find ("Counter");
+		isInSelectionMode = true;
+		selected_point_ids = new List<int> ();
+
+	}
+
+	public void setSelectedPoints(List<int>selected)
+	{
+		selected_point_ids = selected;
+	}
+
+	public void setInSelectionMode(bool inSelectionMode)
+	{
+		isInSelectionMode = inSelectionMode;
 	}
 
 	public float GetMinVertex(GameObject obj) {
