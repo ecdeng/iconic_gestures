@@ -49,6 +49,8 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 			GameObject sphere = ObjManager.Instance.GetGameObject (id);
 			sphere.transform.localScale = Vector3.one * scale * 10;
 		}
+		ObjManager.Instance.FollowCamera (obj);
+
 	}
 
 	public void OnPointerExit (PointerEventData evd)
