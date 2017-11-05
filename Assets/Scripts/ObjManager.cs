@@ -26,6 +26,7 @@ public class ObjManager : Singleton<ObjManager> {
 	public int counter = 0;
 	private GameObject counterText;
 	private HashSet<float> y_set;
+	private HashSet<float> radial_set;
 	private bool followMode = false;
 	public bool isInSelectionMode; // in selection mode is first stage
 	private List<int> selected_point_ids;
@@ -37,10 +38,11 @@ public class ObjManager : Singleton<ObjManager> {
 	void Start () {
 		parent = new GameObject ("parent");
 		parent.transform.parent = transform;
-		var filepath = "Assets/Models/pikachu.obj";
+		var filepath = "Assets/Models/flask.obj";
 		point_ids = new Dictionary<int, GameObject> ();
 		point_normals = new Dictionary<int, PositionNormals> ();
 		y_set = new HashSet<float> ();
+		radial_set = new HashSet<float> ();
 		LoadModel (filepath);
 		counter = 0;
 		counterText = GameObject.Find ("Counter");
@@ -75,6 +77,7 @@ public class ObjManager : Singleton<ObjManager> {
 		point_ids.Clear ();
 		point_normals.Clear ();
 		y_set.Clear ();
+		radial_set.Clear ();
 		Destroy (model);
 		model = OBJLoader.LoadOBJFile (filepath);
 		//model = GameObject.CreatePrimitive (PrimitiveType.Sphere);
@@ -127,13 +130,15 @@ public class ObjManager : Singleton<ObjManager> {
 
 		//var new_vertices = vertices.Where ((x, i) => i % 1 == 0).ToList ();
 
-		y_set = new HashSet<float> (y_set.Where ((x, i) => i % 2 == 0)); 
+		y_set = new HashSet<float> (y_set.Where ((x, i) => i % 10 == 0));
+		radial_set = new HashSet<float> (radial_set.Where ((x, i) => i % 10 == 0));
 		//points = points.Where ((x, i) => i % 1 == 0).ToList();
 		points = points.Where ((x, i) => y_set.Contains (x.pos.y)).ToList();
+		points = points.Where((x,i) => radial_set.Contains(AngleToCamera(x.pos))).ToList();
 
 		//points = points.OrderBy (obj => obj.pos.y).ThenBy(obj => obj.pos.x).ThenBy(obj => obj.pos.z).ToList();
 
-		points = points.OrderBy(obj => AngleToCamera(obj.pos)).ThenBy(obj => obj.pos.y).ToList();
+		points = points.OrderBy(obj => obj.pos.y).ThenBy(obj => AngleToCamera(obj.pos)).ToList();
 		return points;
 	}
 
@@ -283,6 +288,7 @@ public class ObjManager : Singleton<ObjManager> {
 			vertices[i] += new Vector3(0,transform.localScale.y,0);
 			posnormals.Add (new PositionNormals(vertices [i], normals [i]));
 			y_set.Add (vertices [i].y);
+			radial_set.Add(AngleToCamera(vertices[i]));
 		}
 
 		return posnormals;
