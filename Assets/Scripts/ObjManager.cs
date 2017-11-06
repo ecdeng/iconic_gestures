@@ -48,7 +48,8 @@ public class ObjManager : Singleton<ObjManager> {
 	void Start () {
 		InitObjects ();
 		InitModel ();
-		LoadModel ("Assets/Models/flask.obj");
+		LoadModel ("Assets/Models/mug.obj");
+
 
 	}
 		
@@ -59,6 +60,7 @@ public class ObjManager : Singleton<ObjManager> {
 		var model_scale = Vector3.one;
 		var rotate = new Vector3 (0, movespeed, 0);
 		if (model != null) {
+
 			if (Input.GetKey ("left")) {
 				quat = Quaternion.Euler (-1*rotate);
 			}
@@ -87,16 +89,12 @@ public class ObjManager : Singleton<ObjManager> {
 				cam.transform.position += new Vector3 (1*camspeed, 0, 0);
 
 			}
-
 			if (Input.GetKey ("up")) {
-				parent.transform.localScale *= (1 + scale);
 				model_scale *= (1 + scale);
 
 			}
 			if (Input.GetKey ("down")) {
-				parent.transform.localScale *= (1 - scale);
-				model_scale *= (1 - scale);;
-
+				model_scale *= (1 - scale);
 			}
 			if (Input.GetKeyDown ("f")) {
 				followMode = !followMode;
@@ -109,6 +107,8 @@ public class ObjManager : Singleton<ObjManager> {
 	/// Inits the Objects
 	/// </summary>
 	void InitObjects() {
+		scale = 0.05f;
+
 		counter = 0;
 		counterText = GameObject.Find ("Counter");
 
@@ -141,7 +141,9 @@ public class ObjManager : Singleton<ObjManager> {
 		DestroyModel ();
 		model = OBJLoader.LoadOBJFile (filepath);
 
-		var min = GetMinVertex (model);
+		var minmax = GetMinMaxVertex (model);
+		var min = minmax [0];
+		var max = minmax [1];
 		var offset = model.transform.position.y - min;
 		var vec = new Vector3(0,offset,0);
 		model.transform.position += vec;
@@ -149,6 +151,12 @@ public class ObjManager : Singleton<ObjManager> {
 		model.transform.parent = parent.transform;
 		CreatePoints (vec);
 		ListControllerScript.Instance.CreateListForModel ();
+		Debug.Log (max);
+
+		//change scale to bounding box
+		while (GetMinMaxVertex (model) [1] > 7) {
+			UpdatePoints (Quaternion.identity, Vector3.one * (1-scale));
+		}
 	}
 
 	/// <summary>
@@ -193,7 +201,10 @@ public class ObjManager : Singleton<ObjManager> {
 	/// <param name="rotation">Rotation.</param>
 	/// <param name="p_scale">P scale.</param>
 	void UpdatePoints(Quaternion rotation, Vector3 p_scale) {
+
+		//Debug.Log (GetMinMaxVertex (model) [1]);
 		parent.transform.Rotate(rotation.eulerAngles);
+		parent.transform.localScale *= p_scale.x;
 
 		foreach(KeyValuePair<int, GameObject> entry in point_ids)
 		{
@@ -249,8 +260,10 @@ public class ObjManager : Singleton<ObjManager> {
 	List<PositionNormals> SortPoints(List<PositionNormals> points) {
 
 		//restrict current points by height and radians
-		var y_distro = 10;
-		var rad_distro = 5;
+		var total_points = points.Count;
+		Debug.Log (total_points); 
+		int y_distro = 10;
+		int rad_distro = Mathf.Max(total_points/3000,1);
 		y_set = new HashSet<float> (y_set.Where ((x, i) => i % y_distro == 0));
 		radial_set = new HashSet<float> (radial_set.Where ((x, i) => i % rad_distro == 0));
 
@@ -270,13 +283,15 @@ public class ObjManager : Singleton<ObjManager> {
 	/// </summary>
 	/// <returns>The minimum vertex.</returns>
 	/// <param name="obj">Object.</param>
-	public float GetMinVertex(GameObject obj) {
+	public float[] GetMinMaxVertex(GameObject obj) {
 		var min = obj.transform.position.y;
+		var max = obj.transform.position.y;
 		var renderers = obj.GetComponentsInChildren<Renderer> ();
 		foreach (var renderer in renderers) {
 			min = Mathf.Min (min, renderer.bounds.min.y);
+			max = Mathf.Max (max, renderer.bounds.max.y);
 		}
-		return min;
+		return new float[]{min,max};
 	}
 		
 
