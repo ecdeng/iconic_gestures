@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GenerateTableButtonScript : MonoBehaviour {
+public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 
 	public Button generateTableButton;
 	public InputField rowsField;
@@ -11,7 +11,7 @@ public class GenerateTableButtonScript : MonoBehaviour {
 	public bool showTable = false;
 	public int numRows;
 	public int numCols;
-	List<string> inputVals;
+	public List<string> inputVals;
 
 	// Use this for initialization
 	void Start () {
