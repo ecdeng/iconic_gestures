@@ -6,23 +6,23 @@ using UnityEngine.UI;
 public class GenerateTableButtonScript : MonoBehaviour {
 
 	public Button generateTableButton;
-	public GameObject TablePanel;
-	public GameObject ListItemPrefab;
-	private GameObject model;
+	public InputField rowsField;
+	public InputField colsField;
 	public bool showTable = false;
-	public int numRows = 2;
-	public int numCols = 2;
-	public string str = "";
+	public int numRows;
+	public int numCols;
 	List<string> inputVals;
 
 	// Use this for initialization
 	void Start () {
 		
 		Debug.Log ("START");
+		rowsField = GameObject.Find ("NumRowsInput").GetComponent<InputField>();
+		colsField = GameObject.Find ("NumColsInput").GetComponent<InputField>();
+		Debug.Log ("rows: " + rowsField.textComponent.text + " cols: " + rowsField.textComponent.text);
 		inputVals = new List<string> ();
 		Button btn = generateTableButton.GetComponent<Button>();
 		btn.onClick.AddListener(GenerateTable);
-		TablePanel = GameObject.Find ("TablePanel");
 	}
 	
 	// Update is called once per frame
@@ -34,13 +34,13 @@ public class GenerateTableButtonScript : MonoBehaviour {
 		
 		if (showTable){
 			
-			GUILayout.BeginArea(new Rect(Screen.width - numCols * 50, 0 , numCols*50, numRows*50), GUI.skin.window);
+			GUILayout.BeginArea(new Rect(Screen.width - numCols * 50, 0 , numCols*50, numRows*28), GUI.skin.window);
 			Debug.Log ("numCols:" + numCols + " numRows: " + numRows);
 
 			for (int i = 0; i < numRows; i++) {
 				GUILayout.BeginHorizontal ();
 				for (int j = 0; j<numCols; j++) {
-					inputVals[i*numCols + j] = GUILayout.TextField (inputVals[i*numCols + j], 3);
+					inputVals[i*numCols + j] = GUILayout.TextField (inputVals[i*numCols + j], 3, GUILayout.Width(35), GUILayout.Height(20));
 
 				}
 				GUILayout.EndHorizontal ();
@@ -53,7 +53,9 @@ public class GenerateTableButtonScript : MonoBehaviour {
 	}
 
 	public void GenerateTable() {
-		Debug.Log ("GENERATE TABLE");
+		ObjManager.Instance.setInSelectionMode(false); // change the state we're in
+		ListControllerScript.Instance.RemoveUnselectedPoints();
+
 		showTable = true;
 		numRows = 10;
 		numCols = 2;
