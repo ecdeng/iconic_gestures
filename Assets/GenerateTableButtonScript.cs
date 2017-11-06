@@ -34,7 +34,7 @@ public class GenerateTableButtonScript : MonoBehaviour {
 		
 		if (showTable){
 			
-			GUILayout.BeginArea(new Rect(Screen.width - numCols * 150, 0 , numCols*150, numRows*40), GUI.skin.window);
+			GUILayout.BeginArea(new Rect(Screen.width - numCols * 50, 0 , numCols*50, numRows*50), GUI.skin.window);
 			Debug.Log ("numCols:" + numCols + " numRows: " + numRows);
 
 			for (int i = 0; i < numRows; i++) {
