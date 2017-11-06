@@ -9,53 +9,59 @@ public class GenerateTableButtonScript : MonoBehaviour {
 	public GameObject TablePanel;
 	public GameObject ListItemPrefab;
 	private GameObject model;
+	public bool showTable = false;
+	public int numRows = 2;
+	public int numCols = 2;
+	public string str = "";
+	List<string> inputVals;
 
 	// Use this for initialization
 	void Start () {
+		
+		Debug.Log ("START");
+		inputVals = new List<string> ();
 		Button btn = generateTableButton.GetComponent<Button>();
-		btn.onClick.AddListener(delegate{GenerateTable(2,2);});
+		btn.onClick.AddListener(GenerateTable);
 		TablePanel = GameObject.Find ("TablePanel");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 
-	public void GenerateTable(int rows, int cols) {
-		ObjManager.Instance.setInSelectionMode(false); // change the state we're in
-		ListControllerScript.Instance.RemoveUnselectedPoints();
+	void OnGUI(){
+		//Debug.Log ("ONGUI");
+		
+		if (showTable){
+			
+			GUILayout.BeginArea(new Rect(Screen.width - numCols * 50, 0 , numCols*50, numRows*50), GUI.skin.window);
+			Debug.Log ("numCols:" + numCols + " numRows: " + numRows);
 
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				GameObject newListItem = Instantiate(ListItemPrefab) as GameObject;
-				ListItemScript listItemScript = newListItem.GetComponent<ListItemScript>();
-				listItemScript.id = i * 2 + j;
-				listItemScript.text.text = "Hello";
-				listItemScript.selected = false;
+			for (int i = 0; i < numRows; i++) {
+				GUILayout.BeginHorizontal ();
+				for (int j = 0; j<numCols; j++) {
+					inputVals[i*numCols + j] = GUILayout.TextField (inputVals[i*numCols + j], 3);
 
-				newListItem.transform.SetParent (TablePanel.transform);
-				newListItem.transform.localScale = Vector3.one;
+				}
+				GUILayout.EndHorizontal ();
 			}
+
+			GUILayout.EndArea();
 		}
 
-//		listItemScript.id = point.Key;
-//		listItemScript.x = point.Value.transform.position.x;
-//		listItemScript.y = point.Value.transform.position.y;
-//		listItemScript.z = point.Value.transform.position.z;
-//		//			listItemScript.text.text = listItemScript.id.ToString () + ": (" +
-//		//				listItemScript.x.ToString ("0.0000") + "," +
-//		//				listItemScript.y.ToString ("0.0000") + "," +
-//		//				listItemScript.z.ToString ("0.0000") + ")";
-//		listItemScript.text.text = listItemScript.id.ToString () + ": (" +
-//			System.Math.Round(listItemScript.x,3).ToString() + "," +
-//			System.Math.Round(listItemScript.y,3).ToString() + "," +
-//			System.Math.Round(listItemScript.z,3).ToString() + ")";
-//		listItemScript.selected = false;
-//
-//		newListItem.transform.SetParent (ContentPanel.transform);
-//
-//		//			newListItem.transform.parent = ContentPanel.transform;
-//		newListItem.transform.localScale = Vector3.one;
+
+	}
+
+	public void GenerateTable() {
+		Debug.Log ("GENERATE TABLE");
+		showTable = true;
+		numRows = 10;
+		numCols = 2;
+		int invalid = -1;
+		for (int i = 0; i<numRows; i++) {
+			for (int j = 0; j<numCols; j++) {
+				inputVals.Add (invalid.ToString ());
+			}
+		}
 	}
 }
