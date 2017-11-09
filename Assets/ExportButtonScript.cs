@@ -20,7 +20,7 @@ public class ExportButtonScript : MonoBehaviour {
 	}
 
 	public List<List<int>> Export () {
-		Debug.Log ("Attempting to export.");
+		//Debug.Log ("Attempting to export.");
 
 		List<string> unformatted = GenerateTableButtonScript.Instance.inputVals;
 		//Debug.Log ("unformatted size: " + unformatted.Count);
@@ -34,14 +34,21 @@ public class ExportButtonScript : MonoBehaviour {
 			unformattedToInt [i] = int.Parse(unformatted [i]);
 			//Debug.Log (unformattedToInt [i] + ", ");
 		}
-		//Debug.Log ("numRows: " + numRows + " numCols: " + numCols);
+
+		List<int> unformattedToOrigKeys = new List<int> (unformatted.Count);
+		unformattedToOrigKeys =  (Enumerable.Repeat (0, unformatted.Count)).ToList();
+		for (int i = 0; i < unformattedToOrigKeys.Count; i++) {
+			unformattedToOrigKeys[i] = ObjManager.Instance.GetVirtualMemory() [unformattedToInt [i]];
+		}
+		Debug.Log ("unformatted to original keys: " + unformattedToOrigKeys.Count);
+	
 		//convert from row-wise to column-wise
 		List<List<int>> result = new List<List<int>>(numCols);
 		for (int j = 0; j < numCols + 1; j++) {
 			result.Add(new List<int>());
-			for (int i = 0; i < unformattedToInt.Count; i++) {
+			for (int i = 0; i < unformattedToOrigKeys.Count; i++) {
 				if (i%numCols == j) {
-					result [j].Add (unformattedToInt [i]);
+					result [j].Add (unformattedToOrigKeys [i]);
 					//result [j-1][i] = unformattedToInt [i];
 				}
 			}
