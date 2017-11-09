@@ -44,10 +44,21 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 			GUILayout.BeginArea(new Rect(Screen.width - Screen.width/4, 0 , Screen.width/4, Screen.height - Screen.height / 20), GUI.skin.window);
 			scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true); 
 
+			// head each column with "Actor #x"
+			int actorNumber = 1;
+			GUILayout.BeginHorizontal ();
+			for (int j = 0; j<numCols; j++) {
+				GUILayout.Label ("Actor #" + actorNumber.ToString(), GUILayout.Width(85), GUILayout.Height(20));
+				actorNumber++;
+
+			}
+			GUILayout.EndHorizontal ();
+
+			// draw the rest of the table
 			for (int i = 0; i < numRows; i++) {
 				GUILayout.BeginHorizontal ();
 				for (int j = 0; j<numCols; j++) {
-					inputVals[i*numCols + j] = GUILayout.TextField (inputVals[i*numCols + j], 3, GUILayout.Width(35), GUILayout.Height(20));
+					inputVals[i*numCols + j] = GUILayout.TextField (inputVals[i*numCols + j], 3, GUILayout.Width(85), GUILayout.Height(20));
 
 				}
 				GUILayout.EndHorizontal ();
