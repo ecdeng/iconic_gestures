@@ -12,11 +12,16 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 	public int numRows;
 	public int numCols;
 	public List<string> inputVals;
+	public Vector2 scrollPosition;
+
+	public int maxWidth;
+	public int maxCols;
 
 	// Use this for initialization
 	void Start () {
 		
 		Debug.Log ("START");
+		scrollPosition = Vector2.zero;
 		InputField rows = rowsField.GetComponent<InputField>();
 		InputField cols = colsField.GetComponent<InputField>();
 		inputVals = new List<string> ();
@@ -33,8 +38,11 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 		
 		if (showTable){
 			
-			GUILayout.BeginArea(new Rect(Screen.width - numCols * 50, 0 , numCols*50, numRows*28), GUI.skin.window);
+//			GUILayout.BeginArea(new Rect(Screen.width - numCols * 50, 0 , numCols*50, numRows*28), GUI.skin.window);
 			//Debug.Log ("numCols:" + numCols + " numRows: " + numRows);
+
+			GUILayout.BeginArea(new Rect(Screen.width - Screen.width/4, 0 , Screen.width/4, Screen.height - Screen.height / 20), GUI.skin.window);
+			scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true); 
 
 			for (int i = 0; i < numRows; i++) {
 				GUILayout.BeginHorizontal ();
@@ -45,6 +53,7 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 				GUILayout.EndHorizontal ();
 			}
 
+			GUILayout.EndScrollView();
 			GUILayout.EndArea();
 		}
 
