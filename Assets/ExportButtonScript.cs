@@ -19,6 +19,7 @@ public class ExportButtonScript : MonoBehaviour
         clientSocket = default(TcpClient);
         networkStream = null;
 
+		print ("about to start server");
         serverSocket.Start();
         print("Server started");
 
