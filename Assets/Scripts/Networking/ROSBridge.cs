@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Net;
@@ -34,6 +33,7 @@ public class ROSBridge : MonoBehaviour
 
     static void CheckForConnection()
     {
+        print("waiting for connection");
         clientSocket = serverSocket.AcceptTcpClient();
         print("Client connected to");
         networkStream = clientSocket.GetStream();
@@ -60,26 +60,28 @@ public class ROSBridge : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Dictionary<int, Vector3> positions = new Dictionary<int, Vector3>();
-        //positions.Add(0, new Vector3(1, 2, 3));
-        //positions.Add(1, new Vector3(2, 3, 4));
+        if (Input.GetKeyDown("space"))
+        {
+            Dictionary<int, Vector3> positions = new Dictionary<int, Vector3>();
+            positions.Add(0, new Vector3(3.2f, 0.1f, -1.1f));
 
-        //Dictionary<int, Vector3> normals = new Dictionary<int, Vector3>();
-        //normals.Add(0, new Vector3(4, 5, 6));
-        //normals.Add(1, new Vector3(6, 7, 8));
+            Dictionary<int, Quaternion> quarternions = new Dictionary<int, Quaternion>();
+            quarternions.Add(0, new Quaternion(0, 0, 0, 1));
 
-        //List<List<int>> topList = new List<List<int>>();
-        //List<int> bottomList = new List<int>();
-        //bottomList.Add(0);
-        //topList.Add(bottomList);
-        //bottomList = new List<int>();
-        //bottomList.Add(1);
-        //topList.Add(bottomList);
-        //for (int i = 0; i < 2; i++)
-        //{
-        //    topList.Add(bottomList);
-        //}
-        //sendPoints(topList, positions, normals);
+            PositionNormals positionNormals = new PositionNormals(new Vector3(3.2f, 0.1f, -1.1f), new Quaternion(0, 0, 0, 1));
+            Dictionary<int, PositionNormals> map = new Dictionary<int, PositionNormals>();
+            map.Add(0, positionNormals);
+
+            List<List<int>> topList = new List<List<int>>();
+            List<int> bottomList = new List<int>();
+            bottomList.Add(0);
+
+            topList.Add(bottomList);
+            topList.Add(bottomList);
+
+            sendPoints(topList, map);
+            print("send");
+        }
     }
 
     public void sendPoints(object[] point_normals)
@@ -88,8 +90,7 @@ public class ROSBridge : MonoBehaviour
         // point_normals [1]);
     }
 
-    void sendPoints(List<List<int>> actorList, Dictionary<int, Vector3>
-positions, Dictionary<int, Vector3> normals)
+    void sendPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions)
     {
         Wrapper moveList = new Wrapper(new List<Actor>());
         foreach (List<int> gestureList in actorList)
@@ -98,8 +99,7 @@ positions, Dictionary<int, Vector3> normals)
             foreach (int gesture in gestureList)
             {
                 if (gesture == -1) continue;
-                actor.gest.Add(new Vertex(positions[gesture],
-normals[gesture]));
+                actor.gest.Add(new Vertex(positions[gesture].pos, positions[gesture].norm));
             }
             moveList.act.Add(actor);
         }
@@ -113,12 +113,12 @@ normals[gesture]));
     class Vertex
     {
         public Vector3 p;
-        public Vector3 n;
+        public Quaternion q;
 
-        public Vertex(Vector3 position, Vector3 normal)
+        public Vertex(Vector3 position, Quaternion quarternion)
         {
             this.p = position;
-            this.n = normal;
+            this.q = quarternion;
         }
     }
 
