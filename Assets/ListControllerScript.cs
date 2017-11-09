@@ -21,8 +21,8 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 	/// <summary>
 	/// destroy all list elements if any
 	/// </summary>
-	void DestroyListIfAny() {
-		if (listItemGameObjects.Count > 0) {
+	public void DestroyListIfAny() {
+		if (listItemGameObjects != null && listItemGameObjects.Count > 0) {
 			foreach (GameObject gameObject in listItemGameObjects) {
 				Destroy (gameObject);
 			}

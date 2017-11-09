@@ -162,6 +162,7 @@ public class ObjManager : Singleton<ObjManager> {
 
 		model.transform.parent = parent.transform;
 		CreatePoints (vec);
+		ListControllerScript.Instance.DestroyListIfAny ();
 		ListControllerScript.Instance.CreateListForModel ();
 		Debug.Log (max);
 
