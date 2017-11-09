@@ -79,6 +79,8 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 
 	public void GenerateTable() {
 		ExportButtonScript.Instance.Initialize ();
+		FileUpload.Instance.Disable ();
+		Disable ();
 		ObjManager.Instance.setInSelectionMode(false); // change the state we're in
 		ListControllerScript.Instance.RemoveUnselectedPoints();
 
@@ -91,5 +93,11 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 				inputVals.Add (invalid.ToString ());
 			}
 		}
+	}
+
+	public void Disable() {
+		generateTableButton.gameObject.SetActive(false);
+		rowsField.gameObject.SetActive(false);
+		colsField.gameObject.SetActive(false);
 	}
 }

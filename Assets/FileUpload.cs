@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 
-public class FileUpload : MonoBehaviour {
+public class FileUpload : Singleton<FileUpload> {
 
 	private GameObject model;
 	public Button fileUploadButton;
@@ -21,5 +21,10 @@ public class FileUpload : MonoBehaviour {
 		if(path.Length != 0)
 			ObjManager.Instance.LoadModel (path);
 
+	}
+
+	public void Disable () {
+		Button btn = fileUploadButton.GetComponent<Button>();
+		btn.gameObject.SetActive (false);
 	}
 }
