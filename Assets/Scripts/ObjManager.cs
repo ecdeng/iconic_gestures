@@ -342,6 +342,14 @@ public class ObjManager : Singleton<ObjManager> {
 		return point_ids;
 	}
 
+	public void AddToVirtualMemory(int virtual_id, int physical_id) {
+		virtual_memory.Add (virtual_id, physical_id);
+	}
+
+	public Dictionary<int,GameObject> GetVirtualMemory() {
+		return virtual_memory;
+	}
+
 	/// <summary>
 	/// returns gameobject for the sphere given id
 	/// </summary>

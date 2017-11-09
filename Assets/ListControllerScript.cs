@@ -65,9 +65,11 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 
 		// create list of selected points
 		selectedListItemIDs.Clear ();
+		int id = 0;
 		foreach (ListItemScript item in listItems) {
 			if (item.selected == true) {
 				selectedListItemIDs.Add (item.id);
+				ObjManager.Instance.AddToVirtualMemory (id++, item.id);
 			}
 		}
 
