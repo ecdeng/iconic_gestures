@@ -9,6 +9,7 @@ using System.Threading;
 using System.Text;
 using System;
 
+// script for export button behavior
 public class ExportButtonScript : Singleton<ExportButtonScript>
 {
     public Button exportButton;

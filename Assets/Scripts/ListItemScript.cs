@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Behavior script for individual list elements
+/// handles the hovering and click behavior for the list elements in both stages
+/// </summary>
 public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 	public Text text; // text actually rendered on screen
 	public int displayID; // id to use only in rendered text, can be different from actual point ID for user convenience in 2nd stage

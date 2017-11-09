@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
+/// <summary>
+/// Wraps vector 3D position and its corresponding Quaternion (rotation)
+/// </summary>
 public class PositionNormals
 {
 	public Vector3 pos;
@@ -14,6 +17,11 @@ public class PositionNormals
 	}
 }
 
+/// <summary>
+/// handles loading model, creating vertices mesh, rendering the spheres for each point, rotation and panning of views
+/// stores which points are selected
+/// essentially the data model for the entire application
+/// </summary>
 public class ObjManager : Singleton<ObjManager> {
 
 
@@ -27,8 +35,8 @@ public class ObjManager : Singleton<ObjManager> {
 	private HashSet<float> radial_set;
 
 	//user movement around view
-	private float movespeed = 2.0f;
-	private float camspeed = 0.5f;
+	private float movespeed = 2.0f; // move the model speed
+	private float camspeed = 0.5f; // move the camera speed
 
 	//id maps
 	private Dictionary<int,GameObject> point_ids; // id to game object of the spheres in the mesh
@@ -41,9 +49,9 @@ public class ObjManager : Singleton<ObjManager> {
 	private GameObject counterText; // UI object to render the counter
 
 	//selection and follow mode
-	private bool followMode;
-	public bool isInSelectionMode; // in selection mode is first stage
-	private HashSet<int> selected_point_ids;
+	private bool followMode; // true when you spin the model around to show which point the user is currently hovering over (both stages)
+	public bool isInSelectionMode; // true if in first stage (selection), false if in second stage (grouping)
+	private HashSet<int> selected_point_ids; // set of selected point ids once user exits first stage and enters second stage
 
 	//scrolling
 	Vector2 scrollPosition = Vector2.zero;
@@ -386,6 +394,10 @@ public class ObjManager : Singleton<ObjManager> {
 		return physical_memory;
 	}
 
+	/// <summary>
+	/// returns dictionary where key is original point ID and values is the positionNormal for that ID
+	/// </summary>
+	/// <returns>The point normals.</returns>
 	public Dictionary<int, PositionNormals> GetPointNormals() {
 		return point_normals;
 	}
@@ -425,7 +437,10 @@ public class ObjManager : Singleton<ObjManager> {
 		isInSelectionMode = inSelectionMode;
 	}
 
-	// select the point to be used in grouping stage of the application
+	/// <summary>
+	/// Select the point to be used in grouping stage of the application
+	/// </summary>
+	/// <param name="sphere">Sphere.</param>
 	public void Select(GameObject sphere) {
 		Renderer renderer = sphere.GetComponent<Renderer>();
 		renderer.material.color = Color.green;
