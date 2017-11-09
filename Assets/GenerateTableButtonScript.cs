@@ -17,9 +17,8 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 	void Start () {
 		
 		Debug.Log ("START");
-		rowsField = GameObject.Find ("NumRowsInput").GetComponent<InputField>();
-		colsField = GameObject.Find ("NumColsInput").GetComponent<InputField>();
-		Debug.Log ("rows: " + rowsField.textComponent.text + " cols: " + rowsField.textComponent.text);
+		InputField rows = rowsField.GetComponent<InputField>();
+		InputField cols = colsField.GetComponent<InputField>();
 		inputVals = new List<string> ();
 		Button btn = generateTableButton.GetComponent<Button>();
 		btn.onClick.AddListener(GenerateTable);
@@ -35,7 +34,7 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 		if (showTable){
 			
 			GUILayout.BeginArea(new Rect(Screen.width - numCols * 50, 0 , numCols*50, numRows*28), GUI.skin.window);
-			Debug.Log ("numCols:" + numCols + " numRows: " + numRows);
+			//Debug.Log ("numCols:" + numCols + " numRows: " + numRows);
 
 			for (int i = 0; i < numRows; i++) {
 				GUILayout.BeginHorizontal ();
@@ -49,7 +48,6 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 			GUILayout.EndArea();
 		}
 
-
 	}
 
 	public void GenerateTable() {
@@ -57,9 +55,9 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 		ListControllerScript.Instance.RemoveUnselectedPoints();
 
 		showTable = true;
-		numRows = 10;
-		numCols = 2;
-		int invalid = -1;
+		numRows = int.Parse(rowsField.text);
+		numCols = int.Parse(colsField.text);
+		int invalid = 1;
 		for (int i = 0; i<numRows; i++) {
 			for (int j = 0; j<numCols; j++) {
 				inputVals.Add (invalid.ToString ());
