@@ -168,6 +168,8 @@ public class ObjManager : Singleton<ObjManager> {
 		foreach (KeyValuePair<int, GameObject> entry in point_ids) {
 			Destroy (entry.Value);
 		}
+		virtual_memory.Clear ();
+		physical_memory.Clear ();
 		point_ids.Clear ();
 		point_normals.Clear ();
 		y_set.Clear ();
