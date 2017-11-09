@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Behavior script for the list of listItemScript elements
+/// handles destroying and creating lists for the current model
+/// </summary>
 public class ListControllerScript : Singleton<ListControllerScript> {
 		public GameObject ContentPanel; // what each list element is rendered on
 		public GameObject ListItemPrefab; // prefab template for each list element
-//		private GameObject model;
 
 		List<GameObject> listItemGameObjects; // list of game objects for each list element 
 		List<ListItemScript> listItems; // the scripts for each element, holds the data for each one
@@ -18,8 +21,8 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 	/// <summary>
 	/// destroy all list elements if any
 	/// </summary>
-	void DestroyListIfAny() {
-		if (listItemGameObjects.Count > 0) {
+	public void DestroyListIfAny() {
+		if (listItemGameObjects != null && listItemGameObjects.Count > 0) {
 			foreach (GameObject gameObject in listItemGameObjects) {
 				Destroy (gameObject);
 			}

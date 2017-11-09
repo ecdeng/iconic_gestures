@@ -9,6 +9,7 @@ using System.Threading;
 using System.Text;
 using System;
 
+// script for export button behavior
 public class ExportButtonScript : Singleton<ExportButtonScript>
 {
     public Button exportButton;
@@ -76,7 +77,11 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         //Debug.Log ("unformatted to int size: " + unformattedToInt.Count);
         for (int i = 0; i < unformattedToInt.Count; i++)
         {
-            unformattedToInt[i] = int.Parse(unformatted[i]);
+			if (unformatted [i].Length > 0) {
+				unformattedToInt [i] = int.Parse (unformatted [i]);
+			} else {
+				unformattedToInt [i] = -1;
+			}
             //Debug.Log (unformattedToInt [i] + ", ");
         }
 
