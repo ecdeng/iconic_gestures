@@ -307,13 +307,23 @@ public class ObjManager : Singleton<ObjManager> {
 	}
 		
 
-	//helper functions for getting and sorting
+	/// <summary>
+	/// helper functions for getting and sorting
+	/// </summary>
+	/// <returns>The to camera.</returns>
+	/// <param name="pos">Position.</param>
 	private float AngleToCamera(Vector3 pos) {
 		var vec1 = new Vector2(pos.x,pos.z);
 		var vec2 = new Vector2 (Camera.main.transform.position.x, Camera.main.transform.position.z);
 		return -1 * AngleBetweenVector2 (vec1, vec2);
 	}
 
+	/// <summary>
+	/// Finding angle between 2 vectors for ordering points
+	/// </summary>
+	/// <returns>The between vector2.</returns>
+	/// <param name="vec1">Vec1.</param>
+	/// <param name="vec2">Vec2.</param>
 	private float AngleBetweenVector2(Vector2 vec1, Vector2 vec2)
 	{
 		Vector2 vec1Rotated90 = new Vector2(-vec1.y, vec1.x);
@@ -337,7 +347,7 @@ public class ObjManager : Singleton<ObjManager> {
 		
 
 	/// <summary>
-	/// Getter for id and verties
+	/// Getter for dictionary where key is point ID id and value are the game objects for the spheres/vertices on the mesh
 	/// </summary>
 	/// <returns>The vertices with I ds.</returns>
 	public Dictionary<int,GameObject> GetVerticesWithIDs() {
@@ -345,15 +355,28 @@ public class ObjManager : Singleton<ObjManager> {
 		return point_ids;
 	}
 
+	/// <summary>
+	/// Adds to virtual memory map where key is new simplified id to display in grouping state and value is the original point id
+	/// </summary>
+	/// <param name="virtual_id">Virtual identifier.</param>
+	/// <param name="physical_id">Physical identifier.</param>
 	public void AddToVirtualMemory(int virtual_id, int physical_id) {
 		virtual_memory.Add (virtual_id, physical_id);
 		physical_memory.Add (physical_id, virtual_id);
 	}
 
+	/// <summary>
+	/// Returns dictionary where key is new simplified id to display in grouping state and value is the original point id
+	/// </summary>
+	/// <returns>The virtual memory.</returns>
 	public Dictionary<int,int> GetVirtualMemory() {
 		return virtual_memory;
 	}
 
+	/// <summary>
+	/// Returns dictionary where key is original point id and value is the new simplified id to display in grouping state
+	/// </summary>
+	/// <returns>The physical memory.</returns>
 	public Dictionary<int,int> GetPhysicalMemory() {
 		return physical_memory;
 	}
@@ -367,7 +390,10 @@ public class ObjManager : Singleton<ObjManager> {
 		return point_ids [id];
 	}
 		
-	//selection and highlighting
+	/// <summary>
+	/// remove unselected spheres in grouping state
+	/// </summary>
+	/// <param name="selected">Selected.</param>
 	public void setSelectedPoints(List<int>selected)
 	{
 		selected_point_ids = new HashSet<int>(selected);
@@ -381,11 +407,16 @@ public class ObjManager : Singleton<ObjManager> {
 
 	}
 
+	/// <summary>
+	/// change state of application from selection to grouping state
+	/// </summary>
+	/// <param name="inSelectionMode">If set to <c>true</c> in selection mode.</param>
 	public void setInSelectionMode(bool inSelectionMode)
 	{
 		isInSelectionMode = inSelectionMode;
 	}
 
+	// select the point to be used in grouping stage of the application
 	public void Select(GameObject sphere) {
 		Renderer renderer = sphere.GetComponent<Renderer>();
 		renderer.material.color = Color.green;
@@ -393,12 +424,22 @@ public class ObjManager : Singleton<ObjManager> {
 		counterText.GetComponent<Text> ().text = counter.ToString ();
 	}
 
+	/// <summary>
+	/// highlight the selected sphere to a red color, used when hovering over the corresponding point in the list 
+	// in selection mode
+	/// </summary>
+	/// <param name="sphere">Sphere.</param>
 	public void Highlight(GameObject sphere) {
 		Renderer renderer = sphere.GetComponent<Renderer>();
 		renderer.material.color = Color.red;
 
 	}
 
+	/// <summary>
+	/// unhighlight the selected sphere to its original color
+	/// </summary>
+	/// <param name="sphere">Sphere.</param>
+	/// <param name="unSelect">If set to <c>true</c> un select.</param>
 	public void Unhighlight(GameObject sphere, bool unSelect) {
 		if (unSelect) {
 			counter--;

@@ -15,6 +15,9 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 	void Start () {
 	}
 
+	/// <summary>
+	/// destroy all list elements if any
+	/// </summary>
 	void DestroyListIfAny() {
 		if (listItemGameObjects.Count > 0) {
 			foreach (GameObject gameObject in listItemGameObjects) {
@@ -23,6 +26,9 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 		}
 	}
 
+	/// <summary>
+	/// create list elements based on points for the current model
+	/// </summary>
 	public void CreateListForModel () {
 		listItems = new List<ListItemScript> ();
 		listItemGameObjects = new List<GameObject> ();
@@ -40,10 +46,6 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 			listItemScript.x = point.Value.transform.position.x;
 			listItemScript.y = point.Value.transform.position.y;
 			listItemScript.z = point.Value.transform.position.z;
-//			listItemScript.text.text = listItemScript.id.ToString () + ": (" +
-//				listItemScript.x.ToString ("0.0000") + "," +
-//				listItemScript.y.ToString ("0.0000") + "," +
-//				listItemScript.z.ToString ("0.0000") + ")";
 			listItemScript.text.text = listItemScript.id.ToString () + ": (" +
 				System.Math.Round(listItemScript.x,3).ToString() + "," +
 				System.Math.Round(listItemScript.y,3).ToString() + "," +
@@ -54,13 +56,14 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 			listItemGameObjects.Add (newListItem); // store the game object for this item
 
 			newListItem.transform.SetParent (ContentPanel.transform);
-
-//			newListItem.transform.parent = ContentPanel.transform;
 			newListItem.transform.localScale = Vector3.one;
 
 		}
 	}
 
+	/// <summary>
+	/// Destroy all list elements and remake the list for only points selected from the selection state
+	/// </summary>
 	public void RemoveUnselectedPoints () {
 		Debug.Log ("Removing");
 
@@ -108,8 +111,6 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 				listItemGameObjects.Add (newListItem);
 
 				newListItem.transform.SetParent (ContentPanel.transform);
-
-				//			newListItem.transform.parent = ContentPanel.transform;
 				newListItem.transform.localScale = Vector3.one;
 			}
 		}

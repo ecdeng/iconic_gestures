@@ -24,6 +24,10 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 		
 	}
 
+	/// <summary>
+	/// handler for clicking on list element. If in selection mode, show the element and point in green.
+	/// </summary>
+	/// <param name="evd">Evd.</param>
 	public void OnPointerClick (PointerEventData evd)
 	{
 		// only do something if in first stage/selection mode for now
@@ -41,6 +45,11 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 		}
 	}
 
+	/// <summary>
+	/// handler for hovering over list element. if in selection mode, hovering (not selection) will show the element in red and also highlight the point red
+	/// if in grouping state, element will highlight in green and point will enlarge
+	/// </summary>
+	/// <param name="evd">Evd.</param>
 	public void OnPointerEnter (PointerEventData evd)
 	{
 		var obj = ObjManager.Instance.GetGameObject (id);
@@ -56,6 +65,10 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 
 	}
 
+	/// <summary>
+	/// handler for exiting (aka finish hovering) over list element. undo the UI changes made in OnPointerEnter
+	/// </summary>
+	/// <param name="evd">Evd.</param>
 	public void OnPointerExit (PointerEventData evd)
 	{
 		if (!selected && ObjManager.Instance.isInSelectionMode) {
