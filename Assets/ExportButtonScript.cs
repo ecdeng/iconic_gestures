@@ -1,13 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using System.Linq;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using System.Text;
 using System;
-using UnityEngine;
 
 public class ExportButtonScript : MonoBehaviour
 {
+    public Button exportButton;
+    public GameObject tableInfo;
+
+    //networking
     static TcpListener serverSocket;
     static TcpClient clientSocket;
     static NetworkStream networkStream;
@@ -15,26 +22,92 @@ public class ExportButtonScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        Button btn = exportButton.GetComponent<Button>();
+        btn.onClick.AddListener(delegate { Export(); });
+
+        //networking
         serverSocket = new TcpListener(IPAddress.Any, 8888);
         clientSocket = default(TcpClient);
         networkStream = null;
 
-		print ("about to start server");
         serverSocket.Start();
         print("Server started");
 
         Initialize();
     }
 
+    //networking
     void Initialize()
     {
         Thread tid1 = new Thread(new ThreadStart(ExportButtonScript.CheckForConnection));
         tid1.Start();
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public List<List<int>> Export()
+    {
+        //Debug.Log ("Attempting to export.");
+
+        List<string> unformatted = GenerateTableButtonScript.Instance.inputVals;
+        //Debug.Log ("unformatted size: " + unformatted.Count);
+        int numCols = GenerateTableButtonScript.Instance.numCols;
+        //int numRows = GenerateTableButtonScript.Instance.numRows;
+        List<int> unformattedToInt = new List<int>(unformatted.Count);
+        unformattedToInt = (Enumerable.Repeat(0, unformatted.Count)).ToList();
+
+        //Debug.Log ("unformatted to int size: " + unformattedToInt.Count);
+        for (int i = 0; i < unformattedToInt.Count; i++)
+        {
+            unformattedToInt[i] = int.Parse(unformatted[i]);
+            //Debug.Log (unformattedToInt [i] + ", ");
+        }
+
+        List<int> unformattedToOrigKeys = new List<int>(unformatted.Count);
+        unformattedToOrigKeys = (Enumerable.Repeat(0, unformatted.Count)).ToList();
+        for (int i = 0; i < unformattedToOrigKeys.Count; i++)
+        {
+            if (unformattedToInt[i] != -1)
+            {
+                unformattedToOrigKeys[i] = ObjManager.Instance.GetVirtualMemory()[unformattedToInt[i]];
+            }
+            else
+            {
+                unformattedToOrigKeys[i] = -1;
+            }
+        }
+        Debug.Log("unformatted to original keys: " + unformattedToOrigKeys.Count);
+
+        //convert from row-wise to column-wise
+        List<List<int>> result = new List<List<int>>(numCols);
+        for (int j = 0; j < numCols + 1; j++)
+        {
+            result.Add(new List<int>());
+            for (int i = 0; i < unformattedToOrigKeys.Count; i++)
+            {
+                if (i % numCols == j)
+                {
+                    result[j].Add(unformattedToOrigKeys[i]);
+                    //result [j-1][i] = unformattedToInt [i];
+                }
+            }
+        }
+        //		Debug.Log ("firstcol0: " + result[0].Count);
+        //		Debug.Log ("secondcol1: " + result[1].Count);
+        //Debug.Log(result[0][0] + "," + result[0][1] + "," + result[0][2]);
+
+        sendPoints(result, ObjManager.Instance.GetPointNormals());
+
+        return result;
+    }
+
+    //networking
     static void CheckForConnection()
     {
-        print("waiting for connection");
         clientSocket = serverSocket.AcceptTcpClient();
         print("Client connected to");
         networkStream = clientSocket.GetStream();
@@ -56,50 +129,6 @@ public class ExportButtonScript : MonoBehaviour
             networkStream = null;
             Initialize();
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown("space"))
-        {
-            Dictionary<int, Vector3> positions = new Dictionary<int, Vector3>();
-            positions.Add(0, new Vector3(3.2f, 0.1f, -1.1f));
-
-            Dictionary<int, Quaternion> quarternions = new Dictionary<int, Quaternion>();
-            quarternions.Add(0, new Quaternion(0, 0, 0, 1));
-
-            PositionNormals positionNormal1 = new PositionNormals(new Vector3(3.4f, 0.1f, -0.1f), new Quaternion(0, 0, 0, 1));
-            PositionNormals positionNormal2 = new PositionNormals(new Vector3(3.4f, 8.5f, -0.1f), new Quaternion(0, 0, 0, 1));
-            PositionNormals positionNormal3 = new PositionNormals(new Vector3(3.2f, 8.5f, -1.1f), new Quaternion(0, 0, 0, 1));
-            PositionNormals positionNormal4 = new PositionNormals(new Vector3(2.7f, 0.1f, -2.1f), new Quaternion(0, 0, 0, 1));
-            Dictionary<int, PositionNormals> map = new Dictionary<int, PositionNormals>();
-            map.Add(0, positionNormal1);
-            map.Add(1, positionNormal2);
-            map.Add(2, positionNormal3);
-            map.Add(3, positionNormal4);
-
-            List<List<int>> topList = new List<List<int>>();
-            List<int> bottomList1 = new List<int>();
-            bottomList1.Add(0);
-            bottomList1.Add(1);
-
-            List<int> bottomList2 = new List<int>();
-            bottomList2.Add(2);
-            bottomList2.Add(3);
-
-            topList.Add(bottomList1);
-            topList.Add(bottomList2);
-
-            sendPoints(topList, map);
-            print("send");
-        }
-    }
-
-    public void sendPoints(object[] point_normals)
-    {
-        // sendPoints ((List<Vector3>)point_normals [0], (List<Vector3>)
-        // point_normals [1]);
     }
 
     void sendPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions)
@@ -127,10 +156,10 @@ public class ExportButtonScript : MonoBehaviour
         public Vector3 p;
         public Quaternion q;
 
-        public Vertex(Vector3 position, Quaternion quarternion)
+        public Vertex(Vector3 position, Quaternion normal)
         {
             this.p = position;
-            this.q = quarternion;
+            this.q = normal;
         }
     }
 
@@ -155,5 +184,4 @@ public class ExportButtonScript : MonoBehaviour
             this.act = actors;
         }
     }
-
 }
