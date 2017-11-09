@@ -250,7 +250,8 @@ public class ObjManager : Singleton<ObjManager> {
 		{
 			
 			vertices[i] += new Vector3(0,transform.localScale.y,0);
-			posnormals.Add (new PositionNormals(vertices [i], Quaternion.Euler(normals [i])));
+			var quat = Quaternion.LookRotation (normals [i], Vector3.up);
+			posnormals.Add (new PositionNormals(vertices [i], quat));
 			y_set.Add (vertices [i].y);
 			radial_set.Add(AngleToCamera(vertices[i]));
 
