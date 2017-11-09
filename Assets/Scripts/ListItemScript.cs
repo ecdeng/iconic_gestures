@@ -49,6 +49,7 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 		} else if (!ObjManager.Instance.isInSelectionMode) { // stage 2
 			GameObject sphere = ObjManager.Instance.GetGameObject (id);
 			sphere.transform.localScale = Vector3.one * scale * 10;
+			gameObject.GetComponent<Image> ().color = UnityEngine.Color.green;
 		}
 		ObjManager.Instance.FollowCamera (obj);
 
@@ -62,6 +63,7 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 		} else if (!ObjManager.Instance.isInSelectionMode) {
 			GameObject sphere = ObjManager.Instance.GetGameObject (id);
 			sphere.transform.localScale = Vector3.one * scale * 5;
+			gameObject.GetComponent<Image> ().color = UnityEngine.Color.clear;
 		}
 
 	}
