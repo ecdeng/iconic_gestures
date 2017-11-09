@@ -7,8 +7,8 @@ using System.Linq;
 public class PositionNormals
 {
 	public Vector3 pos;
-	public Vector3 norm;
-	public PositionNormals(Vector3 pos, Vector3 norm){
+	public Quaternion norm;
+	public PositionNormals(Vector3 pos, Quaternion norm){
 		this.pos = pos;
 		this.norm = norm;
 	}
@@ -31,6 +31,7 @@ public class ObjManager : Singleton<ObjManager> {
 	//id maps
 	private Dictionary<int,GameObject> point_ids;
 	private Dictionary<int,PositionNormals> point_normals;
+	private Dictionary<int,int> virtual_memory;
 
 	//counters
 	public int counter;
@@ -49,8 +50,6 @@ public class ObjManager : Singleton<ObjManager> {
 		InitObjects ();
 		InitModel ();
 		LoadModel ("Assets/Models/mug.obj");
-
-
 	}
 		
 	// Update is called once per frame
@@ -233,6 +232,7 @@ public class ObjManager : Singleton<ObjManager> {
 			foreach (var filter in filters) {
 				vertices.AddRange (filter.mesh.vertices);
 				normals.AddRange (filter.mesh.normals);
+
 			}
 		} else {
 			vertices = new List<Vector3> (meshFilter.mesh.vertices);
@@ -243,11 +243,15 @@ public class ObjManager : Singleton<ObjManager> {
 		//updating vertices
 		for(int i = 0; i < vertices.Count; i++)
 		{
+			
 			vertices[i] += new Vector3(0,transform.localScale.y,0);
-			posnormals.Add (new PositionNormals(vertices [i], normals [i]));
+			posnormals.Add (new PositionNormals(vertices [i], Quaternion.Euler(normals [i])));
 			y_set.Add (vertices [i].y);
 			radial_set.Add(AngleToCamera(vertices[i]));
+
 		}
+		//Debug.Log (vertices [0]);
+		//Debug.Log (Quaternion.Euler (normals [0]));
 
 		return posnormals;
 	}
@@ -261,11 +265,16 @@ public class ObjManager : Singleton<ObjManager> {
 
 		//restrict current points by height and radians
 		var total_points = points.Count;
+		int y_distro = 1;
+		int rad_distro = 1;
 		Debug.Log (total_points); 
-		int y_distro = 10;
-		int rad_distro = Mathf.Max(total_points/3000,1);
-		y_set = new HashSet<float> (y_set.Where ((x, i) => i % y_distro == 0));
-		radial_set = new HashSet<float> (radial_set.Where ((x, i) => i % rad_distro == 0));
+		if (total_points > 100) {
+			y_distro = 10;
+			rad_distro = Mathf.Max (total_points / 3000, 1);
+		}
+			y_set = new HashSet<float> (y_set.Where ((x, i) => i % y_distro == 0));
+			radial_set = new HashSet<float> (radial_set.Where ((x, i) => i % rad_distro == 0));
+
 
 		//update points
 		points = points.Where ((x, i) => y_set.Contains (x.pos.y)).ToList();
