@@ -78,7 +78,7 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 	}
 
 	public void GenerateTable() {
-		if (rowsField.text.Length > 0 && colsField.text.Length > 0) {
+		if (rowsField.text.Length > 0 && colsField.text.Length > 0 && ObjManager.Instance.counter > 0) {
 
 			ExportButtonScript.Instance.Initialize ();
 			FileUpload.Instance.Disable ();
