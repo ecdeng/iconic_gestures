@@ -78,19 +78,22 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 	}
 
 	public void GenerateTable() {
-		ExportButtonScript.Instance.Initialize ();
-		FileUpload.Instance.Disable ();
-		Disable ();
-		ObjManager.Instance.setInSelectionMode(false); // change the state we're in
-		ListControllerScript.Instance.RemoveUnselectedPoints();
+		if (rowsField.text.Length > 0 && colsField.text.Length > 0) {
 
-		showTable = true;
-		numRows = int.Parse(rowsField.text);
-		numCols = int.Parse(colsField.text);
-		int invalid = -1;
-		for (int i = 0; i<numRows; i++) {
-			for (int j = 0; j<numCols; j++) {
-				inputVals.Add (invalid.ToString ());
+			ExportButtonScript.Instance.Initialize ();
+			FileUpload.Instance.Disable ();
+			Disable ();
+			ObjManager.Instance.setInSelectionMode (false); // change the state we're in
+			ListControllerScript.Instance.RemoveUnselectedPoints ();
+
+			showTable = true;
+			numRows = int.Parse (rowsField.text);
+			numCols = int.Parse (colsField.text);
+			int invalid = -1;
+			for (int i = 0; i < numRows; i++) {
+				for (int j = 0; j < numCols; j++) {
+					inputVals.Add (invalid.ToString ());
+				}
 			}
 		}
 	}
