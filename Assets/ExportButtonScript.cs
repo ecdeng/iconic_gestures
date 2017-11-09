@@ -142,10 +142,11 @@ public class ExportButtonScript : MonoBehaviour
                 if (gesture == -1) continue;
                 actor.gest.Add(new Vertex(positions[gesture].pos, positions[gesture].norm));
             }
-            moveList.act.Add(actor);
+            if (actor.gest.Count != 0) moveList.act.Add(actor);
         }
 
         string serializedPoints = UnityEngine.JsonUtility.ToJson(moveList);
+        print(serializedPoints);
         Send(serializedPoints);
         //print(serializedPoints);
     }
