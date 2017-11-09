@@ -9,7 +9,7 @@ using System.Threading;
 using System.Text;
 using System;
 
-public class ExportButtonScript : MonoBehaviour
+public class ExportButtonScript : Singleton<ExportButtonScript>
 {
     public Button exportButton;
     public GameObject tableInfo;
@@ -24,21 +24,33 @@ public class ExportButtonScript : MonoBehaviour
     {
         Button btn = exportButton.GetComponent<Button>();
         btn.onClick.AddListener(delegate { Export(); });
+		btn.gameObject.SetActive (false);
 
-        //networking
-        serverSocket = new TcpListener(IPAddress.Any, 8888);
-        clientSocket = default(TcpClient);
-        networkStream = null;
-
-        serverSocket.Start();
-        print("Server started");
-
-        Initialize();
+//        //networking
+//        serverSocket = new TcpListener(IPAddress.Any, 8888);
+//        clientSocket = default(TcpClient);
+//        networkStream = null;
+//
+//        serverSocket.Start();
+//        print("Server started");
+//
+//        Initialize();
     }
 
     //networking
-    void Initialize()
+    public void Initialize()
     {
+		Button btn = exportButton.GetComponent<Button>();
+		btn.gameObject.SetActive (true);
+
+		//networking
+		serverSocket = new TcpListener(IPAddress.Any, 8888);
+		clientSocket = default(TcpClient);
+		networkStream = null;
+
+		serverSocket.Start();
+		print("Server started");
+
         Thread tid1 = new Thread(new ThreadStart(ExportButtonScript.CheckForConnection));
         tid1.Start();
     }
