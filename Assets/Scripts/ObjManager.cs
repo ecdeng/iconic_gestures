@@ -32,6 +32,7 @@ public class ObjManager : Singleton<ObjManager> {
 	private Dictionary<int,GameObject> point_ids;
 	private Dictionary<int,PositionNormals> point_normals;
 	private Dictionary<int,int> virtual_memory;
+	private Dictionary<int,int> physical_memory;
 
 	//counters
 	public int counter;
@@ -127,6 +128,8 @@ public class ObjManager : Singleton<ObjManager> {
 
 		point_ids = new Dictionary<int, GameObject> ();
 		point_normals = new Dictionary<int, PositionNormals> ();
+		virtual_memory = new Dictionary<int, int> ();
+		physical_memory = new Dictionary<int,int> ();
 
 		y_set = new HashSet<float> ();
 		radial_set = new HashSet<float> ();
@@ -344,10 +347,15 @@ public class ObjManager : Singleton<ObjManager> {
 
 	public void AddToVirtualMemory(int virtual_id, int physical_id) {
 		virtual_memory.Add (virtual_id, physical_id);
+		physical_memory.Add (physical_id, virtual_id);
 	}
 
 	public Dictionary<int,int> GetVirtualMemory() {
 		return virtual_memory;
+	}
+
+	public Dictionary<int,int> GetPhysicalMemory() {
+		return physical_memory;
 	}
 
 	/// <summary>
