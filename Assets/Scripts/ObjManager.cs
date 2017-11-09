@@ -109,7 +109,7 @@ public class ObjManager : Singleton<ObjManager> {
 		scale = 0.05f;
 
 		counter = 0;
-		counterText = GameObject.Find ("Counter");
+		counterText = GameObject.Find ("PointsSelectedCounter");
 
 		isInSelectionMode = true;
 		selected_point_ids = new HashSet<int> ();

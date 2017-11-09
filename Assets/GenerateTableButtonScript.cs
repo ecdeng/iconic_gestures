@@ -3,26 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GenerateTableButtonScript : MonoBehaviour {
+public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 
 	public Button generateTableButton;
-	public GameObject TablePanel;
-	public GameObject ListItemPrefab;
-	private GameObject model;
+	public InputField rowsField;
+	public InputField colsField;
 	public bool showTable = false;
-	public int numRows = 2;
-	public int numCols = 2;
-	public string str = "";
-	List<string> inputVals;
+	public int numRows;
+	public int numCols;
+	public List<string> inputVals;
 
 	// Use this for initialization
 	void Start () {
 		
 		Debug.Log ("START");
+		InputField rows = rowsField.GetComponent<InputField>();
+		InputField cols = colsField.GetComponent<InputField>();
 		inputVals = new List<string> ();
 		Button btn = generateTableButton.GetComponent<Button>();
 		btn.onClick.AddListener(GenerateTable);
-		TablePanel = GameObject.Find ("TablePanel");
 	}
 	
 	// Update is called once per frame
@@ -34,13 +33,13 @@ public class GenerateTableButtonScript : MonoBehaviour {
 		
 		if (showTable){
 			
-			GUILayout.BeginArea(new Rect(Screen.width - numCols * 50, 0 , numCols*50, numRows*50), GUI.skin.window);
-			Debug.Log ("numCols:" + numCols + " numRows: " + numRows);
+			GUILayout.BeginArea(new Rect(Screen.width - numCols * 50, 0 , numCols*50, numRows*28), GUI.skin.window);
+			//Debug.Log ("numCols:" + numCols + " numRows: " + numRows);
 
 			for (int i = 0; i < numRows; i++) {
 				GUILayout.BeginHorizontal ();
 				for (int j = 0; j<numCols; j++) {
-					inputVals[i*numCols + j] = GUILayout.TextField (inputVals[i*numCols + j], 3);
+					inputVals[i*numCols + j] = GUILayout.TextField (inputVals[i*numCols + j], 3, GUILayout.Width(35), GUILayout.Height(20));
 
 				}
 				GUILayout.EndHorizontal ();
@@ -49,15 +48,16 @@ public class GenerateTableButtonScript : MonoBehaviour {
 			GUILayout.EndArea();
 		}
 
-
 	}
 
 	public void GenerateTable() {
-		Debug.Log ("GENERATE TABLE");
+		ObjManager.Instance.setInSelectionMode(false); // change the state we're in
+		ListControllerScript.Instance.RemoveUnselectedPoints();
+
 		showTable = true;
-		numRows = 10;
-		numCols = 2;
-		int invalid = -1;
+		numRows = int.Parse(rowsField.text);
+		numCols = int.Parse(colsField.text);
+		int invalid = 1;
 		for (int i = 0; i<numRows; i++) {
 			for (int j = 0; j<numCols; j++) {
 				inputVals.Add (invalid.ToString ());
