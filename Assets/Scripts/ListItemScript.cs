@@ -5,14 +5,14 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
-	public Text text;
-	public int displayID;
-	public int id;
+	public Text text; // text actually rendered on screen
+	public int displayID; // id to use only in rendered text, can be different from actual point ID for user convenience in 2nd stage
+	public int id; // actual point ID used internally for functions
 	public float x;
 	public float y;
 	public float z;
-	public bool selected;
-	private float scale = 0.05f;
+	public bool selected; // whether point is selected in 1st stage
+	private float scale = 0.05f; // scale to render spheres at
 
 	// Use this for initialization
 	void Start () {

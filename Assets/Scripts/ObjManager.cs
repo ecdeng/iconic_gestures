@@ -18,25 +18,27 @@ public class ObjManager : Singleton<ObjManager> {
 
 
 	//model and point data
-	public GameObject parent;
+	public GameObject parent; // used for scaling the model 
 	public GameObject model;
-	private float scale = 0.05f;
+	private float scale = 0.05f; // what to render the spheres and model with
+
+	// used to select points from the entire mesh based on y distance apart and radial distance apart
 	private HashSet<float> y_set;
 	private HashSet<float> radial_set;
 
-	//user movement
+	//user movement around view
 	private float movespeed = 2.0f;
 	private float camspeed = 0.5f;
 
 	//id maps
-	private Dictionary<int,GameObject> point_ids;
-	private Dictionary<int,PositionNormals> point_normals;
-	private Dictionary<int,int> virtual_memory; //the new second stage to the original
-	private Dictionary<int,int> physical_memory;
+	private Dictionary<int,GameObject> point_ids; // id to game object of the spheres in the mesh
+	private Dictionary<int,PositionNormals> point_normals; // id to position normal for the points
+	private Dictionary<int,int> virtual_memory; //mapping from displayed point ID in 2nd stage to original point ID
+	private Dictionary<int,int> physical_memory; //mapping from original point ID to displayed point ID in 2nd stage 
 
 	//counters
-	public int counter;
-	private GameObject counterText;
+	public int counter; // counter of selected points
+	private GameObject counterText; // UI object to render the counter
 
 	//selection and follow mode
 	private bool followMode;
@@ -60,7 +62,7 @@ public class ObjManager : Singleton<ObjManager> {
 		var model_scale = Vector3.one;
 		var rotate = new Vector3 (0, movespeed, 0);
 		if (model != null) {
-
+			// handling keyboard commands
 			if (Input.GetKey ("left")) {
 				quat = Quaternion.Euler (-1*rotate);
 			}
