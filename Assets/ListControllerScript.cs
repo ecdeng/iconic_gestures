@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ListControllerScript : Singleton<ListControllerScript> {
-		public GameObject ContentPanel;
-		public GameObject ListItemPrefab;
-		private GameObject model;
+		public GameObject ContentPanel; // what each list element is rendered on
+		public GameObject ListItemPrefab; // prefab template for each list element
+//		private GameObject model;
 
-		List<GameObject> listItemGameObjects;
-		List<ListItemScript> listItems;
-		public List<int> selectedListItemIDs;
+		List<GameObject> listItemGameObjects; // list of game objects for each list element 
+		List<ListItemScript> listItems; // the scripts for each element, holds the data for each one
+		public List<int> selectedListItemIDs; // id of each selected point
 
 	void Start () {
 	}
@@ -46,7 +46,7 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 			listItemScript.x = point.Value.transform.position.x;
 			listItemScript.y = point.Value.transform.position.y;
 			listItemScript.z = point.Value.transform.position.z;
-			listItemScript.text.text = listItemScript.id.ToString () + ": (" +
+			listItemScript.text.text = listItemScript.id.ToString () + ": (" + // rounding so that coordinate text isn't too long
 				System.Math.Round(listItemScript.x,3).ToString() + "," +
 				System.Math.Round(listItemScript.y,3).ToString() + "," +
 				System.Math.Round(listItemScript.z,3).ToString() + ")";
