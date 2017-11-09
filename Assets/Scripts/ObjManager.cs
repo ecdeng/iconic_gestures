@@ -150,8 +150,11 @@ public class ObjManager : Singleton<ObjManager> {
 	/// </summary>
 	/// <param name="filepath">Filepath.</param>
 	public void LoadModel(string filepath) {
+		
 		DestroyModel ();
-		model = OBJLoader.LoadOBJFile (filepath);
+
+		//model = OBJLoader.LoadOBJFile (filepath);
+		model = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 
 		var minmax = GetMinMaxVertex (model);
 		var min = minmax [0];
@@ -285,7 +288,7 @@ public class ObjManager : Singleton<ObjManager> {
 		int y_distro = 1;
 		int rad_distro = 1;
 		Debug.Log (total_points); 
-		if (total_points > 100) {
+		if (total_points > 200) {
 			y_distro = 10;
 			rad_distro = Mathf.Max (total_points / 3000, 1);
 		}
