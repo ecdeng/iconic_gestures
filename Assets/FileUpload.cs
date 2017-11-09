@@ -18,7 +18,8 @@ public class FileUpload : MonoBehaviour {
 
 	public void OpenExplorer() {
 		path = EditorUtility.OpenFilePanel ("Object Upload", "", "obj");
-		ObjManager.Instance.LoadModel (path);
+		if(path.Length != 0)
+			ObjManager.Instance.LoadModel (path);
 
 	}
 }
