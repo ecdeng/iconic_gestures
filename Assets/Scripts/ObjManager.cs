@@ -383,6 +383,10 @@ public class ObjManager : Singleton<ObjManager> {
 		return physical_memory;
 	}
 
+	public Dictionary<int, PositionNormals> GetPointNormals() {
+		return point_normals;
+	}
+
 	/// <summary>
 	/// returns gameobject for the sphere given id
 	/// </summary>
