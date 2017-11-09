@@ -154,7 +154,7 @@ public class ObjManager : Singleton<ObjManager> {
 		Debug.Log (max);
 
 		//change scale to bounding box
-		while (GetMinMaxVertex (model) [1] > 7) {
+		while (GetMinMaxVertex (model) [1] > 5) {
 			UpdatePoints (Quaternion.identity, Vector3.one * (1-scale));
 		}
 	}
