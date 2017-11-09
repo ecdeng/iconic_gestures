@@ -57,7 +57,7 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 		showTable = true;
 		numRows = int.Parse(rowsField.text);
 		numCols = int.Parse(colsField.text);
-		int invalid = 1;
+		int invalid = -1;
 		for (int i = 0; i<numRows; i++) {
 			for (int j = 0; j<numCols; j++) {
 				inputVals.Add (invalid.ToString ());

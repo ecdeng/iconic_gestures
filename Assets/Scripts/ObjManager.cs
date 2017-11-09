@@ -31,7 +31,7 @@ public class ObjManager : Singleton<ObjManager> {
 	//id maps
 	private Dictionary<int,GameObject> point_ids;
 	private Dictionary<int,PositionNormals> point_normals;
-	private Dictionary<int,int> virtual_memory;
+	private Dictionary<int,int> virtual_memory; //the new second stage to the original
 	private Dictionary<int,int> physical_memory;
 
 	//counters
@@ -382,6 +382,10 @@ public class ObjManager : Singleton<ObjManager> {
 	/// <returns>The physical memory.</returns>
 	public Dictionary<int,int> GetPhysicalMemory() {
 		return physical_memory;
+	}
+
+	public Dictionary<int, PositionNormals> GetPointNormals() {
+		return point_normals;
 	}
 
 	/// <summary>
