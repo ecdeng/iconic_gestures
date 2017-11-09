@@ -82,14 +82,16 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 		listItems.Clear ();
 		listItemGameObjects.Clear ();
 
+
 		// go through and remake the objects for the selected IDs
 		Dictionary<int,GameObject> point_ids = ObjManager.Instance.GetVerticesWithIDs();
+		Dictionary<int,int> original_to_new_id = ObjManager.Instance.GetPhysicalMemory ();
 		foreach(KeyValuePair<int, GameObject> point in point_ids)
 		{
 			if (selectedListItemIDs.Contains (point.Key)) {
 				GameObject newListItem = Instantiate (ListItemPrefab) as GameObject;
 				ListItemScript listItemScript = newListItem.GetComponent<ListItemScript> ();
-				listItemScript.id = point.Key;
+				listItemScript.id = original_to_new_id[point.Key];
 				listItemScript.x = point.Value.transform.position.x;
 				listItemScript.y = point.Value.transform.position.y;
 				listItemScript.z = point.Value.transform.position.z;
