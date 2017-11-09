@@ -346,7 +346,7 @@ public class ObjManager : Singleton<ObjManager> {
 		virtual_memory.Add (virtual_id, physical_id);
 	}
 
-	public Dictionary<int,GameObject> GetVirtualMemory() {
+	public Dictionary<int,int> GetVirtualMemory() {
 		return virtual_memory;
 	}
 
