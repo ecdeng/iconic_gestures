@@ -101,7 +101,7 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 				listItemScript.y = point.Value.transform.position.y;
 				listItemScript.z = point.Value.transform.position.z;
 
-				listItemScript.text.text = listItemScript.id.ToString () + ": (" +
+				listItemScript.text.text = listItemScript.displayID.ToString () + ": (" +
 				System.Math.Round (listItemScript.x, 3).ToString () + "," +
 				System.Math.Round (listItemScript.y, 3).ToString () + "," +
 				System.Math.Round (listItemScript.z, 3).ToString () + ")";
