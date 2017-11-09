@@ -36,6 +36,7 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 			GameObject newListItem = Instantiate(ListItemPrefab) as GameObject;
 			ListItemScript listItemScript = newListItem.GetComponent<ListItemScript>();
 			listItemScript.id = point.Key;
+			listItemScript.displayID = point.Key;
 			listItemScript.x = point.Value.transform.position.x;
 			listItemScript.y = point.Value.transform.position.y;
 			listItemScript.z = point.Value.transform.position.z;
@@ -91,7 +92,8 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 			if (selectedListItemIDs.Contains (point.Key)) {
 				GameObject newListItem = Instantiate (ListItemPrefab) as GameObject;
 				ListItemScript listItemScript = newListItem.GetComponent<ListItemScript> ();
-				listItemScript.id = original_to_new_id[point.Key];
+				listItemScript.id = point.Key;
+				listItemScript.displayID = original_to_new_id[point.Key];
 				listItemScript.x = point.Value.transform.position.x;
 				listItemScript.y = point.Value.transform.position.y;
 				listItemScript.z = point.Value.transform.position.z;

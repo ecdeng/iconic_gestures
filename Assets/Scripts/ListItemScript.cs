@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 	public Text text;
+	public int displayID;
 	public int id;
 	public float x;
 	public float y;
