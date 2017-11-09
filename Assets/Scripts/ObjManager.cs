@@ -143,7 +143,8 @@ public class ObjManager : Singleton<ObjManager> {
 	/// <param name="filepath">Filepath.</param>
 	public void LoadModel(string filepath) {
 		DestroyModel ();
-		model = OBJLoader.LoadOBJFile (filepath);
+		//model = OBJLoader.LoadOBJFile (filepath);
+        model = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
 		var minmax = GetMinMaxVertex (model);
 		var min = minmax [0];

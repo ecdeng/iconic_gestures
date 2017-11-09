@@ -26,15 +26,17 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         btn.onClick.AddListener(delegate { Export(); });
 		btn.gameObject.SetActive (false);
 
-//        //networking
-//        serverSocket = new TcpListener(IPAddress.Any, 8888);
-//        clientSocket = default(TcpClient);
-//        networkStream = null;
-//
-//        serverSocket.Start();
-//        print("Server started");
-//
-//        Initialize();
+        //        //networking
+        serverSocket = new TcpListener(IPAddress.Any, 8888);
+        clientSocket = default(TcpClient);
+        networkStream = null;
+
+        serverSocket.Start();
+        print("Server started");
+        //
+        //        Initialize();
+        Thread tid1 = new Thread(new ThreadStart(ExportButtonScript.CheckForConnection));
+        tid1.Start();
     }
 
     //networking
@@ -44,15 +46,14 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
 		btn.gameObject.SetActive (true);
 
 		//networking
-		serverSocket = new TcpListener(IPAddress.Any, 8888);
-		clientSocket = default(TcpClient);
-		networkStream = null;
+		//serverSocket = new TcpListener(IPAddress.Any, 8888);
+		//clientSocket = default(TcpClient);
+		//networkStream = null;
 
-		serverSocket.Start();
-		print("Server started");
+		//serverSocket.Start();
+		//print("Server started");
 
-        Thread tid1 = new Thread(new ThreadStart(ExportButtonScript.CheckForConnection));
-        tid1.Start();
+     
     }
 
     // Update is called once per frame
@@ -151,7 +152,16 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
             Actor actor = new Actor(new List<Vertex>());
             foreach (int gesture in gestureList)
             {
-                if (gesture == -1) continue;
+                if (!positions.ContainsKey(gesture)) continue;
+                positions[gesture].pos.Normalize();
+                //actor.gest.Add(new Vertex(positions[gesture].pos, new Quaternion(0.0f, 0.0f, 0.0f, 1.0f)));
+                if (positions[gesture].norm.x < 0 && positions[gesture].norm.y < 0 && positions[gesture].norm.z < 0 && positions[gesture].norm.w < 0)
+                {
+                    positions[gesture].norm.x *= -1;
+                    positions[gesture].norm.y *= -1;
+                    positions[gesture].norm.z *= -1;
+                    positions[gesture].norm.w *= -1;
+                }
                 actor.gest.Add(new Vertex(positions[gesture].pos, positions[gesture].norm));
             }
             if (actor.gest.Count != 0) moveList.act.Add(actor);
