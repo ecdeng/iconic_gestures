@@ -76,7 +76,11 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         //Debug.Log ("unformatted to int size: " + unformattedToInt.Count);
         for (int i = 0; i < unformattedToInt.Count; i++)
         {
-            unformattedToInt[i] = int.Parse(unformatted[i]);
+			if (unformatted [i].Length > 0) {
+				unformattedToInt [i] = int.Parse (unformatted [i]);
+			} else {
+				unformattedToInt [i] = -1;
+			}
             //Debug.Log (unformattedToInt [i] + ", ");
         }
 

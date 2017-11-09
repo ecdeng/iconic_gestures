@@ -99,8 +99,8 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 	}
 
 	public void Disable() {
-		generateTableButton.gameObject.SetActive(false);
 		rowsField.gameObject.SetActive(false);
 		colsField.gameObject.SetActive(false);
+		generateTableButton.gameObject.GetComponent<CanvasRenderer> ().SetAlpha (0f);
 	}
 }
