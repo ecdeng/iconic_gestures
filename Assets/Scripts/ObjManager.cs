@@ -60,7 +60,7 @@ public class ObjManager : Singleton<ObjManager> {
 	void Start () {
 		InitObjects ();
 		InitModel ();
-		LoadModel ("Assets/Models/sphere.obj");
+		//LoadModel ("Assets/Models/sphere.obj");
 	}
 		
 	// Update is called once per frame
@@ -72,43 +72,37 @@ public class ObjManager : Singleton<ObjManager> {
 		if (model != null) {
 			// handling keyboard commands
 			if (Input.GetKey ("left")) {
-				quat = Quaternion.Euler (-1*rotate);
+				if (!Input.GetKey(KeyCode.LeftShift))
+					quat = Quaternion.Euler (-1*rotate);
+				else
+					cam.transform.position += new Vector3 (0, camspeed, 0);
 			}
 
 			if (Input.GetKey ("right")) {
-				quat = Quaternion.Euler (rotate);
+				if (!Input.GetKey(KeyCode.LeftShift))
+					quat = Quaternion.Euler (rotate);
+				else
+					cam.transform.position += new Vector3 (1*camspeed, 0, 0);
+					
 			}
-
-			if (Input.GetKeyDown ("r")) {	
-				var rot = new Vector3(0,180,0);
-				quat = Quaternion.Euler (rot);
-			}
-
-			if (Input.GetKey ("w")) {
-				cam.transform.position += new Vector3 (0, camspeed, 0);
-			}
-			if (Input.GetKey ("a")) {
-				cam.transform.position += new Vector3 (-1*camspeed, 0, 0);
-
-			}
-			if (Input.GetKey ("s")) {
-				cam.transform.position += new Vector3 (0, -1*camspeed,0);
-
-			}
-			if (Input.GetKey ("d")) {
-				cam.transform.position += new Vector3 (1*camspeed, 0, 0);
-
-			}
+				
 			if (Input.GetKey ("up")) {
-				model_scale *= (1 + scale);
-
+				if (!Input.GetKey(KeyCode.LeftShift))
+					model_scale *= (1 + scale);
+				else
+					cam.transform.position += new Vector3 (0, camspeed, 0);
 			}
 			if (Input.GetKey ("down")) {
-				model_scale *= (1 - scale);
+				if (!Input.GetKey(KeyCode.LeftShift))
+					model_scale *= (1 - scale);
+				else
+					cam.transform.position += new Vector3 (0, -1*camspeed,0);
 			}
-			if (Input.GetKeyDown ("f")) {
+			if (Input.GetKeyDown (KeyCode.LeftControl)) {
 				followMode = !followMode;
 			}
+
+
 			UpdatePoints (quat,model_scale);
 		}
 	}

@@ -5,18 +5,21 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/Landing Page Scene.unity
+  - enabled: 0
+    path: 
     guid: 42332fc0f828d4ab2a18f05821a3a7c8
-  - enabled: 1
-    path: Assets/Scenes/Control Panel Testing.unity
+  - enabled: 0
+    path: 
     guid: 4e42c6c8baa8a471bbde9cd6b2657d85
   - enabled: 0
     path: 
     guid: e6c1594e1d81a4b6b9acdc8e41c92432
   - enabled: 0
-    path: Assets/Scenes/Options Scene.unity
+    path: 
     guid: 85ecc277d77ca49ceae7ba2ef8d47848
-  - enabled: 1
-    path: Assets/Scenes/Master Scene.unity
+  - enabled: 0
+    path: 
     guid: 886adb8a460dd41a1ae8ada6f0083c0e
+  - enabled: 1
+    path: Assets/Scenes/UIScene.unity
+    guid: 68129e05532af43c3b386cc362825974
