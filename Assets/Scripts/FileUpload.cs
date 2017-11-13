@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 
+/// <summary>
+/// Handles behavior for upload button
+/// opens file explorer and gets absolute file path
+/// </summary>
 public class FileUpload : Singleton<FileUpload> {
 
 	private GameObject model;
