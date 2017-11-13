@@ -9,7 +9,9 @@ using System.Threading;
 using System.Text;
 using System;
 
-// script for export button behavior
+/// <summary>
+/// Script for export button behavior. Initializes network connection and serializes points to server
+/// </summary>
 public class ExportButtonScript : Singleton<ExportButtonScript>
 {
     public Button exportButton; // UI element
@@ -19,7 +21,9 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
     static TcpClient clientSocket;
     static NetworkStream networkStream;
 
-    // Use this for initialization
+    /// <summary>
+    /// Initializes network connection
+    /// </summary>
     void Start()
     {
         Button btn = exportButton.GetComponent<Button>();
@@ -38,19 +42,26 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         tid1.Start();
     }
 
-    //networking
+    /// <summary>
+    /// Set export button to active when user finishes clicking "generate table" button
+    /// </summary>
     public void Initialize()
     {
 		Button btn = exportButton.GetComponent<Button>();
 		btn.gameObject.SetActive (true);    
     }
 
-    // Update is called once per frame
+    /// <summary>
+	/// Update is called once per frame
+    /// </summary>
     void Update()
     {
         exportPoints(null, null);
     }
 
+	/// <summary>
+	/// collects input from the user in the table and compiles it into list of lists. called when user hits "export" button in 2nd stage
+	/// </summary>
     public List<List<int>> Export()
     {
         List<string> unformatted = GenerateTableButtonScript.Instance.inputVals;
@@ -95,12 +106,15 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
             }
         }
         
+		// send points over server
         sendPoints(result, ObjManager.Instance.GetPointNormals());
 
         return result;
     }
 
-    //networking
+    /// <summary>
+	/// Checks for network connection
+    /// </summary>
     static void CheckForConnection()
     {
         while(true)
@@ -111,6 +125,10 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         }
     }
 
+	/// <summary>
+	/// writes information to server over network
+	/// </summary>
+	/// <param name="information">Information.</param>
     private void Send(string information)
     {
         if (networkStream == null) return;
@@ -129,13 +147,23 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         }
     }
 
+	/// <summary>
+	/// converts points to json before calling Send over network
+	/// </summary>
+	/// <param name="actorList">Actor list.</param>
+	/// <param name="positions">Positions.</param>
     void sendPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions)
     {
         String serializedPoints = convertPoints(actorList, positions, false);
         print(serializedPoints);
         Send(serializedPoints);
     }
-
+		
+	/// <summary>
+	/// convert points to json and writes to a file
+	/// </summary>
+	/// <param name="actorList">Actor list.</param>
+	/// <param name="positions">Positions.</param>
     void exportPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions)
     {
         String serializedPoints = convertPoints(actorList, positions, true);
@@ -157,6 +185,13 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         System.IO.File.WriteAllText(pathname, serializedPoints);
     }
 
+	/// <summary>
+	/// converts points to json
+	/// </summary>
+	/// <returns>The points.</returns>
+	/// <param name="actorList">Actor list.</param>
+	/// <param name="positions">Positions.</param>
+	/// <param name="pretty">If set to <c>true</c> pretty.</param>
     String convertPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions, bool pretty)
     {
         Wrapper moveList = new Wrapper(new List<Actor>());
@@ -174,7 +209,10 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
 
         return UnityEngine.JsonUtility.ToJson(moveList, pretty);
     }
-
+		
+	/// <summary>
+	/// wraps position and normals for each vertex
+	/// </summary>
     [Serializable]
     class Vertex
     {
@@ -188,6 +226,9 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         }
     }
 
+	/// <summary>
+	/// each actor has a list of vertices to make a gesture
+	/// </summary>
     [Serializable]
     class Actor
     {
@@ -199,6 +240,9 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         }
     }
 
+	/// <summary>
+	/// list of actors
+	/// </summary>
     [Serializable]
     class Wrapper
     {
