@@ -22,6 +22,7 @@ public class FileUpload : Singleton<FileUpload> {
 
 	public void OpenExplorer() {
 		path = EditorUtility.OpenFilePanel ("Object Upload", "", "obj");
+		//System.Diagnostics.Process.Start ("explorer.exe", "-p");
 		if(path.Length != 0)
 			ObjManager.Instance.LoadModel (path);
 

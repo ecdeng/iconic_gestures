@@ -204,7 +204,7 @@ public class ObjManager : Singleton<ObjManager> {
 			var pos = vertex.pos;
 			var gameObj = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 			gameObj.transform.position = pos;
-			gameObj.transform.position += offset;
+			gameObj.transform.position += (offset - new Vector3(0,transform.localScale.y/2,0));
 			gameObj.transform.localScale = Vector3.one * scale * 5;
 			point_ids.Add (id, gameObj);
 			point_normals.Add (id, vertex);
@@ -288,8 +288,8 @@ public class ObjManager : Singleton<ObjManager> {
 		int rad_distro = 1;
 		Debug.Log (total_points); 
 		if (total_points > 200) {
-			y_distro = Mathf.Max(total_points/1000,1);
-			rad_distro = Mathf.Max (total_points / 3000, 1);
+			y_distro = Mathf.Max(total_points/300,1);
+			rad_distro = Mathf.Max (total_points / 300, 1);
 		}
 			y_set = new HashSet<float> (y_set.Where ((x, i) => i % y_distro == 0));
 			radial_set = new HashSet<float> (radial_set.Where ((x, i) => i % rad_distro == 0));
