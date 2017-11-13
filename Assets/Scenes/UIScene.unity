@@ -780,7 +780,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4ce87a97eb5fe4b54b4aae2316c06b81, type: 2}
+  - {fileID: 2100000, guid: edc512ab079e94ab28b3acc0c66a3633, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1031,7 +1031,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exportButton: {fileID: 924220344}
-  tableInfo: {fileID: 0}
 --- !u!114 &924220344
 MonoBehaviour:
   m_ObjectHideFlags: 0
