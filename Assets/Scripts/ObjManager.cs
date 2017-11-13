@@ -60,7 +60,7 @@ public class ObjManager : Singleton<ObjManager> {
 	void Start () {
 		InitObjects ();
 		InitModel ();
-		LoadModel ("Assets/Models/pikachu.obj");
+		LoadModel ("Assets/Models/sphere.obj");
 	}
 		
 	// Update is called once per frame
