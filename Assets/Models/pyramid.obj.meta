@@ -1,17 +1,22 @@
 fileFormatVersion: 2
 guid: 979bd816fdf244fc98b7228557510f8b
-timeCreated: 1510552461
+timeCreated: 1510554352
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
     100000: pPyramid1
     100002: //RootNode
+    100004: pyramid:pPyramid1
     400000: pPyramid1
     400002: //RootNode
+    400004: pyramid:pPyramid1
     2300000: pPyramid1
+    2300002: pyramid:pPyramid1
     3300000: pPyramid1
+    3300002: pyramid:pPyramid1
     4300000: pPyramid1
+    4300002: pyramid:pPyramid1
   materials:
     importMaterials: 1
     materialName: 0
