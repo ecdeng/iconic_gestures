@@ -150,7 +150,7 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
 
     void exportPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions)
     {
-        String serializedPoints = convertPoints(actorList, positions, true);
+        String serializedPoints = convertPoints(actorList, positions, false);
         String originalPathname = FileUpload.Instance.path;
         StringBuilder sb = new StringBuilder();
         int ind = originalPathname.Length - 1;
