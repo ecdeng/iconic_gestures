@@ -49,7 +49,7 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
     // Update is called once per frame
     void Update()
     {
-        exportPoints(null, null);
+
     }
 
     public List<List<int>> Export()
@@ -108,7 +108,7 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         //Debug.Log(result[0][0] + "," + result[0][1] + "," + result[0][2]);
 
         sendPoints(result, ObjManager.Instance.GetPointNormals());
-
+        exportPoints(result, ObjManager.Instance.GetPointNormals());
         return result;
     }
 
