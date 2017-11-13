@@ -45,7 +45,12 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
 		Button btn = exportButton.GetComponent<Button>();
 		btn.gameObject.SetActive (true);    
     }
-		
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     public List<List<int>> Export()
     {
@@ -103,7 +108,7 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         //Debug.Log(result[0][0] + "," + result[0][1] + "," + result[0][2]);
 
         sendPoints(result, ObjManager.Instance.GetPointNormals());
-
+        exportPoints(result, ObjManager.Instance.GetPointNormals());
         return result;
     }
 
