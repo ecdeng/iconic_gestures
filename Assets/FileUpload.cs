@@ -8,7 +8,7 @@ public class FileUpload : Singleton<FileUpload> {
 
 	private GameObject model;
 	public Button fileUploadButton;
-	string path;
+	public string path;
 
 	// Use this for initialization
 	void Start () {

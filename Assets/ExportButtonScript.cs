@@ -44,23 +44,13 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
     public void Initialize()
     {
 		Button btn = exportButton.GetComponent<Button>();
-		btn.gameObject.SetActive (true);
-
-		//networking
-		//serverSocket = new TcpListener(IPAddress.Any, 8888);
-		//clientSocket = default(TcpClient);
-		//networkStream = null;
-
-		//serverSocket.Start();
-		//print("Server started");
-
-     
+		btn.gameObject.SetActive (true);    
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        exportPoints(null, null);
     }
 
     public List<List<int>> Export()
@@ -126,9 +116,12 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
     //networking
     static void CheckForConnection()
     {
-        clientSocket = serverSocket.AcceptTcpClient();
-        print("Client connected to");
-        networkStream = clientSocket.GetStream();
+        while(true)
+        {
+            clientSocket = serverSocket.AcceptTcpClient();
+            print("Client connected to");
+            networkStream = clientSocket.GetStream();
+        }
     }
 
     private void Send(string information)
@@ -151,6 +144,34 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
 
     void sendPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions)
     {
+        String serializedPoints = convertPoints(actorList, positions, false);
+        print(serializedPoints);
+        Send(serializedPoints);
+    }
+
+    void exportPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions)
+    {
+        String serializedPoints = convertPoints(actorList, positions, true);
+        String originalPathname = FileUpload.Instance.path;
+        StringBuilder sb = new StringBuilder();
+        int ind = originalPathname.Length - 1;
+
+        // Ignore the file extension
+        while (originalPathname[ind--] != '.') ;
+
+        // Move up until it reaches the end of the filename
+        while (originalPathname[ind] != '\\' && originalPathname[ind] != '/') sb.Append(originalPathname[ind--]);
+        char[] filenameChars = sb.ToString().ToCharArray();
+        Array.Reverse(filenameChars);
+        String filename = new string(filenameChars) + ".json";
+        String pathname = originalPathname.Substring(0, ind + 1) + filename;
+
+        // Save the json in the same directory as the .obj
+        System.IO.File.WriteAllText(pathname, serializedPoints);
+    }
+
+    String convertPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions, bool pretty)
+    {
         Wrapper moveList = new Wrapper(new List<Actor>());
         foreach (List<int> gestureList in actorList)
         {
@@ -159,23 +180,19 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
             {
                 if (!positions.ContainsKey(gesture)) continue;
                 positions[gesture].pos.Normalize();
-                //actor.gest.Add(new Vertex(positions[gesture].pos, new Quaternion(0.0f, 0.0f, 0.0f, 1.0f)));
-                if (positions[gesture].norm.x < 0 && positions[gesture].norm.y < 0 && positions[gesture].norm.z < 0 && positions[gesture].norm.w < 0)
-                {
-                    positions[gesture].norm.x *= -1;
-                    positions[gesture].norm.y *= -1;
-                    positions[gesture].norm.z *= -1;
-                    positions[gesture].norm.w *= -1;
-                }
+                //if (positions[gesture].norm.x < 0 && positions[gesture].norm.y < 0 && positions[gesture].norm.z < 0 && positions[gesture].norm.w < 0)
+                //{
+                //    positions[gesture].norm.x *= -1;
+                //    positions[gesture].norm.y *= -1;
+                //    positions[gesture].norm.z *= -1;
+                //    positions[gesture].norm.w *= -1;
+                //}
                 actor.gest.Add(new Vertex(positions[gesture].pos, positions[gesture].norm));
             }
             if (actor.gest.Count != 0) moveList.act.Add(actor);
         }
 
-        string serializedPoints = UnityEngine.JsonUtility.ToJson(moveList);
-        print(serializedPoints);
-        Send(serializedPoints);
-        //print(serializedPoints);
+        return UnityEngine.JsonUtility.ToJson(moveList, pretty);
     }
 
     [Serializable]
