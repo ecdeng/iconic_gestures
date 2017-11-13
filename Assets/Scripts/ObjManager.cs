@@ -154,7 +154,6 @@ public class ObjManager : Singleton<ObjManager> {
 		DestroyModel ();
 
 		model = OBJLoader.LoadOBJFile (filepath);
-		//model = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 
 		var minmax = GetMinMaxVertex (model);
 		var min = minmax [0];

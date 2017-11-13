@@ -9,7 +9,9 @@ using System.Threading;
 using System.Text;
 using System;
 
-// script for export button behavior
+/// <summary>
+/// Script for export button behavior. Initializes network connection and serializes points to server
+/// </summary>
 public class ExportButtonScript : Singleton<ExportButtonScript>
 {
     public Button exportButton; // UI element
@@ -19,51 +21,54 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
     static TcpClient clientSocket;
     static NetworkStream networkStream;
 
-    // Use this for initialization
+    /// <summary>
+    /// Initializes network connection
+    /// </summary>
     void Start()
     {
         Button btn = exportButton.GetComponent<Button>();
         btn.onClick.AddListener(delegate { Export(); });
 		btn.gameObject.SetActive (false);
 
-        //        //networking
+        // networking
         serverSocket = new TcpListener(IPAddress.Any, 8888);
         clientSocket = default(TcpClient);
         networkStream = null;
 
         serverSocket.Start();
         print("Server started");
-        //
-        //        Initialize();
+
         Thread tid1 = new Thread(new ThreadStart(ExportButtonScript.CheckForConnection));
         tid1.Start();
     }
 
-    //networking
+    /// <summary>
+    /// Set export button to active when user finishes clicking "generate table" button
+    /// </summary>
     public void Initialize()
     {
 		Button btn = exportButton.GetComponent<Button>();
 		btn.gameObject.SetActive (true);    
     }
 
-    // Update is called once per frame
+    /// <summary>
+	/// Update is called once per frame
+    /// </summary>
     void Update()
     {
 
     }
 
+	/// <summary>
+	/// collects input from the user in the table and compiles it into list of lists. called when user hits "export" button in 2nd stage
+	/// </summary>
     public List<List<int>> Export()
     {
-        //Debug.Log ("Attempting to export.");
-
         List<string> unformatted = GenerateTableButtonScript.Instance.inputVals;
-        //Debug.Log ("unformatted size: " + unformatted.Count);
         int numCols = GenerateTableButtonScript.Instance.numCols;
-        //int numRows = GenerateTableButtonScript.Instance.numRows;
         List<int> unformattedToInt = new List<int>(unformatted.Count);
         unformattedToInt = (Enumerable.Repeat(0, unformatted.Count)).ToList();
 
-        //Debug.Log ("unformatted to int size: " + unformattedToInt.Count);
         for (int i = 0; i < unformattedToInt.Count; i++)
         {
 			if (unformatted [i].Length > 0) {
@@ -71,7 +76,6 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
 			} else {
 				unformattedToInt [i] = -1;
 			}
-            //Debug.Log (unformattedToInt [i] + ", ");
         }
 
         List<int> unformattedToOrigKeys = new List<int>(unformatted.Count);
@@ -87,7 +91,6 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
                 unformattedToOrigKeys[i] = -1;
             }
         }
-        Debug.Log("unformatted to original keys: " + unformattedToOrigKeys.Count);
 
         //convert from row-wise to column-wise
         List<List<int>> result = new List<List<int>>(numCols);
@@ -99,20 +102,19 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
                 if (i % numCols == j)
                 {
                     result[j].Add(unformattedToOrigKeys[i]);
-                    //result [j-1][i] = unformattedToInt [i];
                 }
             }
         }
-        //		Debug.Log ("firstcol0: " + result[0].Count);
-        //		Debug.Log ("secondcol1: " + result[1].Count);
-        //Debug.Log(result[0][0] + "," + result[0][1] + "," + result[0][2]);
-
+        
+		// send points over server
         sendPoints(result, ObjManager.Instance.GetPointNormals());
         exportPoints(result, ObjManager.Instance.GetPointNormals());
         return result;
     }
 
-    //networking
+    /// <summary>
+	/// Checks for network connection
+    /// </summary>
     static void CheckForConnection()
     {
         while(true)
@@ -123,6 +125,10 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         }
     }
 
+	/// <summary>
+	/// writes information to server over network
+	/// </summary>
+	/// <param name="information">Information.</param>
     private void Send(string information)
     {
         if (networkStream == null) return;
@@ -141,13 +147,23 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         }
     }
 
+	/// <summary>
+	/// converts points to json before calling Send over network
+	/// </summary>
+	/// <param name="actorList">Actor list.</param>
+	/// <param name="positions">Positions.</param>
     void sendPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions)
     {
         String serializedPoints = convertPoints(actorList, positions, false);
         print(serializedPoints);
         Send(serializedPoints);
     }
-
+		
+	/// <summary>
+	/// convert points to json and writes to a file
+	/// </summary>
+	/// <param name="actorList">Actor list.</param>
+	/// <param name="positions">Positions.</param>
     void exportPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions)
     {
         String serializedPoints = convertPoints(actorList, positions, true);
@@ -169,6 +185,13 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         System.IO.File.WriteAllText(pathname, serializedPoints);
     }
 
+	/// <summary>
+	/// converts points to json
+	/// </summary>
+	/// <returns>The points.</returns>
+	/// <param name="actorList">Actor list.</param>
+	/// <param name="positions">Positions.</param>
+	/// <param name="pretty">If set to <c>true</c> pretty.</param>
     String convertPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions, bool pretty)
     {
         Wrapper moveList = new Wrapper(new List<Actor>());
@@ -179,13 +202,6 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
             {
                 if (!positions.ContainsKey(gesture)) continue;
                 positions[gesture].pos.Normalize();
-                //if (positions[gesture].norm.x < 0 && positions[gesture].norm.y < 0 && positions[gesture].norm.z < 0 && positions[gesture].norm.w < 0)
-                //{
-                //    positions[gesture].norm.x *= -1;
-                //    positions[gesture].norm.y *= -1;
-                //    positions[gesture].norm.z *= -1;
-                //    positions[gesture].norm.w *= -1;
-                //}
                 actor.gest.Add(new Vertex(positions[gesture].pos, positions[gesture].norm));
             }
             if (actor.gest.Count != 0) moveList.act.Add(actor);
@@ -193,7 +209,10 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
 
         return UnityEngine.JsonUtility.ToJson(moveList, pretty);
     }
-
+		
+	/// <summary>
+	/// wraps position and normals for each vertex
+	/// </summary>
     [Serializable]
     class Vertex
     {
@@ -207,6 +226,9 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         }
     }
 
+	/// <summary>
+	/// each actor has a list of vertices to make a gesture
+	/// </summary>
     [Serializable]
     class Actor
     {
@@ -218,6 +240,9 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         }
     }
 
+	/// <summary>
+	/// list of actors
+	/// </summary>
     [Serializable]
     class Wrapper
     {

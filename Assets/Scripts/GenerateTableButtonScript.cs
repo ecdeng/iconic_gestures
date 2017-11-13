@@ -23,8 +23,6 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 
 	// Use this for initialization
 	void Start () {
-		
-		Debug.Log ("START");
 		scrollPosition = Vector2.zero; // initialize scroll position
 
 		// get input for # of rows and cols from user. 
@@ -35,19 +33,12 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 		Button btn = generateTableButton.GetComponent<Button>();
 		btn.onClick.AddListener(GenerateTable);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
 
+	/// <summary>
+	/// If showTable boolean is true, create table with GUILayout
+	/// </summary>
 	void OnGUI(){
-		//Debug.Log ("ONGUI");
-		
 		if (showTable){
-			
-//			GUILayout.BeginArea(new Rect(Screen.width - numCols * 50, 0 , numCols*50, numRows*28), GUI.skin.window);
-			//Debug.Log ("numCols:" + numCols + " numRows: " + numRows);
-
 			GUILayout.BeginArea(new Rect(Screen.width - Screen.width/4, 0 , Screen.width/4, Screen.height - Screen.height / 20), GUI.skin.window);
 			scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true); 
 
@@ -77,6 +68,12 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 
 	}
 
+	/// <summary>
+	/// Takes number of rows and columns in and create appropriate list of strings to store the GUI.TextField's data
+	/// Triggers showTable boolean
+	/// Triggers removal of unselected points from model and list
+	/// Disables appropriate buttons and fields
+	/// </summary>
 	public void GenerateTable() {
 		if (rowsField.text.Length > 0 && colsField.text.Length > 0 && ObjManager.Instance.counter > 0) {
 
@@ -98,6 +95,9 @@ public class GenerateTableButtonScript : Singleton<GenerateTableButtonScript> {
 		}
 	}
 
+	/// <summary>
+	/// Disable this button in second stage
+	/// </summary>
 	public void Disable() {
 		rowsField.gameObject.SetActive(false);
 		colsField.gameObject.SetActive(false);

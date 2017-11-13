@@ -37,13 +37,13 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 		listItemGameObjects = new List<GameObject> ();
 		selectedListItemIDs = new List<int> ();
 
-		DestroyListIfAny ();
+		DestroyListIfAny (); // delete any former list if needed
 
 		Dictionary<int,GameObject> point_ids = ObjManager.Instance.GetVerticesWithIDs();
 		foreach(KeyValuePair<int, GameObject> point in point_ids)
 		{
 			GameObject newListItem = Instantiate(ListItemPrefab) as GameObject;
-			ListItemScript listItemScript = newListItem.GetComponent<ListItemScript>();
+			ListItemScript listItemScript = newListItem.GetComponent<ListItemScript>(); // create a new prefab component and set text elements
 			listItemScript.id = point.Key;
 			listItemScript.displayID = point.Key;
 			listItemScript.x = point.Value.transform.position.x;
@@ -68,8 +68,6 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 	/// Destroy all list elements and remake the list for only points selected from the selection state
 	/// </summary>
 	public void RemoveUnselectedPoints () {
-		Debug.Log ("Removing");
-
 		// create list of selected points
 		selectedListItemIDs.Clear ();
 		int id = 0;
@@ -119,10 +117,5 @@ public class ListControllerScript : Singleton<ListControllerScript> {
 		}
 
 		Canvas.ForceUpdateCanvases ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 }
