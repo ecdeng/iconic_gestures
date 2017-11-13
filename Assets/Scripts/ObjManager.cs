@@ -60,7 +60,7 @@ public class ObjManager : Singleton<ObjManager> {
 	void Start () {
 		InitObjects ();
 		InitModel ();
-		LoadModel ("Assets/Models/pikachu.obj");
+		LoadModel ("Assets/Models/sphere.obj");
 	}
 		
 	// Update is called once per frame
@@ -154,7 +154,6 @@ public class ObjManager : Singleton<ObjManager> {
 		DestroyModel ();
 
 		model = OBJLoader.LoadOBJFile (filepath);
-		//model = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 
 		var minmax = GetMinMaxVertex (model);
 		var min = minmax [0];
@@ -289,7 +288,7 @@ public class ObjManager : Singleton<ObjManager> {
 		int rad_distro = 1;
 		Debug.Log (total_points); 
 		if (total_points > 200) {
-			y_distro = Mathf.Max(total_points/250,1);
+			y_distro = Mathf.Max(total_points/1000,1);
 			rad_distro = Mathf.Max (total_points / 3000, 1);
 		}
 			y_set = new HashSet<float> (y_set.Where ((x, i) => i % y_distro == 0));

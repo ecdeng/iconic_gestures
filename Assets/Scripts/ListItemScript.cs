@@ -18,16 +18,6 @@ public class ListItemScript : MonoBehaviour , IPointerClickHandler, IPointerEnte
 	public bool selected; // whether point is selected in 1st stage
 	private float scale = 0.05f; // scale to render spheres at
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
 	/// <summary>
 	/// handler for clicking on list element. If in selection mode, show the element and point in green.
 	/// </summary>
