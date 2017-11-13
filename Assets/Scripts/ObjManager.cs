@@ -289,7 +289,7 @@ public class ObjManager : Singleton<ObjManager> {
 		int rad_distro = 1;
 		Debug.Log (total_points); 
 		if (total_points > 200) {
-			y_distro = Mathf.Max(total_points/250,1);
+			y_distro = Mathf.Max(total_points/1000,1);
 			rad_distro = Mathf.Max (total_points / 3000, 1);
 		}
 			y_set = new HashSet<float> (y_set.Where ((x, i) => i % y_distro == 0));
