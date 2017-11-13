@@ -100,7 +100,7 @@ public class OBJLoader
                 {
                     matlList.Add(currentMaterial);
                 }
-                currentMaterial = new Material(Shader.Find("Standard (Specular setup)"));
+				currentMaterial = Resources.Load("Default", typeof(Material)) as Material;
                 currentMaterial.name = data;
             }
             else if (cmps[0] == "Kd")
@@ -434,14 +434,14 @@ public class OBJLoader
                 
                 if (materialCache == null)
                 {
-                    processedMaterials[i] = new Material(Shader.Find("Standard (Specular setup)"));
+					processedMaterials[i] = Resources.Load("Default", typeof(Material)) as Material;
                 }
                 else
                 {
                     Material mfn = Array.Find(materialCache, x => x.name == meshMaterialNames[i]); ;
                     if (mfn == null)
                     {
-                        processedMaterials[i] = new Material(Shader.Find("Standard (Specular setup)"));
+						processedMaterials[i] = Resources.Load("Default", typeof(Material)) as Material;
                     }
                     else
                     {
