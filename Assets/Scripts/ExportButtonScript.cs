@@ -176,14 +176,11 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
 
         // Move up until it reaches the end of the filename
         while (originalPathname[ind] != '\\' && originalPathname[ind] != '/') sb.Append(originalPathname[ind--]);
-        ind--;
-        // Ignore the Assets folder
-        while (originalPathname[ind] != '\\' && originalPathname[ind] != '/') ind--;
 
         char[] filenameChars = sb.ToString().ToCharArray();
         Array.Reverse(filenameChars);
         String filename = new string(filenameChars) + ".json";
-        String pathname = originalPathname.Substring(0, ind + 1) + "jsons" + originalPathname[ind] + filename;
+        String pathname = originalPathname.Substring(0, ind + 1) + filename;
         print(pathname);
 
         // Save the json in the same directory as the .obj
