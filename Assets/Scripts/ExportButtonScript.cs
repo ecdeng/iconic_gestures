@@ -56,7 +56,7 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
     /// </summary>
     void Update()
     {
-        exportPoints(null, null);
+
     }
 
 	/// <summary>
@@ -108,7 +108,7 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         
 		// send points over server
         sendPoints(result, ObjManager.Instance.GetPointNormals());
-
+        exportPoints(result, ObjManager.Instance.GetPointNormals());
         return result;
     }
 
