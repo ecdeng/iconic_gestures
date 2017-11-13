@@ -26,15 +26,14 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
         btn.onClick.AddListener(delegate { Export(); });
 		btn.gameObject.SetActive (false);
 
-        //        //networking
+        // networking
         serverSocket = new TcpListener(IPAddress.Any, 8888);
         clientSocket = default(TcpClient);
         networkStream = null;
 
         serverSocket.Start();
         print("Server started");
-        //
-        //        Initialize();
+
         Thread tid1 = new Thread(new ThreadStart(ExportButtonScript.CheckForConnection));
         tid1.Start();
     }
@@ -54,16 +53,11 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
 
     public List<List<int>> Export()
     {
-        //Debug.Log ("Attempting to export.");
-
         List<string> unformatted = GenerateTableButtonScript.Instance.inputVals;
-        //Debug.Log ("unformatted size: " + unformatted.Count);
         int numCols = GenerateTableButtonScript.Instance.numCols;
-        //int numRows = GenerateTableButtonScript.Instance.numRows;
         List<int> unformattedToInt = new List<int>(unformatted.Count);
         unformattedToInt = (Enumerable.Repeat(0, unformatted.Count)).ToList();
 
-        //Debug.Log ("unformatted to int size: " + unformattedToInt.Count);
         for (int i = 0; i < unformattedToInt.Count; i++)
         {
 			if (unformatted [i].Length > 0) {
@@ -71,7 +65,6 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
 			} else {
 				unformattedToInt [i] = -1;
 			}
-            //Debug.Log (unformattedToInt [i] + ", ");
         }
 
         List<int> unformattedToOrigKeys = new List<int>(unformatted.Count);
@@ -87,7 +80,6 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
                 unformattedToOrigKeys[i] = -1;
             }
         }
-        Debug.Log("unformatted to original keys: " + unformattedToOrigKeys.Count);
 
         //convert from row-wise to column-wise
         List<List<int>> result = new List<List<int>>(numCols);
@@ -99,14 +91,10 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
                 if (i % numCols == j)
                 {
                     result[j].Add(unformattedToOrigKeys[i]);
-                    //result [j-1][i] = unformattedToInt [i];
                 }
             }
         }
-        //		Debug.Log ("firstcol0: " + result[0].Count);
-        //		Debug.Log ("secondcol1: " + result[1].Count);
-        //Debug.Log(result[0][0] + "," + result[0][1] + "," + result[0][2]);
-
+        
         sendPoints(result, ObjManager.Instance.GetPointNormals());
 
         return result;
@@ -179,13 +167,6 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
             {
                 if (!positions.ContainsKey(gesture)) continue;
                 positions[gesture].pos.Normalize();
-                //if (positions[gesture].norm.x < 0 && positions[gesture].norm.y < 0 && positions[gesture].norm.z < 0 && positions[gesture].norm.w < 0)
-                //{
-                //    positions[gesture].norm.x *= -1;
-                //    positions[gesture].norm.y *= -1;
-                //    positions[gesture].norm.z *= -1;
-                //    positions[gesture].norm.w *= -1;
-                //}
                 actor.gest.Add(new Vertex(positions[gesture].pos, positions[gesture].norm));
             }
             if (actor.gest.Count != 0) moveList.act.Add(actor);
