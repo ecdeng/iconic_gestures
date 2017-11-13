@@ -201,7 +201,9 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
             foreach (int gesture in gestureList)
             {
                 if (!positions.ContainsKey(gesture)) continue;
-                positions[gesture].pos.Normalize();
+                float scaleFactor = Mathf.Max(Mathf.Max(positions[gesture].pos.x, positions[gesture].pos.y), positions[gesture].pos.z);
+                scaleFactor = Mathf.Abs(scaleFactor);
+                if (scaleFactor > 1) positions[gesture].pos /= scaleFactor;
                 actor.gest.Add(new Vertex(positions[gesture].pos, positions[gesture].norm));
             }
             if (actor.gest.Count != 0) moveList.act.Add(actor);
