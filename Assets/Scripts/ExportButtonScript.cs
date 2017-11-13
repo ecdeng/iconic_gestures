@@ -176,10 +176,15 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
 
         // Move up until it reaches the end of the filename
         while (originalPathname[ind] != '\\' && originalPathname[ind] != '/') sb.Append(originalPathname[ind--]);
+        ind--;
+        // Ignore the Assets folder
+        while (originalPathname[ind] != '\\' && originalPathname[ind] != '/') ind--;
+
         char[] filenameChars = sb.ToString().ToCharArray();
         Array.Reverse(filenameChars);
         String filename = new string(filenameChars) + ".json";
-        String pathname = originalPathname.Substring(0, ind + 1) + filename;
+        String pathname = originalPathname.Substring(0, ind + 1) + "jsons" + originalPathname[ind] + filename;
+        print(pathname);
 
         // Save the json in the same directory as the .obj
         System.IO.File.WriteAllText(pathname, serializedPoints);
@@ -195,13 +200,26 @@ public class ExportButtonScript : Singleton<ExportButtonScript>
     String convertPoints(List<List<int>> actorList, Dictionary<int, PositionNormals> positions, bool pretty)
     {
         Wrapper moveList = new Wrapper(new List<Actor>());
+        float scaleFactor = 1.0f;
+        float max = 0.0f;
+        foreach(List<int> gestureList in actorList)
+        {
+            Actor actor = new Actor(new List<Vertex>());
+            foreach (int gesture in gestureList)
+            {
+                float temp = Mathf.Max(Mathf.Max(positions[gesture].pos.x, positions[gesture].pos.y), positions[gesture].pos.y);
+                max = Mathf.Max(max, Mathf.Abs(temp));
+            }
+        }
+        if (max > 1) scaleFactor = max;
+
         foreach (List<int> gestureList in actorList)
         {
             Actor actor = new Actor(new List<Vertex>());
             foreach (int gesture in gestureList)
             {
                 if (!positions.ContainsKey(gesture)) continue;
-                positions[gesture].pos.Normalize();
+                positions[gesture].pos /= scaleFactor;
                 actor.gest.Add(new Vertex(positions[gesture].pos, positions[gesture].norm));
             }
             if (actor.gest.Count != 0) moveList.act.Add(actor);
