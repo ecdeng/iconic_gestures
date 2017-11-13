@@ -12,8 +12,7 @@ using System;
 // script for export button behavior
 public class ExportButtonScript : Singleton<ExportButtonScript>
 {
-    public Button exportButton;
-    public GameObject tableInfo;
+    public Button exportButton; // UI element
 
     //networking
     static TcpListener serverSocket;
